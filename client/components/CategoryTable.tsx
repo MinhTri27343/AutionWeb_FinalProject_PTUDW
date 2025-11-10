@@ -1,6 +1,7 @@
 "use client"
 
 import { ProductCategoryTree } from "@/types";
+import Link from "next/link";
 import React, { useState } from "react";
 
 export default function CategoryTable({ productCategories }: { productCategories: ProductCategoryTree[] }) {
@@ -20,25 +21,25 @@ export default function CategoryTable({ productCategories }: { productCategories
   }
 
   return (
-    <div className="w-60 h-120 bg-white border-2 border-gray-400 rounded-xl p-4">
-      <p className="text-xl">Danh mục</p>
+    <div className="w-60 h-120 bg-white border-2 border-gray-200 rounded-xl p-4">
+      <p className="text-xl font-medium">Danh mục</p>
       {productCategories.map((item) => {
         const isExpanded = expandedCategories.has(item.id) && item.children && item.children.length > 0;
         return (
           <ul key={item.id}>
-            <div className="flex flex-row items-center gap-2 mt-2">
+            <div className="flex flex-row items-center gap-2 mt-3 font-medium">
               <svg
-                className="w-2.5 h-2.5 cursor-pointer"
+                className="w-2.5 h-2.5 cursor-pointer hover:text-blue-500 transition-all duration-200 select-none"
                 onClick={() => toggleCategory(item.id)}
                 aria-hidden="true"
                 xmlns="http://www.w3.org/2000/svg"
                 fill="none"
                 viewBox="0 0 10 6"
-                style={{ transform: isExpanded ? "rotate(-90deg)" : "none", transition: "transform 0.2s" }}
+                style={{ transform: isExpanded ? "rotate(-90deg)" : "none" }}
               >
                 <path stroke="currentColor" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="m1 1 4 4 4-4" />
               </svg>
-              <span>{item.name}</span>
+              <Link href={`/${item.slug}`} className="hover:text-blue-500 transition:all duration-200 select-none">{item.name}</Link>
             </div>
             {isExpanded && (
               <div className="relative pl-6">
@@ -47,12 +48,12 @@ export default function CategoryTable({ productCategories }: { productCategories
                   className="absolute -left-1 top-0"
                   style={{
                     width: "16px",
-                    height: `calc(100% - 4px)`,
+                    height: `calc(100% - 13px)`,
                     pointerEvents: "none",
                   }}
                 >
                   <div
-                    className="mx-auto bg-gray-400"
+                    className="mx-auto bg-gray-300"
                     style={{
                       width: "2px",
                       height: "100%",
@@ -65,16 +66,15 @@ export default function CategoryTable({ productCategories }: { productCategories
                     <li key={child.id} className="relative flex items-center min-h-[28px]">
                       {/* Đường ngang từ dọc sang chữ */}
                       <span
-                        className="absolute -left-5"
+                        className="absolute -left-5 bg-gray-300"
                         style={{
                           top: "50%",
-                          width: "30px",
+                          width: "27px",
                           height: "2px",
-                          background: "#9ca3af",
                           transform: "translateY(-50%)"
                         }}
                       ></span>
-                      <span className="ml-4">{child.name}</span>
+                      <Link href={`/${child.slug}`} className="ml-4 select-none hover:text-blue-500 transition:all duration-200">{child.name}</Link>
                     </li>
                   ))}
                 </ul>
