@@ -4,7 +4,7 @@ export type BidLog = {
   product_id: number;
   price: number;
   created_at: Date;
-  updated_at: Date;
+  updated_at: Date | null;
 }
 
 export type BidHistory = {

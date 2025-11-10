@@ -6,5 +6,5 @@ export type Order = {
   shipping_address: string;
   payment_invoice: string;
   created_at: Date;
-  updated_at: Date;
+  updated_at: Date | null;
 }

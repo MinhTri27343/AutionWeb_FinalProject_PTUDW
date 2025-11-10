@@ -5,7 +5,7 @@ export type UserRating = {
   rating: number;
   comment?: string;
   created_at: Date;
-  updated_at: Date;
+  updated_at: Date | null;
 }
 
 export type UserRatingHistory = {

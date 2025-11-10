@@ -14,17 +14,17 @@ export type Product = {
   auto_extend: boolean;
   price_increment: number;
   created_at: Date;
-  updated_at: Date;
+  updated_at: Date | null;
 }
 
 export type ProductCategoryTree = {
   id: number;
   slug: string;
   name: string;
-  parent_id: number;
+  parent_id?: number;
   children?: ProductCategoryTree[];
   created_at: Date;
-  updated_at: Date;
+  updated_at: Date | null;
 }
 
 export type ProductAnswer = {

@@ -10,5 +10,5 @@ export type User = {
   positive_points: number;
   negative_points: number;
   created_at: Date;
-  updated_at: Date;
+  updated_at: Date | null;
 }
