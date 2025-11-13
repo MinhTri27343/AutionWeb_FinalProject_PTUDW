@@ -1,6 +1,6 @@
 "use client"
 
-import { ProductCategoryTree } from "@/types";
+import { ProductCategoryTree } from "../../shared/src/types/index";
 import Link from "next/link";
 import { useRouter, usePathname, useSearchParams } from "next/navigation";
 import React, { useState } from "react";
