@@ -1,14 +1,8 @@
 import Image from "next/image";
+import ProductType from "@/types/product";
 
-interface SoldProductProps {
-    id: number,
-    main_image: string,
-    name: string,
-    intial_price: string,
-    closing_price: string,
-}
 
-const SoldProduct = ({ product }: { product: SoldProductProps }) => {
+const SoldProduct = ({ product }: { product: ProductType.SoldProduct }) => {
     return (
         <div className="flex items-center justify-between bg-white border border-gray-100 rounded-lg shadow-xs p-4 w-full">
             <div className="flex items-center gap-3">

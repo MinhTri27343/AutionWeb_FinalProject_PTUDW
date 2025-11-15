@@ -7,6 +7,14 @@ namespace ProductType {
         current_price: string,
         bidding_price: string,
     }
+
+    export interface SoldProduct {
+        id: number,
+        main_image: string,
+        name: string,
+        intial_price: string,
+        closing_price: string,
+    }
 }
 
 export default ProductType
