@@ -83,6 +83,8 @@ export const SearchBar: FC<SearchBarProps> = ({
                     alt={item.title}
                     fill // ảnh sẽ fill container div
                     className="rounded-sm object-cover"
+                    width={400}
+                    height={400}
                     sizes="(max-width: 640px) 100vw, (max-width: 768px) 50vw, 33vw"
                   />
                 </div>

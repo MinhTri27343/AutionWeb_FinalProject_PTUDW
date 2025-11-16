@@ -6,8 +6,8 @@ import Link from "next/link"
 import Image from "next/image"
 
 export default function ProductCard({ product } : { product: Product }) {
-  return <div className="group relative w-50 h-123 rounded-lg border-2 border-gray-200 bg-white shadow-md hover:shadow-2xl hover:border-blue-500 transition-all duration-200 select-none">
-    <Image src={product.main_image} alt={product.name} className="w-full aspect-5/4 rounded-t-md" />
+  return <div className="group relative w-full h-123 rounded-lg border-2 border-gray-200 bg-white shadow-md hover:shadow-2xl hover:border-blue-500 transition-all duration-200 select-none">
+    <Image src={product.main_image} alt={product.name} className="w-full aspect-5/4 rounded-t-md" width={100} height={100}/>
     <Link href={`/product/${product.slug}`} className="block px-3">
       <section className="mt-2">
         <p className="font-medium">{product.name}</p>

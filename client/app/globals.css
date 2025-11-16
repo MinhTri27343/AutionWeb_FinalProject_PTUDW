@@ -220,5 +220,5 @@ h6 {
 }
 
 .background-user{
-  @apply bg-white shadow-sm px-6 rounded-lg pt-8 pb-4 border border-gray-200
+  @apply bg-white shadow-sm px-6 rounded-lg pt-8 pb-8 border border-gray-200
 }

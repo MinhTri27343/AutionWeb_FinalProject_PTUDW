@@ -7,6 +7,7 @@ import UserCategoryTable from "@/components/UserCategoryTable";
 import { userCategories } from "./const";
 
 import { usePathname } from "next/navigation";
+import { Footer } from "@/components/Footer/Footer";
  const productCategories: ProductCategoryTree[] = [{
   id: 1,
   slug: "điện-tử",
@@ -133,7 +134,7 @@ export default function RootLayout({
     <html lang="en">
       <body>
           <Header />
-          <div className="mt-[100px] flex container gap-8">
+          <div className="mt-[100px] flex container gap-8 mb-[50px]">
             <aside>
               {isUserRoute ? (
                 <UserCategoryTable userCategories={userCategories} />
@@ -146,6 +147,7 @@ export default function RootLayout({
               {children}
             </main>
           </div>
+          <Footer/>
       </body>
     </html>
   );
