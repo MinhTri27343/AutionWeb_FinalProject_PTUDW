@@ -40,7 +40,7 @@
     PATCH	/upgrades/:id/approve	            Duyệt yêu cầu	
     PATCH	/upgrades/:id/reject	            Từ chối yêu cầu	
 ----------------------------
-## 2: PRODUCT API (Âu)
+## 2: PRODUCT API (Trí)
  --> product.routes.ts
     GET	    /products	                                Lấy danh sách tất cả sản phẩm 
     GET	    /products?query&category&sort	                        Tìm kiếm full-text theo tên, danh mục, sắp xếp theo thời gian, giá...	
@@ -63,7 +63,7 @@
     PATCH	/categories/:id	                    Cập nhật danh mục (Name)	
     DELETE	/categories/:id	                    Xoá danh mục        
 ----------------------------
-## 4: FAVORITE (Watch List) API (Trí)
+## 4: FAVORITE (Watch List) API (Âu)
 --> favorite.route.ts
     GET	    /favorites	                        Xem danh sách sản phẩm yêu thích	
     POST	/favorites/:productId	            Thêm vào danh sách yêu thích	
@@ -80,7 +80,7 @@
     POST	/bids	                            Gửi giá đấu 
     POST	/bids/reject	                    Seller từ chối người mua cụ thể	Seller
 ---------------------------
-## 7: ORDER & TRANSACTION API (Trí)
+## 7: ORDER & TRANSACTION API (Âu)
 --> order.route.ts
     GET	    /orders	                            Xem danh sách đơn hàng của user	
     GET	    /orders/:productId	                Xem chi tiết đơn hàng (thắng đấu giá)	
