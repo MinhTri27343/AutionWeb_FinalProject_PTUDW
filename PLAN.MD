@@ -43,7 +43,7 @@
 ## 2: PRODUCT API (Trí)
  --> product.routes.ts
     GET	    /products	                                Lấy danh sách tất cả sản phẩm 
-    GET	    /products?query&category&sort	                        Tìm kiếm full-text theo tên, danh mục, sắp xếp theo thời gian, giá...	
+    GET	    /products?query&category&sort	            Tìm kiếm full-text theo tên, danh mục, sắp xếp theo thời gian, giá...	
     GET	    /products/top	                            Top 5 sản phẩm sắp kết thúc / nhiều lượt ra giá / giá cao nhất
     GET	    /products/:id	                            Xem chi tiết sản phẩm	
     POST	/products	                                Seller đăng sản phẩm mới	
