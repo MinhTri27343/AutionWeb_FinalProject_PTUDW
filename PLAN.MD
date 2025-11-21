@@ -51,12 +51,14 @@
     DELETE	/product/:id	                            Gỡ sản phẩm	
     GET	    /product/:productId/questions	            Lấy danh sách câu hỏi & trả lời	
     POST	/product/:productId/questions	            Đặt câu hỏi	
-    POST	/product/:productId/:questionsId/answers	Người bán trả lời câu hỏi	
+    POST	/product/:productId/:questionsId/answers	Người bán trả lời câu hỏi
     GET	    /product/:productId/status	        Kiểm tra tình trạng (đang diễn ra / kết thúc / gia hạn)	
     POST	/product/:productId/extend	        Tự động gia hạn (trigger nội bộ hoặc admin chỉnh config)
+
+    pool.query(sql, [...])
 ----------------------------
 ## 3: CATEGORY API (Luân)
- --> ategory.routes.ts
+ --> category.routes.ts
     GET	    /category	                        Lấy danh sách tất cả danh mục 2 cấp	
     GET	    /category/:id/products	        Lấy sản phẩm theo danh mục (phân trang)	
     POST	/category	                        Tạo danh mục mới	    
@@ -66,8 +68,7 @@
 ## 4: FAVORITE (Watch List) API (Âu)
 --> favorite.route.ts
     GET	    /favorite	                        Xem danh sách sản phẩm yêu thích	
-    POST	/favorite/:productId	            Thêm vào danh sách yêu thích	
-    DELETE	/favorite/:productId	            Xoá khỏi danh sách yêu thích
+    POST	/favorite/:productId/:isFavorite	            Thêm/bỏ vào danh sách yêu thích
 ---------------------------
 ## 5: RATING API (Hà)
 --> rating.route.ts

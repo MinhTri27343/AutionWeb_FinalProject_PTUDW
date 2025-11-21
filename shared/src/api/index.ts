@@ -1,8 +1,4 @@
 const BASE_API = '/api';
-
-
-
-
 const API_ROUTES = {
     user: {
         getUsers: `${BASE_API}/users`,
