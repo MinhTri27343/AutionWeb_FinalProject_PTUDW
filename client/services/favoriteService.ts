@@ -8,16 +8,9 @@ export class FavoriteService {
     });
   }
 
-  static async createFavorite(payload: any) {
-    return safeRequest(async () => {
-      const res = await api.post('/favorite', payload);
-      return res.data;
-    });
-  }
-
   static async updateFavorite(productId: number, isFavorite: boolean): Promise<any> {
     return safeRequest(async () => {
-      const res = await api.put(`/favorite/${productId}/${isFavorite}`);
+      const res = await api.patch(`/favorite/${productId}/${isFavorite}`);
       return res.data;
     });
   }
