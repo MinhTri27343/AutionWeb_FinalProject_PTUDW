@@ -1,4 +1,4 @@
-const BASE_API = "/api";
+const BASE_API = " http://localhost:8080";
 const CATEGORY_API = `${BASE_API}/category`;
 const BID_API = `${BASE_API}/bid`;
 import { Pagination } from "../types/Pagination";
@@ -19,7 +19,7 @@ const API_ROUTES = {
     updateCategory: (id: number) => `${CATEGORY_API}/${id}`, //PATCH
     deleteCategory: (id: number) => ` ${CATEGORY_API}/${id}`, //DELETE
   },
-  auction: {
+  bid: {
     getBidLogs: (id: number) => `${BID_API}/${id}`, //GET
     createBid: `${BID_API}`, //POST
     createReject: `${BID_API}/reject`, //POST

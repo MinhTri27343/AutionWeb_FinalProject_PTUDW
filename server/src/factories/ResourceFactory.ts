@@ -1,11 +1,11 @@
-import { AuctionRoute } from "../routes/BidRoute";
+import { BidRoute } from "../routes/BidRoute";
 import { CategoryRoute } from "../routes/CategoryRoute";
 import { UserRoute } from "../routes/UserRoute";
 
 const resourceMap: Record<string, any> = {
   user: UserRoute,
   category: CategoryRoute,
-  bid: AuctionRoute,
+  bid: BidRoute,
 };
 export class ResourceFactory {
   static createResource(resource: string) {

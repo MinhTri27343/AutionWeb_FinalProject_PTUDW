@@ -2,23 +2,23 @@ import { api, safeRequest } from "../config/axios.config";
 import API_ROUTES from "../../shared/src/api";
 import { BidLog } from "../../shared/src/types";
 
-export class AuctionService {
+export class BidService {
   static async getBidlogs(product_id: number): Promise<any> {
     return safeRequest(async () => {
-      const res = await api.get(API_ROUTES.auction.getBidLogs(product_id));
+      const res = await api.get(API_ROUTES.bid.getBidLogs(product_id));
       return res.data;
     });
   }
 
   static async createBid(payload: BidLog) {
     return safeRequest(async () => {
-      const res = await api.post(API_ROUTES.auction.createBid, payload);
+      const res = await api.post(API_ROUTES.bid.createBid, payload);
       return res.data;
     });
   }
   static async createReject(payload: BidLog) {
     return safeRequest(async () => {
-      const res = await api.post(API_ROUTES.auction.createReject, payload);
+      const res = await api.post(API_ROUTES.bid.createReject, payload);
       return res.data;
     });
   }
