@@ -6,20 +6,20 @@ export type Product = {
   seller: Pick<User, 'id' | 'name' | 'profile_img'>;
   category_id: number;
   main_image: string;
-  extra_images: string[];
+  extra_images?: string[];
   name: string;
-  initial_price: number;
-  buy_now_price: number;
-  current_price: number;
-  top_bidder: Pick<User, 'id' | 'name' | 'profile_img'> | null;
-  bid_count: number;
-  end_time: Date;
-  description: string;
-  auto_extend: boolean;
-  status: "available" | "sold_out"
-  price_increment: number;
-  created_at: Date;
-  updated_at: Date | null;
+  initial_price?: number;
+  buy_now_price?: number;
+  current_price?: number;
+  top_bidder?: Pick<User, 'id' | 'name' | 'profile_img'> | null;
+  bid_count?: number;
+  end_time?: Date;
+  description?: string;
+  auto_extend?: boolean;
+  status?: "available" | "sold_out"
+  price_increment?: number;
+  created_at?: Date;
+  updated_at?: Date | null;
 }
 
 export type ProductPreview = Pick<Product,
