@@ -1,5 +1,6 @@
 const BASE_API = "http://localhost:8080/api";
-const USER_API = `${BASE_API}/user`
+const USER_API = `${BASE_API}/user`;
+const UPGRADE_API =`${BASE_API}/upgrade`,
 const PRODUCT_API = `${BASE_API}/product`;
 const CATEGORY_API = `${BASE_API}/category`;
 const BID_API = `${BASE_API}/bid`;
@@ -17,6 +18,12 @@ const API_ROUTES = {
     getProfile: (id: number) => `${USER_API}/profile/${id}`, //GET
     updateProfile: `${USER_API}/profile`, //PATCH
     updatePassword: `${USER_API}/password`, //PATCH 
+  },
+  upgrade: {
+    createSellerRequest: `${UPGRADE_API}/request`, //POST
+    getRequestStatus: `${UPGRADE_API}/status`, //GET
+    updateApproveRequest: `${UPGRADE_API}/approve`, //PATCH
+    updateRejectRequest: `${UPGRADE_API}/reject`, //PATCH
   },
   category: {
     getCategories: `${CATEGORY_API}`, //GET

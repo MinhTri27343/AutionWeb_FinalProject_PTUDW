@@ -38,7 +38,7 @@ PATCH /user/password Đổi mật khẩu (yêu cầu mật khẩu cũ)
 --> upgrade.routes.ts
 POST /upgrade/request Bidder gửi yêu cầu trở thành seller
 GET /upgrade/status Xem tình trạng yêu cầu
-PATCH /upgrade/:id/approve Duyệt yêu cầu
+PATCH /upgrade/approve Duyệt yêu cầu
 PATCH /upgrade/:id/reject Từ chối yêu cầu
 
 ---
