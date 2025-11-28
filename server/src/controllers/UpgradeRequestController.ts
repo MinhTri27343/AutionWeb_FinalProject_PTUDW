@@ -10,4 +10,9 @@ export class UpgradeController extends BaseController {
         const result = await this.service.createSellerRequest(req.body);
         return {result};
     }
+
+    async getRequestStatus(req: Request, res: Response) {
+        const result = await this.service.getRequestStatus(req.body);
+        return {result};
+    }
 }

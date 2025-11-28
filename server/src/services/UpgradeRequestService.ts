@@ -24,4 +24,16 @@ export class UpgradeService extends BaseService {
 
         return this.safeQuery(sql, params);
     }
+
+    async getRequestStatus(payload: {id: string}) {
+        const sql = 
+                `
+                SELECT status 
+                FROM admin.user_upgrade_requests
+                WHERE id = $1;
+                `
+        const params = [payload.id];
+
+        return this.safeQuery(sql, params);
+    }
 }
