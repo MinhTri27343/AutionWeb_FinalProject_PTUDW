@@ -212,9 +212,7 @@ export default function ProductPage() {
       </div>
       {product && <Question productId={product.id} />}
       {product && <BidHistory productId={product.id} />}
-      {
-        //  product && <RelatedProducts categoryId={product.category_id} />
-      }
+      {product && <RelatedProducts categoryId={product.category_id} />}
     </div>
   );
 }
