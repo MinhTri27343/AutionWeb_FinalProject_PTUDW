@@ -4,7 +4,7 @@ import { FavoriteRoute } from "../routes/FavoriteRoute";
 import { OrderRoute } from "../routes/OrderRoute";
 import { UserRoute } from "../routes/UserRoute";
 import { ProductRoute } from "../routes/ProductRoute";
-import { UpgradeRoute } from "../routes/UpgradeRoute";
+import { UpgradeRequestRoute } from "../routes/UpgradeRequestRoute";
 const resourceMap: Record<string, any> = {
   user: UserRoute,
   category: CategoryRoute,
@@ -12,7 +12,7 @@ const resourceMap: Record<string, any> = {
   product: ProductRoute,
   favorite: FavoriteRoute,
   order: OrderRoute,
-  upgrade: UpgradeRoute
+  upgrade: UpgradeRequestRoute
 };
 export class ResourceFactory {
   static createResource(resource: string) {

@@ -3,7 +3,7 @@ import { UpgradeService } from "../services/UpgradeRequestService";
 import { BaseController } from "../controllers/BaseController";
 import { UpgradeController } from "../controllers/UpgradeRequestController";
 
-export class UpgradeRoute extends BaseRoute {
+export class UpgradeRequestRoute extends BaseRoute {
     private controller: UpgradeController;
     constructor() {
         super();
