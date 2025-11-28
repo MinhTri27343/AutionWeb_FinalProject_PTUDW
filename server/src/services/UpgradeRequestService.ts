@@ -9,9 +9,9 @@ export class UpgradeService extends BaseService {
 
     static getInstance() {
         if (!UpgradeService.instance) {
-            this.instance = new UpgradeService();
+            UpgradeService.instance = new UpgradeService();
         }
-        return this.instance;
+        return UpgradeService.instance;
     }
 
     async createSellerRequest(payload: { id: string }) {
