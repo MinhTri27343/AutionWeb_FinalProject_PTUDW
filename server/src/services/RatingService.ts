@@ -1,4 +1,10 @@
 import { BaseService } from "./BaseService";
+import { UserRating } from "../../../shared/src/types";
+
+interface CreateRatingPayload extends UserRating {
+    rater_id: string
+    ratee_id: string
+}
 
 export class RatingService extends BaseService {
 
@@ -15,20 +21,28 @@ export class RatingService extends BaseService {
         return RatingService.instance
     }
 
-    async getRating(payload: {userId: number}) {
-        const sql = 
-                `
+    async getRating(userId: number) {
+        const sql =
+            `
                 SELECT sum(rating)
                 FROM feedback.user_ratings
                 WHERE ratee_id = $1
                 `
-        const params = [payload.userId]
+        const params = [userId]
 
         return await this.safeQuery(sql, params);
     }
 
-    // async createRating(payload) {
+    async createRating(payload: CreateRatingPayload) {
+        const {rater_id, ratee_id, comment, rating} = payload;
+        const sql = 
+                `
+                INSERT INTO feedback.user_ratings (rater_id, ratee_id, comment, rating)
+                VALUES ( $1, $2, $3, $4 )
+                `
+        const params = [rater_id, ratee_id, comment ? comment : "", rating];
 
-    // }
+        return await this.safeQuery(sql, params);
+    }
 
 }

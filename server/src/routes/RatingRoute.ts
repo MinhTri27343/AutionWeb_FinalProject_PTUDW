@@ -4,7 +4,6 @@ import { RatingController } from "../controllers/RatingController";
 import { RatingService } from "../services/RatingService";
 
 export class RatingRoute extends BaseRoute {
-
     private controller: RatingController
     constructor() {
         super();
@@ -13,6 +12,17 @@ export class RatingRoute extends BaseRoute {
     }
 
     initRoutes() {
-        this.router.get("/:userId", BaseController.handleRequest(this.controller.getRating.bind(this.controller)));
+        this.router.get(
+            "/:userId", 
+            BaseController.handleRequest(
+                this.controller.getRating.bind(
+                    this.controller
+                )));
+
+        this.router.post("/", 
+            BaseController.handleRequest(
+                this.controller.createRating.bind(
+                    this.controller
+                )));
     }
 }
