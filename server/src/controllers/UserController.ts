@@ -7,8 +7,6 @@ export class UserController extends BaseController {
         super(service); // inject service
     }
 
-
-
     async getUsers(req: Request, res: Response) {
         const users = await this.service.getUsers();
         return { user: users }
@@ -19,7 +17,5 @@ export class UserController extends BaseController {
         const profile = await this.service.getProfile(id);
         return { profile }
     }
+
 }
-
-
-// user/
