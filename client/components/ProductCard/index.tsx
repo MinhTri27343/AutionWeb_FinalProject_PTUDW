@@ -7,6 +7,7 @@ import { getTimeDifference } from "@/app/utils";
 import Link from "next/link";
 import Image from "next/image";
 import FavoriteHook from "@/hooks/useFavorite";
+import LoadingSpinner from "../LoadingSpinner";
 
 export default function ProductCard({
   product,
@@ -14,22 +15,12 @@ export default function ProductCard({
 }: {
   product: ProductPreview;
   isFavorite: boolean;
-}) {
+}) 
+{
   const { mutate: addFavorite, isPending: isAdding } =
     FavoriteHook.useAddFavorite();
   const { mutate: removeFavorite, isPending: isRemoving } =
     FavoriteHook.useRemoveFavorite();
-  const {
-    data: favoriteProducts,
-    isLoading,
-    error,
-  } = FavoriteHook.useFavorite() as {
-    data: ProductPreview[];
-    isLoading: boolean;
-    error: any;
-  };
-
-  const favoriteSet = new Set(favoriteProducts.map((item) => item.id));
 
   const handleFavorite = (productId: number, isFavorite: boolean) => {
     try {
@@ -140,12 +131,11 @@ export default function ProductCard({
       {/* Favourite Button */}
       <div className="absolute top-1.5 left-1.5 opacity-0 group-hover:opacity-100 transition-opacity duration-200">
         <FavoriteButton
-          isFavorite={false}
-          onClick={() =>
-            handleFavorite(product.id, !favoriteSet.has(product.id))
-          }
+          isFavorite={isFavorite}
+          onClick={() => handleFavorite(product.id, !isFavorite)}
         />
       </div>
+      {(isAdding || isRemoving) && <LoadingSpinner />}
     </div>
   );
 }

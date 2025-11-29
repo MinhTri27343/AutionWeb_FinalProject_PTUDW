@@ -7,16 +7,16 @@ import FavoriteHook from "@/hooks/useFavorite";
 
 const FavoriteProductPage = () => {
   const {
-    data: favoriteProducts,
+    data: favoriteProducts = [],
     isLoading,
     error,
   } = FavoriteHook.useFavorite() as {
-    data: any;
+    data: ProductPreview[];
     isLoading: boolean;
     error: any;
   };
 
-  console.log(favoriteProducts);
+  const favoriteSet = new Set(favoriteProducts.map((item) => item.id));
 
   return (
     <div className="background-user">
@@ -25,10 +25,14 @@ const FavoriteProductPage = () => {
       {error && <div>{error.message}</div>}
       {!isLoading && !error && (
         <div className="mt-2 grid grid-cols-5 gap-3">
-          {favoriteProducts.data.favorite_products.map((item) => {
+          {favoriteProducts.map((item) => {
             return (
               <div key={item.id} className="mt-3">
-                <ProductCard key={item.id} product={item} />
+                <ProductCard
+                  key={item.id}
+                  product={item}
+                  isFavorite={favoriteSet.has(item.id)}
+                />
               </div>
             );
           })}
