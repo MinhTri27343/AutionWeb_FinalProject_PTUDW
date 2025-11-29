@@ -1,7 +1,5 @@
-export function getTimeDifference(start: string, end: string): string {
-  const startDate = new Date(start);
-  const endDate = new Date(end);
-  const diffMs = endDate.getTime() - startDate.getTime(); // milliseconds
+export function getTimeDifference(start: Date, end: Date): string {
+  const diffMs = end.getTime() - start.getTime(); // milliseconds
   const diffMinutes = Math.floor(diffMs / (1000 * 60));
   const diffHours = Math.floor(diffMinutes / 60);
   const diffDays = Math.floor(diffHours / 24);
