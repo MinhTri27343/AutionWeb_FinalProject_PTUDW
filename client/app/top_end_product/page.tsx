@@ -13,6 +13,7 @@ function Page() {
   const searchParams = useSearchParams();
   const router = useRouter();
   const page = searchParams.get("page") || "1";
+  let totalPages = 1;
   const {
     data: topEndingSoonProduct,
     isLoading: isLoadingTopEndingSoonProduct,
@@ -25,8 +26,10 @@ function Page() {
     router.replace(`?${next.toString()}`);
   };
 
+  if (topEndingSoonProduct) {
+    totalPages = Math.ceil(topEndingSoonProduct.length / per_page);
+  }
   const data = topEndingSoonProduct as ProductPreview[];
-
   return (
     <>
       {isLoadingTopEndingSoonProduct && <LoadingSpinner />}
@@ -65,7 +68,7 @@ function Page() {
           </div>
           <div className="mt-10 flex justify-center">
             <Pagination
-              totalPages={3}
+              totalPages={totalPages}
               onPageChange={handlePageChange}
               currentPage={Number(page)}
             />

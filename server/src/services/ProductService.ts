@@ -66,7 +66,7 @@ export class ProductService extends BaseService {
     // return currentPrice[0]?.current_price
     //   ? Number(currentPrice[0].current_price)
     //   : null;
-    return currentPrice[0]?.current_price
+    return currentPrice[0]?.current_price;
   }
 
   async getStatus(productId: number): Promise<string> {
@@ -198,7 +198,7 @@ export class ProductService extends BaseService {
 
   async getProducts(): Promise<ProductPreview[]> {
     const sql = `SELECT id FROM product.products order by id asc  `;
-    let products:ProductPreview[] = await this.safeQuery(sql);
+    let products: ProductPreview[] = await this.safeQuery(sql);
 
     const newProducts = await Promise.all(
       products.map(async (item: any) => {
@@ -211,26 +211,37 @@ export class ProductService extends BaseService {
   }
 
   // Ko chuyen limit cung
-  async getTopEndingSoonProducts(limit?: number, page?: number): Promise<ProductPreview[]> {
-    
-    let sql = `
+  async getTopEndingSoonProducts(
+    limit?: number,
+    page?: number
+  ): Promise<ProductPreview[]> {
+    let sqlData = `
     SELECT id
+    FROM product.products
+    ORDER BY product.products.end_time ASC
+    `;
+
+    let sqlCount = `
+    SELECT COUNT(*) AS total
     FROM product.products
     ORDER BY product.products.end_time ASC
     `;
 
     const params: any[] = [];
     if (limit) {
-      sql += `LIMIT $1 \n`;
+      sqlData += `LIMIT $1 \n`;
       params.push(limit);
     }
-    if (page && limit){
+    if (page && limit) {
       const offset = (page - 1) * limit;
-      sql += 'OFFSET $2 \n';
+      sqlData += "OFFSET $2 \n";
       params.push(offset);
     }
 
-    const endTimeProducts = await this.safeQuery<ProductPreview>(sql, params);
+    const [endTimeProducts, totalProducts] = await Promise.all([
+      this.safeQuery<ProductPreview>(sqlData, params),
+      this.safeQuery<{ total: number }>(sqlCount),
+    ]);
 
     const newEndtimeProducts = await Promise.all(
       endTimeProducts.map(async (item: any) => {
@@ -238,7 +249,6 @@ export class ProductService extends BaseService {
         return productType;
       })
     );
-
     return newEndtimeProducts;
   }
 

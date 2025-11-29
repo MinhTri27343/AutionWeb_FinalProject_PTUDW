@@ -18,6 +18,7 @@ export class ProductController extends BaseController {
 
     return {
       topEndingSoonProducts: topEndingSoonProducts,
+      totalProducts: topEndingSoonProducts?.length
     };
   }
 
