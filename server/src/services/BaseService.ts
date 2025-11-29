@@ -17,8 +17,3 @@ export class BaseService {
     }
   }
 }
-/*
-const sql const param return this.safequery(sql, param)
-*/
-
-// Image ben ant-design

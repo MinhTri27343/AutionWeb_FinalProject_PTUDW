@@ -1,4 +1,7 @@
 const BASE_API = "http://localhost:8080/api";
+const USER_API = `${BASE_API}/user`;
+const UPGRADE_API =`${BASE_API}/upgrade`;
+const RATING_API = `${BASE_API}/rating`;
 const PRODUCT_API = `${BASE_API}/product`;
 const CATEGORY_API = `${BASE_API}/category`;
 const BID_API = `${BASE_API}/bid`;
@@ -13,6 +16,15 @@ const API_ROUTES = {
     updateUser: (id: number) => `${BASE_API}/users${id}`,
     deleteUser: (id: number) => `${BASE_API}/users${id}`,
     createUSer: `${BASE_API}/users`,
+    getProfile: () => `${USER_API}/profile`, //GET
+    updateProfile: `${USER_API}/profile`, //PATCH
+    updatePassword: `${USER_API}/password`, //PATCH 
+  },
+  upgrade: {
+    createSellerRequest: `${UPGRADE_API}/request`, //POST
+    getRequestStatus:(id: string) =>  `${UPGRADE_API}/status/${id}`, //GET
+    updateApproveRequest: `${UPGRADE_API}/approve`, //PATCH
+    updateRejectRequest: `${UPGRADE_API}/reject`, //PATCH
   },
   category: {
     getCategories: `${CATEGORY_API}`, //GET
@@ -26,6 +38,10 @@ const API_ROUTES = {
     getBidLogs: (id: number) => `${BID_API}/${id}`, //GET
     createBid: `${BID_API}`, //POST
     createReject: `${BID_API}/reject`, //POST
+  },
+  rating: {
+    getRating: (userId: number) => `${RATING_API}/${userId}`, //GET
+    createRating: `${RATING_API}`, //POST
   },
   product: {
     getProducts: `${PRODUCT_API}`, // GET
