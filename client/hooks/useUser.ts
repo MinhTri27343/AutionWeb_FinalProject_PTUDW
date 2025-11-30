@@ -1,14 +1,12 @@
 import { STALE_10_MIN } from "@/config/query.config";
 import { UserService } from "@/services/userService";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query"
-import { User } from "../../shared/src/types";
 
-interface UpdateUserPayload extends User {
-    id: number;
-    name: string | "";
-    email: string | "";
-    address: string | "";
-    profile_img: string | "";
+interface UpdateUserPayload {
+    name: string | '';
+    email: string | '';
+    address: string | '';
+    profile_img: string | '';
 }
 
 class UserHook {
