@@ -1,15 +1,45 @@
+"use client";
+
 import React from "react";
 import FavoriteButton from "../FavoriteButton";
-import { Product } from "../../../shared/src/types";
+import {  ProductPreview } from "../../../shared/src/types";
 import { getTimeDifference } from "@/app/utils";
 import Link from "next/link";
 import Image from "next/image";
+import FavoriteHook from "@/hooks/useFavorite";
+import LoadingSpinner from "../LoadingSpinner";
 
-export default function ProductCard({ product }: { product: Product }) {
+const defaultImage = "https://img.freepik.com/premium-photo/white-colors-podium-abstract-background-minimal-geometric-shape-3d-rendering_48946-113.jpg?semt=ais_hybrid&w=740&q=80";
+
+export default function ProductCard({
+  product,
+  isFavorite = false,
+}: {
+  product: ProductPreview;
+  isFavorite: boolean;
+}) 
+{
+  const { mutate: addFavorite, isPending: isAdding } =
+    FavoriteHook.useAddFavorite();
+  const { mutate: removeFavorite, isPending: isRemoving } =
+    FavoriteHook.useRemoveFavorite();
+
+  const handleFavorite = (productId: number, isFavorite: boolean) => {
+    try {
+      if (isFavorite) {
+        addFavorite({ productId: productId });
+      } else {
+        removeFavorite({ productId: productId });
+      }
+    } catch (e) {
+      console.error("Fail to adding or removing favorite products", e);
+    }
+  };
+
   return (
     <div className="group relative w-full h-123 rounded-lg border-2 border-gray-200 bg-white shadow-md hover:shadow-2xl hover:border-blue-500 transition-all duration-200 select-none">
       <Image
-        src={product.main_image}
+        src={product.main_image || defaultImage}
         width={50}
         height={123}
         alt={product.name}
@@ -39,7 +69,8 @@ export default function ProductCard({ product }: { product: Product }) {
             <p className="text-sm">Giá hiện tại</p>
             <p>
               <span className="text-2xl font-medium text-red-500">
-                {product.current_price.toLocaleString("en-US")}
+                {product.current_price?.toLocaleString("en-US") ||
+                  product.initial_price}
               </span>
             </p>
           </div>
@@ -47,16 +78,16 @@ export default function ProductCard({ product }: { product: Product }) {
             <p className="text-sm">Giá mua ngay</p>
             <p>
               <span className="text-xl font-medium text-blue-600">
-                {product.buy_now_price.toLocaleString("en-US")}
+                {product.buy_now_price?.toLocaleString("en-US") || "---"}
               </span>
             </p>
           </div>
 
           <div className="mt-3 h-10">
-            {product.top_bidder?.name ? (
+            {product.top_bidder_name ? (
               <div>
                 <p className="text-sm">Người trả giá cao nhất</p>
-                <p className="font-medium">{product.top_bidder?.name}</p>
+                <p className="font-medium">{product.top_bidder_name}</p>
               </div>
             ) : (
               <div>
@@ -68,7 +99,8 @@ export default function ProductCard({ product }: { product: Product }) {
         <hr className="border-t border-solid border-gray-300 mt-3 mb-1.5" />
         <section className="flex flex-col gap-1.5">
           <p className="text-sm text-gray-500">
-            Ngày bắt đầu: {product.created_at.toLocaleDateString("en-GB")}
+            Ngày bắt đầu:{" "}
+            {new Date(product.created_at).toLocaleDateString("en-GB")}
           </p>
           <div className="flex flex-row gap-2 items-center">
             <svg
@@ -89,7 +121,10 @@ export default function ProductCard({ product }: { product: Product }) {
               />
             </svg>
             <span>
-              {getTimeDifference(product.created_at, product.end_time)}
+              {getTimeDifference(
+                new Date(product.created_at),
+                new Date(product.end_time)
+              )}
             </span>
           </div>
         </section>
@@ -97,8 +132,12 @@ export default function ProductCard({ product }: { product: Product }) {
 
       {/* Favourite Button */}
       <div className="absolute top-1.5 left-1.5 opacity-0 group-hover:opacity-100 transition-opacity duration-200">
-        <FavoriteButton isFavorite={false} />
+        <FavoriteButton
+          isFavorite={isFavorite}
+          onClick={() => handleFavorite(product.id, !isFavorite)}
+        />
       </div>
+      {(isAdding || isRemoving) && <LoadingSpinner />}
     </div>
   );
 }

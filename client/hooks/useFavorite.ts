@@ -13,8 +13,8 @@ class FavoriteHook {
       staleTime: STALE_10_MIN,
 
       select: (data) => {
-        return data;
-      }
+        return data.data.favorite_products;
+      },
     });
   }
 
@@ -29,7 +29,7 @@ class FavoriteHook {
         queryClient.invalidateQueries({
           queryKey: ["favorite_product"],
         });
-      }
+      },
     });
   }
 
@@ -44,7 +44,7 @@ class FavoriteHook {
         queryClient.invalidateQueries({
           queryKey: ["favorite_product"],
         });
-      }
+      },
     });
   }
 }
