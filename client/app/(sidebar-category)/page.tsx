@@ -110,12 +110,3 @@ function Page() {
   );
 }
 export default Page;
-// "/category/[:...category_slugs]/product/[:product_slug]"
-// "/user/info"
-// "/user/rating"
-// "/user/favourite_products"
-// "/user/bidding_products"
-// "/user/winning_products"
-// "/user/seller_role"
-// "/user/selling_products"
-// "/user/sold_products"
