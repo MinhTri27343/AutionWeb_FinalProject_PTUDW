@@ -47,6 +47,7 @@ const API_ROUTES = {
     getProducts: `${PRODUCT_API}`, // GET
     getProductTop: `${PRODUCT_API}/top`, // GET
     getProductById: (id: number) => `${PRODUCT_API}/${id}`, // GET
+    getProductBySlug: (slug: string) => `${PRODUCT_API}/slug/${slug}`, // GET
     getSoldProduct: `${PRODUCT_API}/sold`, // GET
     getTopEndingSoonProduct: (limit: number, page: number) =>
       `${PRODUCT_API}/top_end?limit=${limit}&page=${page}`, // GET

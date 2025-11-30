@@ -1,4 +1,8 @@
-import { CreateAnswer, CreateProduct, CreateQuestion } from "../../../shared/src/types";
+import {
+  CreateAnswer,
+  CreateProduct,
+  CreateQuestion,
+} from "../../../shared/src/types";
 import { BaseController } from "./BaseController";
 import { Request, Response, NextFunction } from "express";
 
@@ -64,6 +68,13 @@ export class ProductController extends BaseController {
       product: product,
     };
   }
+  async getProductBySlug(req: Request, res: Response) {
+    const slug = req.params.slug;
+    const product = await this.service.getProductBySlug(slug);
+    return {
+      product: product,
+    };
+  }
   async getSoldProducts(req: Request, res: Response) {
     const soldProducts = await this.service.getSoldProducts();
     return {
@@ -113,7 +124,11 @@ export class ProductController extends BaseController {
     const userId = req.headers["user-id"];
     const productId = req.params.productId;
     const createQuestion: CreateQuestion = req.body;
-    const question = await this.service.createQuestion(createQuestion, userId, productId);
+    const question = await this.service.createQuestion(
+      createQuestion,
+      userId,
+      productId
+    );
     return {
       question: question,
     };
@@ -121,9 +136,13 @@ export class ProductController extends BaseController {
 
   async createAnswer(req: Request, res: Response) {
     const userId = req.headers["user-id"];
-    const questionId = req.params.questionId;;
+    const questionId = req.params.questionId;
     const createAnswer: CreateAnswer = req.body;
-    const answer = await this.service.createAnswer(createAnswer, userId, questionId);
+    const answer = await this.service.createAnswer(
+      createAnswer,
+      userId,
+      questionId
+    );
     return {
       answer: answer,
     };

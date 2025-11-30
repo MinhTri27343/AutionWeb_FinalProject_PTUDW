@@ -104,7 +104,9 @@ export class ProductService extends BaseService {
       json_build_object(
         'id', u.id,
         'name', u.name,
-        'profile_img', u.profile_img
+        'profile_img', u.profile_img,
+        'positive_points', u.positive_points,
+        'negative_points', u.negative_points
       ) AS seller,
       p.category_id,
       p.main_image,
@@ -117,10 +119,11 @@ export class ProductService extends BaseService {
       p.auto_extend,
       p.price_increment,
       p.created_at,
-      p.updated_at
-
+      p.updated_at,
+      c.name as category_name
     FROM product.products p 
     JOIN admin.users u on u.id = p.seller_id 
+    JOIN product.product_categories c on c.id = p.category_id
     WHERE p.id = $1
     `;
 
@@ -332,7 +335,23 @@ export class ProductService extends BaseService {
     );
     return newProduct[0];
   }
+  async getProductBySlug(slug: string): Promise<Product | undefined> {
+    const sql = `
+    SELECT id
+    FROM product.products 
+    WHERE slug = $1
+    `;
+    const product = await this.safeQuery<Product>(sql, [slug]);
 
+    const newProduct = await Promise.all(
+      product.map(async (item: any) => {
+        const productType = this.getProductType(item.id);
+        return productType;
+      })
+    );
+
+    return newProduct[0];
+  }
   async getSoldProducts(): Promise<ProductPreview[] | undefined> {
     const sql = `
    SELECT o.product_id as id
