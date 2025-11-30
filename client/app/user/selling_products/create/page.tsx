@@ -166,60 +166,10 @@ const CreateProductPage = () => {
 
     formData.append("payload", JSON.stringify(payload));
 
-    createProduct(formData, {
-      onSuccess: (_) => {
-        alert("Đăng sản phẩm thành công!");
-        window.location.reload();
-      },
-      onError: (error: any) => {
-        alert("Có lỗi xảy ra: " + error.message);
-      },
-    });
-  };
-
-  const handleSubmitUpload = (e: React.FormEvent) => {
-    const formData = new FormData();
-    formData.append("image", mainImage || ""); // "image" chính là key backend nhận
-    const res = api.post(
-      "http://localhost:8080/api/favorite/upload-test",
-      formData,
-      {
-        headers: {
-          "Content-Type": "multipart/form-data",
-        },
-      }
-    );
-    console.log(res);
-  };
-  const handleSubmitDelete = (e: React.FormEvent) => {
-    const imagePath: string =
-      "https://cb5953b1e7c78dc509ddcff170b55b6e.r2.cloudflarestorage.com/ptudw-auction-images/product/1764472240348-1920-x-1080-nature-desktop-7uzi3zf1 qeoosb63.jpg";
-    const res = api.delete("http://localhost:8080/api/favorite/delete-test", {
-      data: {
-        imagePath: imagePath,
-      },
-    });
-    console.log(res);
+    createProduct(formData);
   };
   return (
-    <div className="relative w-full bg-[#F8FAFC] lg:px-32">
-      {/* GIAO DIỆN TẠM - NÚT UPLOAD & XÓA ẢNH TRONG CLOUDFLARE R2 */}
-      {/* <div className="h-50 grid grid-cols-3 gap-2">
-        <button
-          onClick={handleSubmitUpload}
-          className="bg-gray-500 border border-gray-300 cursor-pointer text-white"
-        >
-          Upload
-        </button>
-        <button
-          onClick={handleSubmitDelete}
-          className="bg-gray-500 border border-gray-300 cursor-pointer text-white"
-        >
-          Delete
-        </button>
-      </div> */}
-      {/* KẾT THÚC GIAO DIỆN TẠM */}
-
+    <div className="relative w-full bg-[#F8FAFC] lg:px-24">
       <h1 className="text-3xl font-bold text-gray-900 mb-2">
         Đăng sản phẩm mới
       </h1>
@@ -405,7 +355,7 @@ const CreateProductPage = () => {
             </div>
             <div>
               <label className="block text-sm font-semibold text-gray-900 mb-2">
-                Giá Mua ngay (VND)
+                Giá mua ngay (VND)
               </label>
               <input
                 placeholder="Tuỳ chọn"

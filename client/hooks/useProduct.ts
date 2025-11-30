@@ -151,6 +151,9 @@ class ProductHook {
         queryClient.invalidateQueries({
           queryKey: ["products"],
         });
+
+        alert("Đăng sản phẩm thành công!");
+        window.location.reload();
       },
     });
   }
@@ -165,6 +168,8 @@ class ProductHook {
         queryClient.invalidateQueries({
           queryKey: ["products"],
         });
+
+        alert("Cập nhật sản phẩm thành công!");
       },
     });
   }

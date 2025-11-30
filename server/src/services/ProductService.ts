@@ -428,7 +428,7 @@ export class ProductService extends BaseService {
             WHEN description IS NULL THEN $1
             ELSE description || E'\n\n' || $1
         END,
-        updated = NOW()
+        updated_at = NOW()
     WHERE id = $2
     RETURNING *;
     `;
