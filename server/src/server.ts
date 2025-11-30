@@ -21,7 +21,6 @@ app.use((req, res, next) => {
   console.log("Incoming request:", req.method, req.url);
   next();
 });
-
 // const userRoute = new UserRoute();
 
 // app.use("/user", userRoute.router); // ← mount router vào /user

@@ -1,6 +1,8 @@
 import { DeleteObjectCommand, PutObjectCommand } from "@aws-sdk/client-s3";
 import CloudflareR2 from "../config/cloudflare";
 
+export type R2DirectoryType = "product" | "user";
+
 export class R2Service {
   private readonly r2Client = CloudflareR2.getInstance();
   private static _instance: R2Service;
@@ -18,16 +20,19 @@ export class R2Service {
   public async uploadToR2(
     fileBuffer: Buffer,
     originalName: string,
-    contentType: string
+    contentType: string,
+    directory?: R2DirectoryType
   ): Promise<string> {
-    let fileName = "";
+    let key = "";
     try {
       if (!fileBuffer) throw new Error("File is required");
-      fileName = Date.now() + "-" + originalName;
+
+      const fileName = Date.now() + "-" + originalName;
+      key = directory ? `${directory}/${fileName}` : fileName;
 
       const command = new PutObjectCommand({
         Bucket: process.env.R2_BUCKET_NAME!,
-        Key: fileName,
+        Key: key,
         Body: fileBuffer,
         ContentType: contentType,
       });
@@ -36,8 +41,8 @@ export class R2Service {
     } catch (e) {
       console.error("Fail to upload file", e);
     } finally {
-      return fileName
-        ? `https://${process.env.R2_ACCOUNT_ID}.r2.cloudflarestorage.com/${process.env.R2_BUCKET_NAME}/${fileName}`
+      return key
+        ? `https://${process.env.R2_ACCOUNT_ID}.r2.cloudflarestorage.com/${process.env.R2_BUCKET_NAME}/${key}`
         : "";
     }
   }
@@ -62,6 +67,8 @@ export class R2Service {
       await this.r2Client.send(command);
     } catch (e) {
       console.error("Fail to delete file", e);
+    } finally {
+      return;
     }
   }
 
