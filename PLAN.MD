@@ -96,7 +96,7 @@ done POST /bid/reject Seller từ chối người mua cụ thể Seller
 ## 7: ORDER & TRANSACTION API (Âu)
 
 --> order.route.ts
-    GET	    /order	                            Xem danh sách đơn hàng của user	
+    GET	    /order	                            Xem danh sách đơn hàng của user	x   
     GET	    /order/:productId	                Xem chi tiết đơn hàng (thắng đấu giá)	
     POST	/order	                            Tạo đơn hàng sau khi kết thúc phiên	
     PATCH	/order/:productId/:status	        Cập nhật trạng thái (paid / shipped / completed / cancelled)

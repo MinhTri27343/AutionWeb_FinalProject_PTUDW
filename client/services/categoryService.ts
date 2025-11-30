@@ -15,10 +15,10 @@ export class CategoryService {
       return res.data;
     });
   }
-  static async getProductsByCategory(pagination: Pagination): Promise<any> {
+  static async getProductsByCategory(slug: string, page: number, limit: number, sort: string): Promise<any> {
     return safeRequest(async () => {
       const res = await api.get(
-        API_ROUTES.category.getProductsByCategory(pagination)
+        API_ROUTES.category.getProductsByCategory(slug, page, limit, sort)
       );
       return res.data;
     });
@@ -42,7 +42,7 @@ export class CategoryService {
     });
   }
 
-  static async deeleteCategory(id: number): Promise<any> {
+  static async deleteCategory(id: number): Promise<any> {
     return safeRequest(async () => {
       const res = await api.delete(API_ROUTES.category.deleteCategory(id));
       return res.data;

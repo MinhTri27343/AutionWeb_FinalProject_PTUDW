@@ -42,16 +42,18 @@ export class ProductService {
     });
   }
 
-  static async getTopBiddingProduct(): Promise<any> {
+  static async getTopBiddingProduct(limit: number, page: number): Promise<any> {
     return safeRequest(async () => {
-      const res = await api.get(API_ROUTES.product.getTopBiddingProduct);
+      const res = await api.get(
+        API_ROUTES.product.getTopBiddingProduct(limit, page)
+      );
       return res.data;
     });
   }
 
-  static async getTopPriceProduct(): Promise<any> {
+  static async getTopPriceProduct(limit: number, page: number): Promise<any> {
     return safeRequest(async () => {
-      const res = await api.get(API_ROUTES.product.getTopPriceProduct);
+      const res = await api.get(API_ROUTES.product.getTopPriceProduct(limit, page));
       return res.data;
     });
   }

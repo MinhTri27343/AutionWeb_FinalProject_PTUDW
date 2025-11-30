@@ -173,7 +173,8 @@ export default function ProductPage() {
     },
   });
   watch("price");
-
+  
+  console.log("hello", product);
   return (
     <div className="bg-[#F8FAFC] w-full">
       {isLoadingProduct || isLoadingFavoriteProducts ? (

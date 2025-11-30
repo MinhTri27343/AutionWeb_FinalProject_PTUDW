@@ -28,8 +28,14 @@ const API_ROUTES = {
   },
   category: {
     getCategories: `${CATEGORY_API}`, //GET
-    getProductsByCategory: (pagination: Pagination) =>
-      `${CATEGORY_API}/${pagination.id}/products?page${pagination.page}&limit=${pagination.limit}&sort=${pagination.sort}`, //GET
+    // getProductsByCategory: (pagination: Pagination) =>
+    //   `${CATEGORY_API}/${pagination.slug}/products?page${pagination.page}&limit=${pagination.limit}&sort=${pagination.sort}`, //GET
+    getProductsByCategory: (
+      slug: string,
+      page: number,
+      limit: number,
+      sort: string
+    ) => `${CATEGORY_API}/${slug}?page${page}&limit=${limit}&sort=${sort}`, //GET
     createCategory: `${CATEGORY_API}`, //POST
     updateCategory: (id: number) => `${CATEGORY_API}/${id}`, //PATCH
     deleteCategory: (id: number) => ` ${CATEGORY_API}/${id}`, //DELETE
@@ -47,12 +53,20 @@ const API_ROUTES = {
     getProducts: `${PRODUCT_API}`, // GET
     getProductTop: `${PRODUCT_API}/top`, // GET
     getProductById: (id: number) => `${PRODUCT_API}/${id}`, // GET
-    getProductBySlug: (slug: string) => `${PRODUCT_API}/slug/${slug}`, // GET
+    getProductsByCategory: (
+      slug: string,
+      page: number,
+      limit: number,
+      sort: string
+    ) => `${CATEGORY_API}/${slug}?page${page}&limit=${limit}&sort=${sort}`, //GET
     getSoldProduct: `${PRODUCT_API}/sold`, // GET
     getTopEndingSoonProduct: (limit: number, page: number) =>
       `${PRODUCT_API}/top_end?limit=${limit}&page=${page}`, // GET
-    getTopBiddingProduct: `${PRODUCT_API}/top_bid`, // GET
-    getTopPriceProduct: `${PRODUCT_API}/top_price`, // GET
+    getTopBiddingProduct: (limit: number, page: number) =>
+      `${PRODUCT_API}/top_bid?limit=${limit}&page=${page}`, // GET
+    getTopPriceProduct: (limit: number, page: number) =>
+      `${PRODUCT_API}/top_price?limit=${limit}&page=${page}`, // GET
+    getProductBySlug: (slug: string) => `${PRODUCT_API}/slug/${slug}`, // GET
     createProduct: `${PRODUCT_API}`, // POST
     updateProductDescription: (id: number) =>
       `${PRODUCT_API}/${id}/description`, // PATCH

@@ -1,0 +1,101 @@
+"use client";
+import { SearchBar } from "@/components/SearchBar";
+import { SearchItem } from "@/components/SearchBar";
+import { ArrowRight } from "@/components/icons";
+import Link from "next/link";
+import ProductCard from "@/components/ProductCard";
+import CategoryHook from "@/hooks/useCategory";
+import LoadingSpinner from "@/components/LoadingSpinner";
+import { useSearchParams, useRouter } from "next/navigation";
+import { ProductPreview } from "../../../../../shared/src/types";
+import Pagination from "@/components/Pagination";
+import { use } from "react";
+
+function CategorySlugPage({
+  params,
+}: {
+  params: Promise<{ category_slug: string }>;
+}) {
+  const { category_slug } = use(params);
+  const per_page = 15;
+  const searchParams = useSearchParams();
+  const router = useRouter();
+  const page = searchParams.get("page") || "1";
+  const sort = searchParams.get("sort") || "";
+  let totalPages = 1;
+  let dataResult = null;
+  const {
+    data,
+    isLoading: isLoadingProducts,
+    error: errorProducts,
+  } = CategoryHook.useProductsByCategory(
+    category_slug,
+    Number(page),
+    per_page,
+    sort
+  );
+
+  console.log(category_slug, page, per_page, sort);
+
+  const totalPriceProducts = data?.totalProducts ?? 0;
+  const categoryName = data?.categoryName ?? "";
+  const products = data?.products ?? [];
+
+  console.log(data);
+
+  const handlePageChange = (value: number) => {
+    const next = new URLSearchParams(searchParams);
+    next.set("page", String(value));
+    router.replace(`?${next.toString()}`);
+  };
+
+  if (data) {
+    totalPages = Math.ceil(Number(totalPriceProducts) / per_page);
+    dataResult = products as ProductPreview[];
+  }
+  return (
+    <>
+      {isLoadingProducts && <LoadingSpinner />}
+      {errorProducts && <> Error...</>}
+      {dataResult && dataResult.length > 0 ? (
+        <div>
+          <div className="text-center w-full">
+            <h1 className="text-4xl">Chào mừng đến AuctionHub</h1>
+            <div className="mt-2 text-gray-500">
+              Tìm kiếm và đấu giá hàng triệu sản phẩm từ những người bán uy tín
+            </div>
+          </div>
+          <div className="text-2xl font-medium mt-10">{categoryName}</div>
+          <div className="mt-2 grid grid-cols-5 gap-3">
+            {products.map((item: ProductPreview, index: number) => {
+              return (
+                <div key={index} className="mt-3">
+                  <ProductCard key={index} product={item} isFavorite={false} />
+                </div>
+              );
+            })}
+          </div>
+          <div className="mt-10 flex justify-center">
+            <Pagination
+              totalPages={totalPages}
+              onPageChange={handlePageChange}
+              currentPage={Number(page)}
+            />
+          </div>
+        </div>
+      ) : (
+        <div>Không có sản phẩm thuộc loại này...</div>
+      )}
+    </>
+  );
+}
+export default CategorySlugPage;
+// "/category/[:...category_slugs]/product/[:product_slug]"
+// "/user/info"
+// "/user/rating"
+// "/user/favourite_products"
+// "/user/bidding_products"
+// "/user/winning_products"
+// "/user/seller_role"
+// "/user/selling_products"
+// "/user/sold_products"

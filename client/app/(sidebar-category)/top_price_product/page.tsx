@@ -1,12 +1,13 @@
 "use client";
-import { ArrowRight } from "@/components/icons";
 import Link from "next/link";
-import { ProductPreview } from "../../../shared/src/types";
+import { ProductPreview } from "../../../../shared/src/types";
 import ProductCard from "@/components/ProductCard";
 import ProductHook from "@/hooks/useProduct";
 import LoadingSpinner from "@/components/LoadingSpinner";
 import Pagination from "@/components/Pagination";
 import { useSearchParams, useRouter } from "next/navigation";
+import { ArrowLeft } from "lucide-react";
+import FavoriteHook from "@/hooks/useFavorite";
 
 export default function Page() {
   const per_page = 15;
@@ -14,11 +15,21 @@ export default function Page() {
   const router = useRouter();
   const page = searchParams.get("page") || "1";
   let totalPages = 1;
+  let dataResult = null;
   const {
-    data: topEndingSoonProduct,
-    isLoading: isLoadingTopEndingSoonProduct,
-    error: errorTopEndingSoonProduct,
-  } = ProductHook.useGetTopEndingSoonProduct(per_page, Number(page));
+    data,
+    isLoading: isLoadingTopPriceProducts,
+    error: errorTopPriceProducts,
+  } = ProductHook.useGetTopPriceProduct(per_page, Number(page));
+
+  const {
+    data: favoriteProductData,
+    isLoading: isLoadingFavoriteProduct,
+    error: errorFavoriteProduct,
+  } = FavoriteHook.useFavorite();
+
+  const totalPriceProducts = data?.totalProducts ?? 0;
+  const topPriceProducts = data?.topPriceProducts ?? [];
 
   const handlePageChange = (value: number) => {
     const next = new URLSearchParams(searchParams);
@@ -26,15 +37,16 @@ export default function Page() {
     router.replace(`?${next.toString()}`);
   };
 
-  if (topEndingSoonProduct) {
-    totalPages = Math.ceil(topEndingSoonProduct.length / per_page);
+  if (data) {
+    totalPages = Math.ceil(Number(totalPriceProducts) / per_page);
+    dataResult = topPriceProducts as ProductPreview[];
   }
-  const data = topEndingSoonProduct as ProductPreview[];
   return (
     <>
-      {isLoadingTopEndingSoonProduct && <LoadingSpinner />}
-      {errorTopEndingSoonProduct && <> Error.... </>}
-      {topEndingSoonProduct && (
+      {isLoadingTopPriceProducts && <LoadingSpinner />}
+      {errorTopPriceProducts && <> Error.... </>}
+      {errorFavoriteProduct && <> Error.... </>}
+      {dataResult && (
         <div>
           <div className="text-center w-full">
             <h1 className="text-4xl">Chào mừng đến AuctionHub</h1>
@@ -51,16 +63,24 @@ export default function Page() {
                   href={"/"}
                   className="text-blue-500 flex items-center  gap-2"
                 >
-                  <div className="text-[15px]">Xem tất cả</div>
-                  <ArrowRight className="w-5 h-5 mt-0.5" />
+                  <ArrowLeft className="w-5 h-5 mt-0.5" />
+                  <div className="text-[15px]">Quay lại</div>
                 </Link>
               </div>
             </div>
             <div className="mt-2 grid grid-cols-5 gap-3">
-              {data.map((item, index) => {
+              {dataResult.map((item, index) => {
+                const favoriteIds = new Set(
+                  favoriteProductData.map((f: ProductPreview) => f.id)
+                );
+                const isFavoriteProduct = (item: ProductPreview) =>
+                  favoriteIds.has(item.id);
                 return (
                   <div key={index} className="mt-3">
-                    <ProductCard product={item} isFavorite={false} />
+                    <ProductCard
+                      product={item}
+                      isFavorite={isFavoriteProduct(item)}
+                    />
                   </div>
                 );
               })}
@@ -68,7 +88,7 @@ export default function Page() {
           </div>
           <div className="mt-10 flex justify-center">
             <Pagination
-              totalPages={3}
+              totalPages={totalPages}
               onPageChange={handlePageChange}
               currentPage={Number(page)}
             />

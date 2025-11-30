@@ -102,41 +102,40 @@ class ProductHook {
 
       // Transform data tại Hook (select)
       select: (data) => {
-        console.log(data);
         // Cần BE trả dạng gì ví dụ { data: { ... } } → thì sửa ở đây
-        return data.data.topEndingSoonProducts;
+        return data.data;
       },
     });
   }
 
-  static useGetTopBiddingProduct() {
+  static useGetTopBiddingProduct(limit: number, page: number) {
     return useQuery({
-      queryKey: ["product_top_bidding"],
+      queryKey: ["product_top_bidding", limit, page],
 
-      queryFn: () => ProductService.getTopBiddingProduct(),
+      queryFn: () => ProductService.getTopBiddingProduct(limit, page),
 
       staleTime: STALE_10_MIN,
 
       // Transform data tại Hook (select)
       select: (data) => {
         // Cần BE trả dạng gì ví dụ { data: { ... } } → thì sửa ở đây
-        return data;
+        return data.data;
       },
     });
   }
 
-  static useGetTopPriceProduct() {
+  static useGetTopPriceProduct(limit: number, page: number) {
     return useQuery({
-      queryKey: ["product_top_price"],
+      queryKey: ["product_top_price", limit, page],
 
-      queryFn: () => ProductService.getTopPriceProduct(),
+      queryFn: () => ProductService.getTopPriceProduct(limit, page),
 
       staleTime: STALE_10_MIN,
 
       // Transform data tại Hook (select)
       select: (data) => {
         // Cần BE trả dạng gì ví dụ { data: { ... } } → thì sửa ở đây
-        return data;
+        return data.data;
       },
     });
   }

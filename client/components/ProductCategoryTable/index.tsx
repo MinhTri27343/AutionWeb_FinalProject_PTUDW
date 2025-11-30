@@ -26,6 +26,7 @@ function SortDropdown() {
       onChange={(e) => handleSort(e.target.value)}
     >
       <option value="ascending-price">Giá tăng dần</option>
+      <option value="descending-price">Giá giảm dần</option>
       <option value="expiring-soon">Sắp kết thúc</option>
     </select>
   </div>

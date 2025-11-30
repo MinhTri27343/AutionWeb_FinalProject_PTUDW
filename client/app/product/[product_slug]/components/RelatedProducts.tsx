@@ -26,6 +26,7 @@ export const RelatedProducts = ({
     isLoading: boolean;
   } = CategoryHook.useProductsByCategory(pagination);
 
+  console.log("this is product: ", products);
   return (
     <div>
       <h3 className="text-2xl font-bold text-slate-900 mb-4">
@@ -33,7 +34,7 @@ export const RelatedProducts = ({
       </h3>
       <div className=" grid gap-4 lg:gap-0 lg:grid-cols-5 ">
         {products &&
-          products.map((product, index) => (
+          (products || []).map((product, index) => (
             <div key={index}>
               <ProductCard
                 product={product as ProductPreview}

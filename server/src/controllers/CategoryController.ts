@@ -16,16 +16,37 @@ export class CategoryController extends BaseController {
     const categories = await this.service.getCategories();
     return { categories: categories };
   }
+  // async getProductsByCategory(req: Request, res: Response) {
+  //   const pagination: Pagination = {
+  //     slug: req.body.slug,
+  //     page: parseInt(req.query.page as string) || 1,
+  //     limit: parseInt(req.query.limit as string) || 10,
+  //     sort: (req.query.sort as string) || "",
+  //   };
+  //   const products = await this.service.getProductsByCategory(pagination);
+  //   return products;
+  // }
+
   async getProductsByCategory(req: Request, res: Response) {
-    const pagination: Pagination = {
-      id: parseInt(req.params.id as string),
-      page: parseInt(req.query.page as string) || 1,
-      limit: parseInt(req.query.limit as string) || 10,
-      sort: (req.query.sort as string) || "",
+    const page = Number(req.query.page) || null;
+    const limit = Number(req.query.limit) || null;
+    const sort = req.query.sort;
+    const slug = req.params.slug;
+    const products = await this.service.getProductsByCategory(
+      limit,
+      page,
+      slug,
+      sort
+    );
+    const totalProducts = await this.service.getTotalProductsByCategory(slug);
+    const categoryName = await this.service.getCategoryNameBySlug(slug);
+    return {
+      products: products,
+      totalProducts: totalProducts,
+      categoryName: categoryName,
     };
-    const products = await this.service.getProductsByCategory(pagination);
-    return products;
   }
+
   async createCategory(req: Request, res: Response) {
     const category: CreateCategory = {
       name: req.body.name,

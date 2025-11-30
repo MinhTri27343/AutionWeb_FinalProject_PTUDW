@@ -19,13 +19,13 @@ class CategoryHook {
       },
     });
   }
-  static useProductsByCategory(pagination: Pagination) {
+  static useProductsByCategory(slug: string, page: number, limit: number, sort: string) {
     return useQuery({
-      queryKey: ["products_by_category"],
-      queryFn: () => CategoryService.getProductsByCategory(pagination),
+      queryKey: ["products_by_category", slug, page, limit, sort],
+      queryFn: () => CategoryService.getProductsByCategory(slug, page, limit, sort),
       staleTime: STALE_10_MIN,
       select: (data) => {
-        return data.data.products;
+        return data.data;
       },
     });
   }

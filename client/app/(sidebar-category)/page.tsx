@@ -1,15 +1,16 @@
 "use client";
 import { ArrowRight } from "@/components/icons";
 import Link from "next/link";
-import { Product } from "../../shared/src/types";
+import { ProductPreview } from "../../../shared/src/types";
 import ProductCard from "@/components/ProductCard";
 import ProductHook from "@/hooks/useProduct";
 import LoadingSpinner from "@/components/LoadingSpinner";
+import FavoriteHook from "@/hooks/useFavorite";
 
 interface PageItem {
   title: string;
   href?: string;
-  products: Product[];
+  products: ProductPreview[];
 }
 
 function Page() {
@@ -19,7 +20,13 @@ function Page() {
     error: errorTopProduct,
   } = ProductHook.useGetProductTop();
 
-  if (isLoadingTopProduct)
+  const {
+    data: favoriteProductData,
+    isLoading: isLoadingFavoriteProduct,
+    error: errorFavoriteProduct,
+  } = FavoriteHook.useFavorite();
+
+  if (isLoadingTopProduct && isLoadingFavoriteProduct)
     return (
       <>
         <LoadingSpinner />
@@ -29,25 +36,29 @@ function Page() {
     return <>{errorTopProduct.message};</>;
   }
 
-  console.log(productTop);
-
-  const pageItems: PageItem[] = [
-    {
-      title: "Sản phẩm sắp kết thúc",
-      href: "/top_end_product",
-      products: productTop.topEndingSoonProducts,
-    },
-    {
-      title: "Sản phẩm nhiều lượt đấu giá nhất",
-      href: "/top_bid_product",
-      products: productTop.topBiddingProducts,
-    },
-    {
-      title: "Sản phẩm giá cao nhất",
-      href: "/top_price_product",
-      products: productTop.topPriceProducts,
-    },
-  ];
+  if (errorFavoriteProduct) {
+    return <>{errorFavoriteProduct.message};</>;
+  }
+  let pageItems: PageItem[] = [];
+  if (productTop) {
+    pageItems = [
+      {
+        title: "Sản phẩm sắp kết thúc",
+        href: "/top_end_product",
+        products: productTop.topEndingSoonProducts,
+      },
+      {
+        title: "Sản phẩm nhiều lượt đấu giá nhất",
+        href: "/top_bid_product",
+        products: productTop.topBiddingProducts,
+      },
+      {
+        title: "Sản phẩm giá cao nhất",
+        href: "/top_price_product",
+        products: productTop.topPriceProducts,
+      },
+    ];
+  }
 
   return (
     <>
@@ -75,9 +86,18 @@ function Page() {
               </div>
               <div className="mt-2 grid grid-cols-5 gap-3">
                 {item.products.map((item, index) => {
+                  const favoriteIds = new Set(
+                    favoriteProductData.map((f: ProductPreview) => f.id)
+                  );
+                  const isFavoriteProduct = (item: ProductPreview) =>
+                    favoriteIds.has(item.id);
                   return (
                     <div key={index} className="mt-3">
-                      <ProductCard key={index} product={item} />
+                      <ProductCard
+                        key={index}
+                        product={item}
+                        isFavorite={isFavoriteProduct(item)}
+                      />
                     </div>
                   );
                 })}
@@ -90,12 +110,3 @@ function Page() {
   );
 }
 export default Page;
-// "/category/[:...category_slugs]/product/[:product_slug]"
-// "/user/info"
-// "/user/rating"
-// "/user/favourite_products"
-// "/user/bidding_products"
-// "/user/winning_products"
-// "/user/seller_role"
-// "/user/selling_products"
-// "/user/sold_products"

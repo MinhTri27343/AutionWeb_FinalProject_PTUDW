@@ -9,6 +9,8 @@ import { BaseService } from "./BaseService";
 import { Pagination } from "../../../shared/src/types/Pagination";
 import { MutationResult } from "../../../shared/src/types/Mutation";
 import { createSlugUnique } from "../utils";
+import { ProductPreview } from "../../../shared/src/types/Product";
+import { ShortUser } from "../../../shared/src/types";
 
 export class CategoryService extends BaseService {
   private static instance: CategoryService;
@@ -48,51 +50,51 @@ export class CategoryService extends BaseService {
     return categories;
   }
 
-  
-  async getProductsByCategory(
-    pagination: Pagination
-  ): Promise<ProductPagination> {
-    const offset = (pagination.page - 1) * pagination.limit;
-    const sortColumn = pagination.sort;
-    let sql = "";
-    if (sortColumn != "") {
-      if (sortColumn === "time") {
-        sql = `SELECT * 
-              FROM product.products as p WHERE p.category_id = $1 
-              ORDER BY  p.end_time DESC 
-              LIMIT $2 OFFSET $3`;
-      } else if (sortColumn === "price") {
-        sql = `SELECT * 
-              FROM product.products as p WHERE p.category_id = $1 
-              ORDER BY  p.initial_price ASC 
-              LIMIT $2 OFFSET $3`;
-      }
-    } else {
-      sql = `SELECT * 
-            FROM product.products as p 
-            WHERE p.category_id = $1 
-            LIMIT $2 OFFSET $3`;
-    }
+  // async getProductsByCategory(
+  //   pagination: Pagination
+  // ): Promise<ProductPagination> {
+  //   const offset = (pagination.page - 1) * pagination.limit;
+  //   const sortColumn = pagination.sort;
 
-    const products: Product[] = await this.safeQuery(sql, [
-      pagination.id,
-      pagination.limit,
-      offset,
-    ]);
+  //   let sql = "";
+  //   if (sortColumn != "") {
+  //     if (sortColumn === "time") {
+  //       sql = `SELECT *
+  //             FROM product.products as p WHERE p.category_id = $1
+  //             ORDER BY  p.end_time DESC
+  //             LIMIT $2 OFFSET $3`;
+  //     } else if (sortColumn === "price") {
+  //       sql = `SELECT *
+  //             FROM product.products as p WHERE p.category_id = $1
+  //             ORDER BY  p.initial_price ASC
+  //             LIMIT $2 OFFSET $3`;
+  //     }
+  //   } else {
+  //     sql = `SELECT *
+  //           FROM product.products as p
+  //           WHERE p.category_id = $1
+  //           LIMIT $2 OFFSET $3`;
+  //   }
 
-    sql = ` SELECT COUNT(*) AS total
-    FROM product.products
-    WHERE category_id = $1`;
-    const dataTotal: any = await this.safeQuery(sql, [pagination.id]);
-    const total = dataTotal[0].total;
+  //   const products: Product[] = await this.safeQuery(sql, [
+  //     pagination.id,
+  //     pagination.limit,
+  //     offset,
+  //   ]);
 
-    return {
-      page: pagination.page,
-      limit: pagination.limit,
-      total,
-      products: products,
-    };
-  }
+  //   sql = ` SELECT COUNT(*) AS total
+  //   FROM product.products
+  //   WHERE category_id = $1`;
+  //   const dataTotal: any = await this.safeQuery(sql, [pagination.id]);
+  //   const total = dataTotal[0].total;
+
+  //   return {
+  //     page: pagination.page,
+  //     limit: pagination.limit,
+  //     total,
+  //     products: products,
+  //   };
+  // }
   async createCategory(category: CreateCategory): Promise<MutationResult> {
     const slug = createSlugUnique(category.name);
     const sql = `INSERT INTO product.product_categories (slug, parent_id, name, created_at, updated_at)
@@ -117,5 +119,171 @@ export class CategoryService extends BaseService {
     return {
       success: true,
     };
+  }
+  // ========= TRI ============
+
+  async getTotalProductsByCategory(slug: string): Promise<number | undefined> {
+    let sql = `
+    SELECT COUNT(*) AS total
+    FROM product.products pp 
+    JOIN product.product_categories pc on pc.id = pp.category_id
+    WHERE pc.slug = $1;
+    `;
+    let totalProducts: { total: number }[] = await this.safeQuery(sql, [slug]);
+    return totalProducts[0]?.total;
+  }
+
+    async getCategoryNameBySlug(slug: string): Promise<string | undefined> {
+    let sql = `
+    SELECT pc.name
+    FROM product.product_categories pc
+    WHERE pc.slug = $1;
+    `;
+    let totalProducts: { name: string }[] = await this.safeQuery(sql, [slug]);
+    return totalProducts[0]?.name;
+  }
+
+  async getTopBidder(productId: number): Promise<ShortUser | null> {
+    const sql = `  
+      SELECT u.id, u.name, u.profile_img
+      FROM auction.bid_logs bl 
+      JOIN admin.users u on bl.user_id = u.id 
+      WHERE bl.product_id = $1
+      ORDER BY bl.price DESC 
+      LIMIT 1 
+      `;
+    const bidder = await this.safeQuery<ShortUser>(sql, [productId]);
+    return bidder[0] ? bidder[0] : null;
+  }
+
+  async getBidCount(productId: number): Promise<number | undefined> {
+    const sql = `  
+    SELECT COUNT(DISTINCT(user_id)) AS bid_count
+    FROM auction.bid_logs bl 
+    WHERE bl.product_id = $1
+    `;
+    const bidCount: { bid_count: number }[] = await this.safeQuery(sql, [
+      productId,
+    ]);
+    // return Number(bidCount[0]?.bid_count ?? 0);
+    return bidCount[0]?.bid_count;
+  }
+
+  async getCurrentPrice(productId: number): Promise<number | undefined | null> {
+    const sql = `  
+    SELECT MAX(bl.price) AS current_price
+    FROM auction.bid_logs bl 
+    WHERE bl.product_id = $1
+    `;
+    const currentPrice: { current_price: number | null }[] =
+      await this.safeQuery(sql, [productId]);
+    // return currentPrice[0]?.current_price
+    //   ? Number(currentPrice[0].current_price)
+    //   : null;
+    return currentPrice[0]?.current_price;
+  }
+
+  async getProductPreviewType(productId: number): Promise<ProductPreview> {
+    const result = await Promise.all([
+      this.getTopBidder(productId),
+      this.getBidCount(productId),
+      this.getCurrentPrice(productId),
+    ]);
+
+    const top_bidder: any = result[0];
+    const bid_count = result[1];
+    let current_price = result[2];
+    const sql = `
+    SELECT 
+      p.id, 
+      p.slug,
+      p.category_id,
+      p.main_image,
+      p.name,
+      p.buy_now_price,
+      p.end_time,
+      p.auto_extend,
+      p.created_at,
+      p.initial_price
+
+    FROM product.products p 
+    JOIN admin.users u on u.id = p.seller_id 
+    WHERE p.id = $1
+    `;
+
+    let products: any = await this.safeQuery<ProductPreview>(sql, [productId]);
+    // products[0].id = products[0].id ? Number(products[0].id) : null;
+    // products[0].initial_price = products[0].initial_price
+    //   ? Number(products[0].initial_price)
+    //   : null;
+    // products[0].buy_now_price = products[0].buy_now_price
+    //   ? Number(products[0].buy_now_price)
+    //   : null;
+    // products[0].price_increment = products[0].price_increment
+    //   ? Number(products[0].price_increment)
+    //   : null;
+    if (current_price == null) {
+      current_price = products[0].initial_price;
+    }
+
+    products = {
+      ...products[0],
+      top_bidder_name: top_bidder ? top_bidder.name : null,
+      current_price: current_price,
+      bid_count: bid_count,
+    };
+
+    return products;
+  }
+
+  async getProductsByCategory(
+    limit: number,
+    page: number,
+    slug: string,
+    sort: string
+  ): Promise<ProductPreview[]> {
+    let sql = `
+      SELECT pp.id, GREATEST(COALESCE(bl.current_price, 0), pp.initial_price) AS price, pp.end_time
+      FROM product.products pp
+      JOIN product.product_categories pc on pc.id = pp.category_id
+      LEFT JOIN (
+          SELECT 
+            bl.product_id, 
+            MAX(bl.price) AS current_price
+          FROM auction.bid_logs bl 
+          GROUP BY bl.product_id
+      ) bl ON bl.product_id = pp.id
+      WHERE pc.slug = $1
+      `;
+
+    const params: any[] = [slug];
+    if (sort) {
+      if (sort == "ascending-price") {
+        sql += `ORDER BY price ASC \n`;
+      } else if (sort == "descending-price") {
+        sql += `ORDER BY price DESC \n`;
+      } else if (sort == "expiring-soon") {
+        sql += "ORDER BY end_time ASC \n";
+      }
+    }
+    if (limit) {
+      sql += `LIMIT $2 \n`;
+      params.push(limit);
+    }
+    if (page && limit) {
+      const offset = (page - 1) * limit;
+      sql += "OFFSET $3 \n";
+      params.push(offset);
+    }
+
+    const products = await this.safeQuery<ProductPreview>(sql, params);
+
+    const newProducts = await Promise.all(
+      products.map(async (item: any) => {
+        const productType = this.getProductPreviewType(item.id);
+        return productType;
+      })
+    );
+    return newProducts;
   }
 }

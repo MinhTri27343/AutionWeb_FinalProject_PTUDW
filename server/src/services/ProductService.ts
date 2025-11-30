@@ -173,7 +173,8 @@ export class ProductService extends BaseService {
       p.buy_now_price,
       p.end_time,
       p.auto_extend,
-      p.created_at
+      p.created_at,
+      p.initial_price
 
     FROM product.products p 
     JOIN admin.users u on u.id = p.seller_id 
@@ -197,6 +198,7 @@ export class ProductService extends BaseService {
 
     products = {
       ...products[0],
+      top_bidder: top_bidder,
       top_bidder_name: top_bidder ? top_bidder.name : null,
       current_price: current_price,
       bid_count: bid_count,
@@ -222,18 +224,37 @@ export class ProductService extends BaseService {
   async getTotalProducts(): Promise<number | undefined> {
     let sql = `
     SELECT COUNT(*) AS total
-    FROM product.products
+    FROM product.products pp
     `;
     let totalProducts: { total: number }[] = await this.safeQuery(sql);
     return totalProducts[0]?.total;
   }
 
+  async getTotalProductsByCategory(slug: string): Promise<number | undefined> {
+    let sql = `
+    SELECT COUNT(*) AS total
+    FROM product.products
+    WHERE pp.category_id = $1;
+    `;
+    let totalProducts: { total: number }[] = await this.safeQuery(sql, [slug]);
+    return totalProducts[0]?.total;
+  }
+
+  async getTotalBiddingProducts(): Promise<number | undefined> {
+    let sql = `
+    SELECT COUNT(DISTINCT(bl.product_id)) AS total
+    FROM product.products AS products 
+    JOIN auction.bid_logs  AS bl ON bl.product_id = products.id 
+    `;
+    let totalProducts: { total: number }[] = await this.safeQuery(sql);
+    return totalProducts[0]?.total;
+  }
   // Ko chuyen limit cung
   async getTopEndingSoonProducts(
     limit?: number,
     page?: number
   ): Promise<ProductPreview[]> {
-    let sqlData = `
+    let sql = `
     SELECT id
     FROM product.products
     ORDER BY product.products.end_time ASC
@@ -241,19 +262,16 @@ export class ProductService extends BaseService {
 
     const params: any[] = [];
     if (limit) {
-      sqlData += `LIMIT $1 \n`;
+      sql += `LIMIT $1 \n`;
       params.push(limit);
     }
     if (page && limit) {
       const offset = (page - 1) * limit;
-      sqlData += "OFFSET $2 \n";
+      sql += "OFFSET $2 \n";
       params.push(offset);
     }
 
-    const endTimeProducts = await this.safeQuery<ProductPreview>(
-      sqlData,
-      params
-    );
+    const endTimeProducts = await this.safeQuery<ProductPreview>(sql, params);
 
     const newEndtimeProducts = await Promise.all(
       endTimeProducts.map(async (item: any) => {
@@ -264,7 +282,63 @@ export class ProductService extends BaseService {
     return newEndtimeProducts;
   }
 
-  async getTopBiddingProducts(limit?: number): Promise<ProductPreview[]> {
+  async getProductsByCategory(
+    limit: number,
+    page: number,
+    slug: string,
+    sort: string
+  ): Promise<ProductPreview[]> {
+    let sql = `
+    SELECT pp.id, GREATEST(COALESCE(bl.current_price, 0), pp.initial_price) AS price, pp.end_time
+    FROM product.products pp
+    LEFT JOIN (
+        SELECT 
+          bl.product_id, 
+          MAX(bl.price) AS current_price
+        FROM auction.bid_logs bl 
+        GROUP BY bl.product_id
+    ) bl ON bl.product_id = pp.id
+    WHERE pp.category_id = $1
+    `;
+
+    const params: any[] = [slug];
+    if (limit) {
+      sql += `LIMIT $2 \n`;
+      params.push(limit);
+    }
+    if (page && limit) {
+      const offset = (page - 1) * limit;
+      sql += "OFFSET $3 \n";
+      params.push(offset);
+    }
+    if (sort) {
+      if (sort == "ascending-price") {
+        sql += `ORDER BY price ASC`;
+        params.push(sort);
+      } else if (sort == "descending-price") {
+        sql += `ORDER BY price DESC`;
+        params.push(sort);
+      } else if (sort == "expiring-soon") {
+        sql += "ORDER BY end_time ASC";
+        params.push(sort);
+      }
+    }
+
+    const products = await this.safeQuery<ProductPreview>(sql, params);
+
+    const newProducts = await Promise.all(
+      products.map(async (item: any) => {
+        const productType = this.getProductPreviewType(item.id);
+        return productType;
+      })
+    );
+    return newProducts;
+  }
+
+  async getTopBiddingProducts(
+    limit?: number,
+    page?: number
+  ): Promise<ProductPreview[]> {
     let sql = `
   
   SELECT products.id
@@ -277,6 +351,12 @@ export class ProductService extends BaseService {
     if (limit) {
       sql += `LIMIT $1 \n`;
       params.push(limit);
+    }
+
+    if (page && limit) {
+      const offset = (page - 1) * limit;
+      sql += "OFFSET $2 \n";
+      params.push(offset);
     }
 
     const topBiddingProducts = await this.safeQuery<ProductPreview>(
@@ -294,20 +374,33 @@ export class ProductService extends BaseService {
     return newTopBiddingProducts;
   }
 
-  // Ko chuyen limit cung
-  async getTopPriceProducts(limit?: number): Promise<ProductPreview[]> {
+  // Lấy id nếu có của sp có đấu giá hoặc initial price
+  async getTopPriceProducts(
+    limit?: number,
+    page?: number
+  ): Promise<ProductPreview[]> {
     let sql = `
-    SELECT pp.id
-    FROM product.products AS pp
-    JOin auction.bid_logs bl on bl.product_id = pp.id 
-    GROUP BY pp.id 
-    ORDER BY MAX(bl.price) DESC 
+   SELECT pp.id
+  FROM product.products pp 
+  LEFT JOIN (
+     SELECT bl.product_id, MAX(bl.price) as current_price
+     FROM auction.bid_logs bl 
+     GROUP BY bl.product_id
+  ) bl on bl.product_id = pp.id 
+  ORDER BY GREATEST(COALESCE(bl.current_price, 0), pp.initial_price) DESC 
     `;
     let params: any[] = [];
     if (limit) {
       sql += `LIMIT $1 \n`;
       params.push(limit);
     }
+
+    if (page && limit) {
+      const offset = (page - 1) * limit;
+      sql += "OFFSET $2 \n";
+      params.push(offset);
+    }
+
     const topPriceProducts = await this.safeQuery<ProductPreview>(sql, params);
 
     const newTopPriceProducts = await Promise.all(
@@ -319,7 +412,6 @@ export class ProductService extends BaseService {
     return newTopPriceProducts;
   }
 
-  // check productId phai la number
   async getProductById(productId: number): Promise<Product | undefined> {
     const sql = `
     SELECT id

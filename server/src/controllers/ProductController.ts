@@ -16,6 +16,24 @@ export class ProductController extends BaseController {
     return { products: products };
   }
 
+  async getProductsByCategory(req: Request, res: Response) {
+    const page = Number(req.query.page) || null;
+    const limit = Number(req.query.limit) || null;
+    const slug = req.query.slug;
+    const sort = req.query.sort;
+    const products = await this.service.getProductsByCategory(
+      limit,
+      page,
+      slug,
+      sort
+    );
+    const totalProducts = await this.service.getTotalProductsByCategory(slug);
+    return {
+      products: products,
+      totalProducts: totalProducts,
+    };
+  }
+
   async getTopEndingSoonProducts(req: Request, res: Response) {
     const page = Number(req.query.page) || null;
     const limit = Number(req.query.limit) || null;
@@ -32,18 +50,33 @@ export class ProductController extends BaseController {
   }
 
   async getTopBiddingProducts(req: Request, res: Response) {
-    const topBiddingProducts = await this.service.getTopBiddingProducts();
+    const page = Number(req.query.page) || null;
+    const limit = Number(req.query.limit) || null;
+    const topBiddingProducts = await this.service.getTopBiddingProducts(
+      limit,
+      page
+    );
+
+    const totalBiddingProducts = await this.service.getTotalBiddingProducts();
 
     return {
       topBiddingProducts: topBiddingProducts,
+      totalBiddingProducts: totalBiddingProducts,
     };
   }
 
   async getTopPriceProducts(req: Request, res: Response) {
-    const topPriceProducts = await this.service.getTopPriceProducts();
+    const page = Number(req.query.page) || null;
+    const limit = Number(req.query.limit) || null;
+    const topPriceProducts = await this.service.getTopPriceProducts(
+      limit,
+      page
+    );
+    const totalProducts = await this.service.getTotalProducts();
 
     return {
       topPriceProducts: topPriceProducts,
+      totalProducts: totalProducts,
     };
   }
 

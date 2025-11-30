@@ -22,16 +22,19 @@ export default function FavoriteButton({
   };
 
   return (
-    <div className="cursor-pointer bg-black/50" onClick={handleClick}>
+    <div
+      className="relative w-8 h-8 cursor-pointer rounded-full bg-black/50 flex items-center justify-center"
+      onClick={handleClick}
+    >
       {/* Outline icon */}
       <LoveIcon
         className={`absolute text-white transition-opacity duration-200 ${
           favorite ? "opacity-0" : "opacity-100"
-        }`} 
+        }`}
       />
       {/* Filled icon */}
       <LoveFullIcon
-        className={`absolute text-red-500 transition-opacity duration-200 ${
+        className={`absolute text-red transition-opacity duration-200 ${
           favorite ? "opacity-100" : "opacity-0"
         }`}
       />
