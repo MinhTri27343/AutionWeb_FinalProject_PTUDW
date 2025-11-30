@@ -54,7 +54,7 @@ for (let i = 6; i <= 30; i++) {
     main_image: "https://binhminhdigital.com/storedata/images/product/camera/fujifilm/may-anh-fujifilm-instax-mini-12-blossom-pink-chinh-hang.jpg",
     intial_price: `${10_000_000 + i * 100_000} `,
     closing_price: `${10_000_000 + i * 100_000} `,
-    buyer_name: "Fuck bitch"
+    buyer_name: "Fuck bitch" /// ???? WHAT THE HELL ?
   });
 }
 

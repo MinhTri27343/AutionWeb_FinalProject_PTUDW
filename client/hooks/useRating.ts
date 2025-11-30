@@ -18,21 +18,23 @@ export class RatingHook {
             
             staleTime: STALE_10_MIN,
 
+            enabled: !!userId,
+
             select: (data) => {
                 return data.data;
             }
         })
     }
 
-    static async useCreateRating(data: CreateRatingPayload) {
+    static async useCreateRating() {
 
         const queryClient = useQueryClient();
         
         return useMutation({
-            mutationFn: () => 
+            mutationFn: (data: CreateRatingPayload) => 
                 RatingService.createRating(data),
 
-            onSuccess: () => {
+            onSuccess: (_, data) => {
                 queryClient.invalidateQueries({
                     queryKey: ["user_rating", data.ratee_id]
                 })

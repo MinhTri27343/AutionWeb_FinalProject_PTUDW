@@ -20,13 +20,15 @@ class UserHook {
 
             staleTime: STALE_10_MIN,
 
+            enabled: !!id,
+
             select: (data) => {
                 return data.data;
             }
         });
     }
 
-    static useUpdateProfile(data: UpdateUserPayload) {
+    static useUpdateProfile() {
         const queryClient = useQueryClient();
 
         return useMutation({

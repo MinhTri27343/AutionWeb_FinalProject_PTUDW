@@ -31,23 +31,23 @@ function Page() {
 
   console.log(productTop);
 
-  const pageItems: PageItem[] = [
-    {
-      title: "Sản phẩm sắp kết thúc",
-      href: "/top_end_product",
-      products: productTop.topEndingSoonProducts,
-    },
-    {
-      title: "Sản phẩm nhiều lượt đấu giá nhất",
-      href: "/top_bid_product",
-      products: productTop.topBiddingProducts,
-    },
-    {
-      title: "Sản phẩm giá cao nhất",
-      href: "/top_price_product",
-      products: productTop.topPriceProducts,
-    },
-  ];
+//   const pageItems: PageItem[] = [
+//     {
+//       title: "Sản phẩm sắp kết thúc",
+//       href: "/top_end_product",
+//       products: productTop.topEndingSoonProducts,
+//     },
+//     {
+//       title: "Sản phẩm nhiều lượt đấu giá nhất",
+//       href: "/top_bid_product",
+//       products: productTop.topBiddingProducts,
+//     },
+//     {
+//       title: "Sản phẩm giá cao nhất",
+//       href: "/top_price_product",
+//       products: productTop.topPriceProducts,
+//     },
+//   ];
 
   return (
     <>
@@ -58,7 +58,7 @@ function Page() {
             Tìm kiếm và đấu giá hàng triệu sản phẩm từ những người bán uy tín
           </div>
         </div>
-        {pageItems.map((item, index) => {
+        {/* {pageItems.map((item, index) => {
           return (
             <div key={index}>
               <div className="mt-15">
@@ -73,7 +73,7 @@ function Page() {
                   </Link>
                 </div>
               </div>
-              <div className="mt-2 grid grid-cols-5 gap-3">
+              {/* <div className="mt-2 grid grid-cols-5 gap-3">
                 {item.products.map((item, index) => {
                   return (
                     <div key={index} className="mt-3">
@@ -81,10 +81,10 @@ function Page() {
                     </div>
                   );
                 })}
-              </div>
+              </div> 
             </div>
           );
-        })}
+        })} */}
       </div>
     </>
   );

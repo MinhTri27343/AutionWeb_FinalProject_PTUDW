@@ -2,7 +2,7 @@ import { api, safeRequest } from "@/config/axios.config";
 import API_ROUTES from "../../shared/src/api"
 import { User } from "../../shared/src/types";
 
-interface UpdateUserPayload extends User {
+export interface UpdateUserPayload extends User {
     id: number;
     name: string | "";
     email: string | "";
