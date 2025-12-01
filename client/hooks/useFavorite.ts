@@ -2,18 +2,19 @@ import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import { FavoriteService } from "@/services/favoriteService";
 import { STALE_10_MIN } from "@/config/query.config";
 import { Product } from "../../shared/src/types";
+import { Pagination } from "../../shared/src/types/Pagination";
 
 class FavoriteHook {
-  static useFavorite() {
+  static useFavorite(pagination: Pagination) {
     return useQuery({
-      queryKey: ["favorite_product"],
+      queryKey: ["favorite_product", pagination.page, pagination.limit],
 
-      queryFn: () => FavoriteService.getFavorite(),
+      queryFn: () => FavoriteService.getFavorite(pagination),
 
       staleTime: STALE_10_MIN,
 
       select: (data) => {
-        return data.data.favorite_products;
+        return data.data;
       },
     });
   }

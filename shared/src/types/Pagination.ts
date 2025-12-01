@@ -1,6 +1,6 @@
 export type Pagination = {
-  id: number;
+  id?: number;
   page: number;
   limit: number;
-  sort: string;
+  sort?: string;
 };

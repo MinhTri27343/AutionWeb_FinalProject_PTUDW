@@ -1,4 +1,4 @@
-import { ProductPreview } from "../../../shared/src/types";
+import { ProductPagination, ProductPreview } from "../../../shared/src/types";
 import { BaseService } from "./BaseService";
 import { MutationResult } from "../../../shared/src/types/Mutation";
 export class FavoriteService extends BaseService {
@@ -16,7 +16,11 @@ export class FavoriteService extends BaseService {
     return FavoriteService.instance;
   }
 
-  async getFavorite(userId: number): Promise<ProductPreview[]> {
+  async getFavorite(
+    userId: number,
+    page: number,
+    limit: number
+  ): Promise<ProductPagination> {
     const sql = `
       SELECT 
         P.*,
@@ -28,7 +32,8 @@ export class FavoriteService extends BaseService {
           WHERE L.PRODUCT_ID = P.ID
           ORDER BY L.CREATED_AT DESC
           LIMIT 1
-        ) AS CURRENT_PRICE
+        ) AS CURRENT_PRICE,
+        COUNT(*) OVER() AS TOTAL_COUNT
       FROM AUCTION.FAVORITE_PRODUCTS FP
       JOIN PRODUCT.PRODUCTS P ON P.ID = FP.PRODUCT_ID 
       LEFT JOIN ADMIN.USERS BID ON BID.ID = P.TOP_BIDDER_ID
@@ -39,17 +44,28 @@ export class FavoriteService extends BaseService {
         P.BUY_NOW_PRICE, P.END_TIME, P.AUTO_EXTEND, P.CREATED_AT,
         BID.NAME, FP.CREATED_AT
       ORDER BY FP.CREATED_AT DESC
+      LIMIT $2 OFFSET $3
     `;
 
-    const favoriteProducts = await this.safeQuery<ProductPreview>(sql, [
-      userId,
-    ]);
+    const offset = (page - 1) * limit;
 
-    return favoriteProducts.map((item) => ({
+    const res = await this.safeQuery<ProductPreview & { total_count: number }>(
+      sql,
+      [userId, limit, offset]
+    );
+
+    const favoriteProducts = res.map((item) => ({
       ...item,
       new_time: new Date(item.end_time),
       created_at: new Date(item.created_at),
     }));
+
+    return {
+      page: page,
+      limit: limit,
+      total: res?.[0]?.total_count || 0,
+      products: favoriteProducts,
+    };
   }
 
   async addFavorite(
@@ -59,6 +75,7 @@ export class FavoriteService extends BaseService {
     const sql = `
       INSERT INTO AUCTION.FAVORITE_PRODUCTS (PRODUCT_ID, USER_ID, CREATED_AT, UPDATED_AT)
       VALUES ($1, $2, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP)
+      ON CONFLICT DO NOTHING
     `;
 
     await this.safeQuery(sql, [productId, userId]);
@@ -74,6 +91,7 @@ export class FavoriteService extends BaseService {
     const sql = `
       DELETE FROM AUCTION.FAVORITE_PRODUCTS
       WHERE PRODUCT_ID = $1 AND USER_ID = $2
+      ON CONFLICT DO NOTHING
     `;
 
     await this.safeQuery(sql, [productId, userId]);

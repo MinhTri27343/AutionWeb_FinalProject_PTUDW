@@ -78,7 +78,8 @@ const API_ROUTES = {
     updateProductExtend: (id: number) => `${PRODUCT_API}/${id}/extend`, // PATCH
   },
   favorite: {
-    getFavorite: FAVORITE_API, // GET
+    getFavorite: (pagination: Pagination) =>
+      `${FAVORITE_API}?page=${pagination.page}&limit=${pagination.limit}`, // GET
     addFavorite: (productId: number) => `${FAVORITE_API}/${productId}`, // POST
     removeFavorite: (productId: number) => `${FAVORITE_API}/${productId}`, // DELETE
   },

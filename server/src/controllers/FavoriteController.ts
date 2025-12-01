@@ -8,9 +8,11 @@ export class FavoriteController extends BaseController {
   }
 
   async getFavorite(req: Request, res: Response) {
+    const page = Number(req.query.page) || 1;
+    const limit = Number(req.query.limit) || 10;
     const userId = req.headers["user-id"];
-    const favoriteProducts = await this.service.getFavorite(userId);
-    return { favorite_products: favoriteProducts };
+    const data = await this.service.getFavorite(userId, page, limit);
+    return data;
   }
 
   async addFavorite(req: Request, res: Response) {

@@ -21,10 +21,11 @@ function Page() {
   } = ProductHook.useGetProductTop();
 
   const {
-    data: favoriteProductData,
+    data: fullFavoriteProductData,
     isLoading: isLoadingFavoriteProduct,
     error: errorFavoriteProduct,
-  } = FavoriteHook.useFavorite();
+  } = FavoriteHook.useFavorite({ page: 1, limit: 10 });
+  const favoriteProductData = fullFavoriteProductData?.products || [];
 
   if (isLoadingTopProduct && isLoadingFavoriteProduct)
     return (
