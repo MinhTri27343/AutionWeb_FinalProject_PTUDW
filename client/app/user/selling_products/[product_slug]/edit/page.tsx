@@ -64,6 +64,7 @@ const EditProductPage = () => {
   const handleAddDes = (productId: number, description: string) => {
     updateProductDescription({ id: productId, description: description });
   };
+  
   return (
     <div className="bg-[#F8FAFC] w-full">
       {(isLoadingProduct ||
