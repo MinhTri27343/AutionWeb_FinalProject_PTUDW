@@ -9,11 +9,11 @@ interface CreateRatingPayload extends UserRating {
 }
 
 export class RatingHook {
-  static useGetRating(userId: number) {
+  static useGetRating(userId: number, offset: number) {
     return useQuery({
       queryKey: ["user_rating", userId],
 
-      queryFn: () => RatingService.getRating(userId),
+      queryFn: () => RatingService.getRating(userId, offset),
 
       staleTime: STALE_10_MIN,
       enabled: !!userId,

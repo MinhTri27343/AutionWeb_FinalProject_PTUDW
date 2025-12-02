@@ -1,18 +1,25 @@
 "use client"
 
 import ProductCard from '@/components/ProductCard'
-import React from 'react'
+import React, { useCallback } from 'react'
 import RatingLog from './RatingLog'
 import { UserRatingHistory } from '../../../../shared/src/types'
 import { RatingHook } from '@/hooks/useRating'
 import { useAuth } from '@/hooks/useAuth'
 import LoadingSpinner from '@/components/LoadingSpinner'
-import { useMemo } from 'react'
+import { useMemo, useState } from 'react'
+import Pagination from '@/components/Pagination'
 
 const RatingPage = () => {
+
+    // --- Define State ---
+    const limit: number = 5;
+    const [offset, setOffset] = useState<number>(0);
+    const [currentPage, setPage] = useState<number>(1);
+
     // --- Custom Hook ---
     const userId = useAuth();
-    const { data: userRating, isLoading, error } = RatingHook.useGetRating(Number(userId.user?.id))
+    const { data: userRating, isLoading, error } = RatingHook.useGetRating(Number(userId.user?.id), offset)
 
     // --- React Hook ---
     const positiveRatingPercent = useMemo(() => {
@@ -33,6 +40,11 @@ const RatingPage = () => {
     const sumRating = useMemo(() => {
         return userRating?.logs.length || 0;
     }, [userRating]);
+
+    const handlePageChange = useCallback((page: number) => {
+        setPage(page);
+        setOffset((page - 1) * limit);
+    }, [])
 
     // --- Exception ---
     if (isLoading) return <LoadingSpinner />;
@@ -61,7 +73,12 @@ const RatingPage = () => {
             {userRating.logs.map((log: any) => <RatingLog key={log.id} ratingLog={log} />)}
         </div>
 
-        {/* pagination */}
+        <Pagination
+            totalPages={Math.ceil(sumRating / limit)}
+            onPageChange={handlePageChange}
+            currentPage={currentPage}
+        />
+
     </div>
 }
 

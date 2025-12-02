@@ -3,9 +3,9 @@ import API_ROUTES from "../../shared/src/api";
 import { CreateRating, UserRating } from "../../shared/src/types";
 
 export class RatingService {
-  static async getRating(userId: number): Promise<any> {
+  static async getRating(userId: number, offset: number): Promise<any> {
     return safeRequest(async () => {
-      const res = await api.get(API_ROUTES.rating.getRating(userId));
+      const res = await api.get(API_ROUTES.rating.getRating(userId, offset));
       return res.data;
     });
   }

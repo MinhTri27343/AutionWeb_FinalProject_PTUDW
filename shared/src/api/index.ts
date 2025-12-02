@@ -46,7 +46,7 @@ const API_ROUTES = {
     createReject: `${BID_API}/reject`, //POST
   },
   rating: {
-    getRating: (userId: number) => `${RATING_API}/${userId}`, //GET
+    getRating: (userId: number, offset: number) => `${RATING_API}/${userId}/${offset}`, //GET
     createRating: `${RATING_API}`, //POST
   },
   product: {
