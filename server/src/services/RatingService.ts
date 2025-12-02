@@ -31,8 +31,17 @@ export class RatingService extends BaseService {
     const params = [rater_id, ratee.id, comment ? comment : "", rating];
     return await this.safeQuery(sql, params);
   }
+  async getTotalRating(userId: number): Promise<any> {
+    const sql = `
+        SELECT count(*)
+        FROM feedback.user_ratings fur
+        WHERE fur.ratee_id = $1
+            `
+    const params = [userId];
 
-  async getRating(userId: number): Promise<UserRatingHistory> {
+    return this.safeQuery(sql, params);
+  }
+  async getRating(data: {userId: number, offset: number}): Promise<UserRatingHistory> {
     const sql = `
         SELECT 
             fur.id as rating_id, fur.rating, fur.comment, fur.created_at, fur.updated_at,
@@ -42,12 +51,13 @@ export class RatingService extends BaseService {
         JOIN admin.users aurt ON fur.rater_id = aurt.id
         JOIN admin.users aurtt ON fur.ratee_id = aurtt.id
         WHERE fur.ratee_id = $1
+        LIMIT 1 OFFSET $2
     `;
-    const params = [userId];
+    const params = [data.userId, data.offset];
     const rows = await this.safeQuery(sql, params);
 
     const ratingHistory: UserRatingHistory = {
-      ratee_id: userId,
+      ratee_id: data.userId,
       logs: rows.map((row: any) => ({
         id: row.rating_id,
         rater: {
