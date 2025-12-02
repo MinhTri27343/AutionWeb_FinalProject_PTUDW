@@ -79,6 +79,7 @@ function EndTime({ endTime }: Time) {
   );
 }
 
+
 export default function ProductPage() {
   const { product_slug } = useParams();
   const { user } = useAuth();
