@@ -1,18 +1,24 @@
-"use client"
+"use client";
 
-import React from 'react';
-import UpgradeRequestHook from '@/hooks/useUpgrade';
-import { useAuth } from '@/hooks/useAuth';
-import LoadingSpinner from '@/components/LoadingSpinner';
-import SellerStatusCard from './SellerStatusCard';
-import AlertMessage from './AlertMessage';
+import React from "react";
+import UpgradeRequestHook from "@/hooks/useUpgrade";
+import { useAuth } from "@/hooks/useAuth";
+import LoadingSpinner from "@/components/LoadingSpinner";
+import SellerStatusCard from "./SellerStatusCard";
+import AlertMessage from "./AlertMessage";
 
 const SellerRolePage: React.FC = () => {
   // --- Custome Hook
   const id = Number(useAuth().user?.id);
-  const { data: requestData, isLoading } = UpgradeRequestHook.useGetRequestStatus(id);
-  const { mutate: createRequest, isPending: isUpgradePending, isSuccess, isError } = UpgradeRequestHook.useCreateSellerRequest();
-  
+  const { data: requestData, isLoading } =
+    UpgradeRequestHook.useGetRequestStatus(id);
+  const {
+    mutate: createRequest,
+    isPending: isUpgradePending,
+    isSuccess,
+    isError,
+  } = UpgradeRequestHook.useCreateSellerRequest();
+
   // --- Filter data ---
   const request = Array.isArray(requestData) ? requestData[0] : requestData;
   const expirateDate = new Date();
@@ -35,21 +41,21 @@ const SellerRolePage: React.FC = () => {
           </h1>
 
           <SellerStatusCard
-            status={request ? request.status : 'none'}
-            expiryDate={request.expired_at}
+            status={request ? request.status : "none"}
+            expiryDate={request?.expired_at ?? new Date()}
             onAction={handleRequestSeller}
             isLoading={isUpgradePending}
           />
 
           {isSuccess && (
-            <AlertMessage 
+            <AlertMessage
               type="success"
               message="Yêu cầu của bạn đã được gửi thành công! Vui lòng chờ quản trị viên phê duyệt."
             />
           )}
 
           {isError && (
-            <AlertMessage 
+            <AlertMessage
               type="error"
               message="Có lỗi xảy ra khi gửi yêu cầu. Vui lòng thử lại sau."
             />
