@@ -95,10 +95,10 @@ export default function Avatar({
       <Image
         src={imageUrl}
         alt="Avatar"
-        width={100}
-        height={100}
+        width={120}
+        height={120}
         onClick={() => setViewAvatar(true)}
-        className="border-2 border-black rounded-full object-cover cursor-pointer"
+        className="border-1 border-black rounded-full object-cover cursor-pointer"
       />
 
       {/* View full image */}
