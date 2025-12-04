@@ -1,10 +1,8 @@
 // app/layout.tsx
-
+import { Footer } from "@/components/Footer/Footer";
 import "./globals.css";
 import { Providers } from "./providers";
-
-import HeaderCopy from "@/components/Header copy";
-import { NavigationBar } from "@/components/NavigationBar";
+import Header from "@/components/Header";
 
 export default function RootLayout({
   children,
@@ -15,18 +13,11 @@ export default function RootLayout({
     <html lang="en">
       <body>
         <Providers>
-          <header className="fixed top-0 left-0 right-0 h-[70px] bg-white z-50 shadow">
-            <HeaderCopy />
-          </header>
-
-          <div className="flex">
-            <div className="fixed top-[70px] left-0 w-60 h-screen bg-white shadow z-40">
-              <NavigationBar />
-            </div>
-            <div className="mt-[70px] ml-60 w-full p-4 container">
-              {children}
-            </div>
+          <Header />
+          <div className="mt-[100px] flex container gap-8 mb-[50px]">
+            {children}
           </div>
+          <Footer />
         </Providers>
       </body>
     </html>

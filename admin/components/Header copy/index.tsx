@@ -2,7 +2,7 @@
 
 import { useState, useEffect, useRef } from "react";
 import Link from "next/link";
-import { Menu, X, ShoppingCart, User } from "lucide-react";
+import { Menu, X, User } from "lucide-react";
 
 const HeaderCopy = () => {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
