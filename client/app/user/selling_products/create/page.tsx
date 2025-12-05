@@ -16,7 +16,7 @@ import {
 } from "../../../../../shared/src/types";
 import ErrorMessage from "./ErrorMessage";
 import CategoryHook from "@/hooks/useCategory";
-import { formatPrice, parseNumber } from "@/app/utils";
+import { formatPrice, parseNumber } from "@/utils";
 import LoadingSpinner from "@/components/LoadingSpinner";
 
 const Editor = dynamic(
@@ -340,12 +340,12 @@ const CreateProductPage = () => {
                 placeholder="Giá khởi điểm"
                 className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                 required
-                {...register("initial_price", { valueAsNumber: true })}
-                // value={formatPrice(watch("initial_price"))}
-                // onChange={(e) => {
-                //   const parsed = parseNumber(e.target.value);
-                //   setValue("initial_price", parsed || 0);
-                // }}
+                // {...register("initial_price", { valueAsNumber: true })}
+                value={formatPrice(watch("initial_price"))}
+                onChange={(e) => {
+                  const parsed = parseNumber(e.target.value);
+                  setValue("initial_price", parsed || 0);
+                }}
               />
               {errors.initial_price && (
                 <ErrorMessage message={errors.initial_price.message} />
@@ -360,12 +360,12 @@ const CreateProductPage = () => {
                 className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                 required
                 type="text"
-                {...register("price_increment", { valueAsNumber: true })}
-                // value={formatPrice(watch("price_increment"))}
-                // onChange={(e) => {
-                //   const parsed = parseNumber(e.target.value);
-                //   setValue("price_increment", parsed || 0);
-                // }}
+                // {...register("price_increment", { valueAsNumber: true })}
+                value={formatPrice(watch("price_increment"))}
+                onChange={(e) => {
+                  const parsed = parseNumber(e.target.value);
+                  setValue("price_increment", parsed || 0);
+                }}
               />
               {errors.price_increment && (
                 <ErrorMessage message={errors.price_increment.message} />
@@ -379,12 +379,12 @@ const CreateProductPage = () => {
                 placeholder="Tuỳ chọn"
                 className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                 type="text"
-                {...register("buy_now_price", { valueAsNumber: true })}
-                // value={formatPrice(watch("buy_now_price"))}
-                // onChange={(e) => {
-                //   const parsed = parseNumber(e.target.value);
-                //   setValue("buy_now_price", parsed);
-                // }}
+                // {...register("buy_now_price", { valueAsNumber: true })}
+                value={formatPrice(watch("buy_now_price"))}
+                onChange={(e) => {
+                  const parsed = parseNumber(e.target.value);
+                  setValue("buy_now_price", parsed);
+                }}
               />
               {errors.buy_now_price && (
                 <ErrorMessage message={errors.buy_now_price.message} />

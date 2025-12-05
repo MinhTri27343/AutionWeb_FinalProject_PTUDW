@@ -3,7 +3,7 @@
 import React from "react";
 import FavoriteButton from "../FavoriteButton";
 import { ProductPreview } from "../../../shared/src/types";
-import { getTimeDifference } from "@/app/utils";
+import { getTimeDifference } from "@/utils";
 import Link from "next/link";
 import Image from "next/image";
 import FavoriteHook from "@/hooks/useFavorite";
