@@ -8,62 +8,62 @@ import SellerStatusCard from "./SellerStatusCard";
 import AlertMessage from "./AlertMessage";
 
 const SellerRolePage: React.FC = () => {
-  // --- Custome Hook
-  const id = Number(useAuth().user?.id);
-  const { data: requestData, isLoading } =
-    UpgradeRequestHook.useGetRequestStatus(id);
-  const {
-    mutate: createRequest,
-    isPending: isUpgradePending,
-    isSuccess,
-    isError,
-  } = UpgradeRequestHook.useCreateSellerRequest();
+    // --- Custome Hook
+    const id = Number(useAuth().user?.id);
+    const { data: requestData, isLoading } =
+        UpgradeRequestHook.useGetRequestStatus(id);
+    const {
+        mutate: createRequest,
+        isPending: isUpgradePending,
+        isSuccess,
+        isError,
+    } = UpgradeRequestHook.useCreateSellerRequest();
 
-  // --- Filter data ---
-  const request = Array.isArray(requestData) ? requestData[0] : requestData;
-  const expirateDate = new Date();
-  // --- Handler ---
-  const handleRequestSeller = () => {
-    createRequest();
-  };
+    // --- Filter data ---
+    const request = Array.isArray(requestData) ? requestData[0] : requestData;
 
-  // --- Exception ---
-  if (isLoading) {
-    return <LoadingSpinner />;
-  }
+    // --- Handler ---
+    const handleRequestSeller = () => {
+        createRequest();
+    };
 
-  return (
-    <div className="min-h-screen bg-gray-50 p-6">
-      <div className="max-w-4xl mx-auto">
-        <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
-          <h1 className="text-2xl font-semibold text-gray-900 mb-6">
-            Quyền Seller hoạt động
-          </h1>
+    // --- Exception ---
+    if (isLoading) {
+        return <LoadingSpinner />;
+    }
 
-          <SellerStatusCard
-            status={request ? request.status : "none"}
-            expiryDate={request?.expired_at ?? new Date()}
-            onAction={handleRequestSeller}
-            isLoading={isUpgradePending}
-          />
+    return (
+        <div className="min-h-screen bg-gray-50 p-6">
+            <div className="max-w-4xl mx-auto">
+                <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
+                    <h1 className="text-2xl font-semibold text-gray-900 mb-3">
+                        Quyền Seller hoạt động
+                    </h1>
 
-          {isSuccess && (
-            <AlertMessage
-              type="success"
-              message="Yêu cầu của bạn đã được gửi thành công! Vui lòng chờ quản trị viên phê duyệt."
-            />
-          )}
+                    <SellerStatusCard
+                        status={request ? request.status : "none"}
+                        expiryDate={request?.expired_at ?? new Date()}
+                        onAction={handleRequestSeller}
+                        isLoading={isUpgradePending}
+                    />
 
-          {isError && (
-            <AlertMessage
-              type="error"
-              message="Có lỗi xảy ra khi gửi yêu cầu. Vui lòng thử lại sau."
-            />
-          )}
+                    {isSuccess && (
+                        <AlertMessage
+                            type="success"
+                            message="Yêu cầu của bạn đã được gửi thành công! Vui lòng chờ quản trị viên phê duyệt."
+                        />
+                    )}
+
+                    {isError && (
+                        <AlertMessage
+                            type="error"
+                            message="Có lỗi xảy ra khi gửi yêu cầu. Vui lòng thử lại sau."
+                        />
+                    )}
+                </div>
+            </div>
         </div>
-      </div>
-    </div>
-  );
+    );
 };
 
 export default SellerRolePage;
