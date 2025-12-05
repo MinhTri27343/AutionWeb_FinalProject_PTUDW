@@ -1,12 +1,11 @@
 "use client";
 
-import React from "react";
-import { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { LoveFullIcon, LoveIcon } from "../icons";
 
 type FavoriteButtonProps = {
   isFavorite: boolean;
-  onClick?: (favorite: boolean) => void;
+  onClick?: () => void;
 };
 // favorite
 export default function FavoriteButton({
@@ -15,16 +14,19 @@ export default function FavoriteButton({
 }: FavoriteButtonProps) {
   const [favorite, setFavorite] = useState<boolean>(isFavorite);
 
+  useEffect(() => {
+    setFavorite(isFavorite);
+  }, [isFavorite]);
+
   const handleClick = () => {
-    const newValue = !favorite;
-    setFavorite(newValue);
-    if (onClick) onClick(newValue);
+    setFavorite(!favorite);
+    if (onClick) onClick();
   };
 
   return (
     <div
-      className="relative w-8 h-8 cursor-pointer rounded-full bg-black/50 flex items-center justify-center"
       onClick={handleClick}
+      className="relative w-8 h-8 cursor-pointer rounded-full bg-black/50 flex items-center justify-center"
     >
       {/* Outline icon */}
       <LoveIcon

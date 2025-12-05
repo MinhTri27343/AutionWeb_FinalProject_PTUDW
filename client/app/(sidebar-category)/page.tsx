@@ -6,6 +6,7 @@ import ProductCard from "@/components/ProductCard";
 import ProductHook from "@/hooks/useProduct";
 import LoadingSpinner from "@/components/LoadingSpinner";
 import FavoriteHook from "@/hooks/useFavorite";
+import { useMemo } from "react";
 
 interface PageItem {
   title: string;
@@ -24,8 +25,14 @@ function Page() {
     data: fullFavoriteProductData,
     isLoading: isLoadingFavoriteProduct,
     error: errorFavoriteProduct,
-  } = FavoriteHook.useFavorite({ page: 1, limit: 10 });
-  const favoriteProductData = fullFavoriteProductData?.products || [];
+  } = FavoriteHook.useAllFavorite();
+
+  const favoriteIds = useMemo(
+    () =>
+      new Set(fullFavoriteProductData?.map((f: ProductPreview) => f.id)) ||
+      new Set([]),
+    [fullFavoriteProductData]
+  );
 
   if (isLoadingTopProduct && isLoadingFavoriteProduct)
     return (
@@ -61,6 +68,8 @@ function Page() {
     ];
   }
 
+  console.log(favoriteIds);
+
   return (
     <>
       <div>
@@ -86,18 +95,13 @@ function Page() {
                 </div>
               </div>
               <div className="mt-2 grid grid-cols-5 gap-3">
-                {item.products.map((item, index) => {
-                  const favoriteIds = new Set(
-                    favoriteProductData.map((f: ProductPreview) => f.id)
-                  );
-                  const isFavoriteProduct = (item: ProductPreview) =>
-                    favoriteIds.has(item.id);
+                {item.products.map((item, _) => {
                   return (
-                    <div key={index} className="mt-3">
+                    <div key={item.id} className="mt-3">
                       <ProductCard
-                        key={index}
+                        key={item.id}
                         product={item}
-                        isFavorite={isFavoriteProduct(item)}
+                        isFavorite={favoriteIds.has(item.id)}
                       />
                     </div>
                   );

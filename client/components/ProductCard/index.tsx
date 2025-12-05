@@ -130,7 +130,11 @@ export default function ProductCard({
       </Link>
 
       {/* Favourite Button */}
-      <div className="absolute top-1.5 left-1.5 opacity-0 group-hover:opacity-100 transition-opacity duration-200">
+      <div
+        className={`absolute top-1.5 left-1.5 opacity-0 group-hover:opacity-100 transition-opacity duration-200 ${
+          (isAdding || isRemoving) && "pointer-events-none"
+        }`}
+      >
         <FavoriteButton
           isFavorite={isFavorite}
           onClick={() => handleFavorite(product.id, !isFavorite)}
