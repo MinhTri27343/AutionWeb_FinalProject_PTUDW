@@ -10,11 +10,14 @@ import Fuse from "fuse.js"
 
 const page = () => {
 
+    // Define state
     const limit = 5;
     const [searchQuery, setSearchQuery] = useState("")
     const [currentPage, setCurrentPage] = useState(1);
     const [showCreateModal, setShowCreateModal] = useState(false)
+    const [newCategoryName, setNewCategoryName] = useState("");
 
+    // Custom hook
     const {
         data: categoriesData,
         isLoading: isCategoriesLoading
@@ -22,12 +25,15 @@ const page = () => {
         data: ProductCategoryTree[],
         isLoading: boolean,
     };
+    const { mutate: createCategory, isPending: isPendingCreateCategory } = CategoryHook.useCreateCategory();
 
+    // Full text search
     const fuse = new Fuse(categoriesData, {
         keys: ["name"],
         threshold: 0.4
     })
 
+    // Memo data
     const pageData = useMemo(() => {
         if (!categoriesData) return [];
 
@@ -50,6 +56,44 @@ const page = () => {
         return Math.ceil(filterData.length / limit);
     }, [categoriesData, searchQuery]);
 
+    // Handler
+    const handleCreateParentCategory = (category: { name: string }) => {
+
+        if (categoriesData.some(item =>
+            item.name.toLowerCase() === category.name.toLowerCase()
+        )) {
+            alert("Danh mục đã tồn tại");
+            setNewCategoryName("");
+            return;
+        }
+
+        const newList = [...categoriesData, category];
+
+        newList.sort((a, b) => a.name.localeCompare(b.name));
+
+        const index = newList.findIndex(i =>
+            i.name.toLowerCase() === category.name.toLowerCase()
+        );
+
+        createCategory(category, {
+            onSuccess: () => {
+                alert("Thêm danh mục thành công!");
+                setNewCategoryName("");
+                setSearchQuery("");
+                setShowCreateModal(false);
+                if (index !== -1) {
+                    const newPage = Math.floor(index / limit) + 1;
+                    setCurrentPage(newPage);
+                }
+            },
+            onError: (error) => {
+                console.error("Lỗi cập nhật:", error);
+                alert("Thêm danh mục thất bại.");
+            }
+        })
+    }
+
+    // Handling loading
     if (isCategoriesLoading)
         return <div>Loading...</div>
     return (
@@ -63,7 +107,6 @@ const page = () => {
                 <div className="mt-10 flex justify-center">
                     <Pagination totalPages={totalPages} onPageChange={setCurrentPage} currentPage={currentPage} />
                 </div>
-                {/* <CategoryManagement categories={filteredCategories} /> */}
             </div>
 
             {showCreateModal && (
@@ -73,6 +116,8 @@ const page = () => {
                         <input
                             type="text"
                             placeholder="Tên danh mục"
+                            value={newCategoryName}
+                            onChange={(e) => setNewCategoryName(e.target.value)}
                             className="w-full px-4 py-2 border border-surface rounded-lg mb-4 focus:outline-none focus:ring-2 focus:ring-primary"
                         />
                         <div className="flex gap-2 justify-end">
@@ -83,9 +128,7 @@ const page = () => {
                                 Hủy
                             </button>
                             <button
-                                onClick={() => {
-                                    setShowCreateModal(false)
-                                }}
+                                onClick={() => handleCreateParentCategory({ name: newCategoryName })}
                                 className="px-4 py-2 bg-primary text-white rounded-lg hover:bg-blue-600 transition-colors"
                             >
                                 Tạo

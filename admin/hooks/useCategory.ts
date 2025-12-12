@@ -22,7 +22,7 @@ class CategoryHook {
     return useMutation({
       mutationFn: (category: CreateCategory) =>
         CategoryService.createCategory(category),
-      onSuccess: (_, params) => {
+      onSuccess: (response) => {
         queryClient.invalidateQueries({
           queryKey: ["admin_categories"],
         });
