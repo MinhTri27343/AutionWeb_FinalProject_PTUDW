@@ -5,13 +5,14 @@ import { ChevronRight, Eye, Pencil, Trash2 } from "lucide-react";
 import { useSearchParams } from "next/navigation";
 import { ProductCategoryTree } from "../../../shared/src/types/Product";
 import { Plus } from "lucide-react";
+import { useRouter } from "next/navigation";
 
 const CategoryCard = ({ category }: { category: ProductCategoryTree }) => {
+  const router = useRouter();  
   const [openChildren, setOpenChildren] = useState<boolean>(false);
 
   const handleView = (categoryId: number) => {
-    // TODO
-    alert("Chưa code mà đòi xem");
+    router.push(`/product/${categoryId}`)
   };
 
   const handleEdit = (categoryId: number) => {
@@ -75,15 +76,15 @@ const CategoryCard = ({ category }: { category: ProductCategoryTree }) => {
               </p>
               <div className="flex flex-row gap-2 justify-center items-center">
                 <Eye
-                  onClick={() => handleView(category.id)}
+                  onClick={() => handleView(child.id)}
                   className="h-7 w-7 p-1 text-blue-600 hover:bg-blue-600/20 rounded-md transitions-colors duration-200"
                 />
                 <Pencil
-                  onClick={() => handleEdit(category.id)}
+                  onClick={() => handleEdit(child.id)}
                   className="h-7 w-7 p-1 text-orange-500 hover:bg-orange-500/20 rounded-md transitions-colors duration-200"
                 />
                 <Trash2
-                  onClick={() => handleDelete(category.id)}
+                  onClick={() => handleDelete(child.id)}
                   className="h-7 w-7 p-1 text-red-500 hover:bg-red-500/20 rounded-md transitions-colors duration-200"
                 />
               </div>
