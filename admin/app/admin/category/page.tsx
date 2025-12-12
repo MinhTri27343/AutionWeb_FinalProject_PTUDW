@@ -10,7 +10,7 @@ import Fuse from "fuse.js"
 
 const page = () => {
 
-    const limit = 2;
+    const limit = 5;
     const [searchQuery, setSearchQuery] = useState("")
     const [currentPage, setCurrentPage] = useState(1);
     const [showCreateModal, setShowCreateModal] = useState(false)

@@ -4,6 +4,7 @@ import React, { useState } from "react";
 import { ChevronRight, Eye, Pencil, Trash2 } from "lucide-react";
 import { useSearchParams } from "next/navigation";
 import { ProductCategoryTree } from "../../../shared/src/types/Product";
+import { Plus } from "lucide-react";
 
 const CategoryCard = ({ category }: { category: ProductCategoryTree }) => {
   const [openChildren, setOpenChildren] = useState<boolean>(false);
@@ -21,6 +22,11 @@ const CategoryCard = ({ category }: { category: ProductCategoryTree }) => {
   const handleDelete = (categoryId: number) => {
     // TODO
     alert("Nút xóa này sẽ được thay thể bởi component của Trí");
+  };
+
+  const handleAddSubCategory = (parentId: number) => {
+    //setOpenChildren(!openChildren);
+    alert(`Thêm danh mục con cho danh mục ${parentId}`);
   };
 
   return (
@@ -73,6 +79,15 @@ const CategoryCard = ({ category }: { category: ProductCategoryTree }) => {
               </div>
             </div>
           ))}
+          <button
+            onClick={() => handleAddSubCategory(category.id)}
+            className="ml-10 h-10 border-2 border-dashed border-gray-300 rounded-md flex flex-row gap-2 pl-5 pr-3 py-1 justify-center items-center hover:border-blue-500 hover:bg-blue-50/50 transition-all duration-200 group"
+          >
+            <Plus className="h-5 w-5 text-gray-400 group-hover:text-blue-500 transition-colors duration-200" />
+            <span className="text-sm text-gray-500 group-hover:text-blue-500 transition-colors duration-200 font-medium">
+              Thêm danh mục con
+            </span>
+          </button>
         </div>
       )}
     </div>
