@@ -2,34 +2,67 @@
 
 import CategoryCard from "@/components/CategoryCard";
 import AdminHeader from "@/components/AdminHeader/AdminHeader";
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import CategoryHook from "@/hooks/useCategory";
 import { ProductCategoryTree } from "../../../../shared/src/types";
+import Pagination from "@/components/Pagination";
+import Fuse from "fuse.js"
 
 const page = () => {
 
+    const limit = 2;
     const [searchQuery, setSearchQuery] = useState("")
+    const [currentPage, setCurrentPage] = useState(1);
     const [showCreateModal, setShowCreateModal] = useState(false)
+
     const {
-        data: categoriesData, 
+        data: categoriesData,
         isLoading: isCategoriesLoading
     } = CategoryHook.useCategories() as {
         data: ProductCategoryTree[],
         isLoading: boolean,
     };
 
-    console.log('ll', categoriesData);
+    const fuse = new Fuse(categoriesData, {
+        keys: ["name"],
+        threshold: 0.4
+    })
 
-    if (isCategoriesLoading) 
+    const pageData = useMemo(() => {
+        if (!categoriesData) return [];
+
+        const searchResult = fuse.search(searchQuery);
+        const filterData = searchQuery ? searchResult.map(r => r.item) : categoriesData
+
+        const page = Number(currentPage);
+        const start = limit * (page - 1);
+        const end = Math.min(categoriesData.length, start + limit);
+        
+        return filterData.slice(start, end);
+    }, [currentPage, limit, categoriesData])
+
+    const totalPages = useMemo(() => {
+        if (!categoriesData) return 0;
+
+        const searchResult = fuse.search(searchQuery);
+        const filterData = searchQuery ? searchResult.map(r => r.item) : categoriesData
+
+        return Math.ceil(filterData.length / limit);
+    }, [categoriesData, searchQuery]);
+
+    if (isCategoriesLoading)
         return <div>Loading...</div>
     return (
         <>
             <AdminHeader onSearch={setSearchQuery} onCreateClick={() => setShowCreateModal(true)} />
             <div className="p-6">
                 <h1 className="text-2xl font-bold text-text mb-6">Quản lý danh mục</h1>
-                {categoriesData.map((item, index) => (
-                    <CategoryCard category={item} key={index}/>
+                {pageData.map((item, index) => (
+                    <CategoryCard category={item} key={index} />
                 ))}
+                <div className="mt-10 flex justify-center">
+                    <Pagination totalPages={totalPages} onPageChange={setCurrentPage} currentPage={currentPage} />
+                </div>
                 {/* <CategoryManagement categories={filteredCategories} /> */}
             </div>
 
