@@ -23,7 +23,6 @@ export type Product = {
   updated_at: Date | null;
 };
 
-
 export type ProductPreview = Pick<
   Product,
   | "id"
@@ -38,12 +37,15 @@ export type ProductPreview = Pick<
   | "auto_extend"
   | "created_at"
   | "initial_price"
-  | 'status'
+  | "status"
 > & {
   top_bidder_name: string | null;
 };
 
-export type SearchProduct = Pick<Product, 'id'| 'slug' | 'name' | 'main_image'| 'current_price'>;
+export type SearchProduct = Pick<
+  Product,
+  "id" | "slug" | "name" | "main_image" | "current_price"
+>;
 
 export type ProductCategoryTree = {
   id: number;
@@ -55,15 +57,12 @@ export type ProductCategoryTree = {
   updated_at?: Date | null;
 };
 
-
 export type CategoryProduct = {
-  category_id: ProductCategoryTree['id'];
-  category_slug: ProductCategoryTree['slug'];
-  category_name: ProductCategoryTree['name'];
+  category_id: ProductCategoryTree["id"];
+  category_slug: ProductCategoryTree["slug"];
+  category_name: ProductCategoryTree["name"];
   products: ProductPreview[] | null;
-}
-
-
+};
 
 export type ProductAnswer = {
   id: number;
@@ -80,6 +79,13 @@ export type ProductQuestion = {
   comment: string;
   answer?: ProductAnswer;
   created_at?: Date;
+};
+
+export type ProductQuestionPagination = {
+  page: number;
+  limit: number;
+  total: number;
+  questions: ProductQuestion[];
 };
 
 export type ProductPagination = {

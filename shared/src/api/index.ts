@@ -82,7 +82,12 @@ const API_ROUTES = {
     updateProductDescription: (id: number) =>
       `${PRODUCT_API}/${id}/description`, // PATCH
     deleteProductById: (id: number) => `${PRODUCT_API}/${id}`, // DELETE
-    geProductQuestion: (id: number) => `${PRODUCT_API}/${id}/questions`, // GET
+    getProductQuestion: (id: number) => `${PRODUCT_API}/${id}/questions`, // GET
+    getProductQuestionsByPage: (
+      id: number,
+      page: number = 1,
+      limit: number = 10
+    ) => `${PRODUCT_API}/${id}/questions-by-page?page=${page}&limit=${limit}`, // GET
     createProductQuestion: (id: number) => `${PRODUCT_API}/${id}/questions`, // POST
     createProductAnswer: (idProduct: number, idQuestion: number) =>
       `${PRODUCT_API}/${idProduct}/${idQuestion}/answers`, // POST
