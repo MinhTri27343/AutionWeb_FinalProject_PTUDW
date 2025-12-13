@@ -2,7 +2,7 @@ import React, { useMemo } from "react"
 import Image from 'next/image'
 import { CalendarIcon, MailIcon } from "lucide-react"
 import Avatar from "./Avatar"
-import { User } from "../../../../shared/src/types"
+import { User } from "../../../../../shared/src/types"
 
 export default function ViewDetail({ user }: { user: User }) {
 

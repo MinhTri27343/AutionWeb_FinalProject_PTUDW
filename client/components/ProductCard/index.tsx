@@ -8,7 +8,7 @@ import Link from "next/link";
 import Image from "next/image";
 import FavoriteHook from "@/hooks/useFavorite";
 import LoadingSpinner from "../LoadingSpinner";
-import { formatCurrency } from "@/app/product/[product_slug]/components/Question";
+import { formatCurrency } from "@/app/(MainLayout)/[product_slug]/components/Question";
 
 const defaultImage =
   "https://img.freepik.com/premium-photo/white-colors-podium-abstract-background-minimal-geometric-shape-3d-rendering_48946-113.jpg?semt=ais_hybrid&w=740&q=80";

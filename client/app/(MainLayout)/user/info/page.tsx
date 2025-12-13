@@ -10,8 +10,13 @@ import EditDetail from "./EditDetail";
 import { useAuth } from "@/hooks/useAuth";
 import UserHook from "@/hooks/useUser";
 import LoadingSpinner from "@/components/LoadingSpinner";
+import { useRouter } from "next/navigation";
+import { useAuthStore } from "@/store/auth.store";
 
 const InfoPage = () => {
+  const { signOut } = useAuthStore();
+  const router = useRouter();
+
   // --- Define state ---
   const [inEditMode, setInEditMode] = useState<boolean>(false);
   const [isSaving, setIsSaving] = useState(false);
@@ -27,7 +32,14 @@ const InfoPage = () => {
 
   const handleEditButton = () => setInEditMode(true);
   const handleCancelEditButton = () => setInEditMode(false);
-  const handleLogout = () => console.log("Clicked on log out button");
+  const handleLogout = async () => {
+    try {
+      await signOut();
+      router.push("/login");
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
   const handleSaveButton = useCallback(() => {
     if (submitProfileForm) submitProfileForm();

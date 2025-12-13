@@ -3,8 +3,7 @@
 import CategoryHook from "@/hooks/useCategory";
 import LoadingSpinner from "@/components/LoadingSpinner";
 import UserCategoryTable from "@/components/UserCategoryTable";
-import { userCategories } from "../const";
-
+import { userCategories } from "@/app/const";
 export default function SidebarLayout({
   children,
 }: {

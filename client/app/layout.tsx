@@ -1,8 +1,6 @@
 // app/layout.tsx
-import { Footer } from "@/components/Footer/Footer";
 import "./globals.css";
 import { Providers } from "./providers";
-import Header from "@/components/Header";
 
 export default function RootLayout({
   children,
@@ -13,11 +11,7 @@ export default function RootLayout({
     <html lang="en">
       <body>
         <Providers>
-          <Header />
-          <div className="mt-[100px] flex container gap-8 mb-[50px]">
             {children}
-          </div>
-          <Footer />
         </Providers>
       </body>
     </html>

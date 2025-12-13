@@ -7,6 +7,7 @@ import ProductHook from "@/hooks/useProduct";
 import LoadingSpinner from "@/components/LoadingSpinner";
 import FavoriteHook from "@/hooks/useFavorite";
 import { useMemo } from "react";
+import { useAuthStore } from "@/store/auth.store";
 
 interface PageItem {
   title: string;
@@ -15,6 +16,9 @@ interface PageItem {
 }
 
 function Page() {
+  // const {user} = useAuthStore(); --> Khong nen
+
+  const user = useAuthStore((s) => s.user);
   const {
     data: productTop,
     isLoading: isLoadingTopProduct,
@@ -67,6 +71,7 @@ function Page() {
       },
     ];
   }
+  console.log(user);
 
   return (
     <>
@@ -74,7 +79,8 @@ function Page() {
         <div className="text-center w-full">
           <h1 className="text-4xl">Chào mừng đến AuctionHub</h1>
           <div className="mt-2 text-gray-500">
-            Tìm kiếm và đấu giá hàng triệu sản phẩm từ những người bán uy tín
+            Tìm kiếm và đấu giá hàng triệu sản phẩm từ những người bán uy tín{" "}
+            {user?.username}
           </div>
         </div>
         {pageItems.map((item, index) => {

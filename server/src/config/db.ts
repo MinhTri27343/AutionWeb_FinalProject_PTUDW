@@ -37,10 +37,7 @@ class Database {
         connectionString: process.env.DATABASE_URL,
         ssl: { rejectUnauthorized: false },
       });
-
-      console.log("🔥 PostgreSQL Pool initialized");
     }
-    console.log("🔍 Current pool totalCount:", global._pgPool.totalCount);
 
     return global._pgPool;
   }
