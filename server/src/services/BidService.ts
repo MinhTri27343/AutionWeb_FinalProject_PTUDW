@@ -8,6 +8,7 @@ import { MutationResult } from "../../../shared/src/types/Mutation";
 
 type BidStatusType = {
   top_bidder_id: number;
+  seller_id: number;
   current_price: number;
   max_price: number;
   price_increment: number;
@@ -112,6 +113,7 @@ export class BidService extends BaseService {
       const getProductBidStatusSql = `
         SELECT 
           P.top_bidder_id,
+          P.seller_id,
           COALESCE(
             (
               SELECT BLOG.price::INT
@@ -197,10 +199,15 @@ export class BidService extends BaseService {
       console.log(3);
       // 3. Lấy thông tin đấu giá hiện tại của sản phẩm
       const productBidStatus: BidStatusType = productBidStatusResult[0]!;
-      const { current_price, price_increment } = productBidStatus;
+      const { seller_id, current_price, price_increment } = productBidStatus;
 
       console.log(4);
       // 4. Kiểm tra giá bid có hợp lệ điều kiện cần không
+      if (bid.user_id == seller_id) {
+        await poolClient.query("ROLLBACK");
+        console.log("Seller không được đấu giá sản phẩm mình bán");
+        return { success: false };
+      }
       if (bid.price < current_price + price_increment) {
         await poolClient.query("ROLLBACK");
         console.log("Giá đấu thấp hơn yêu cầu tối thiểu");
