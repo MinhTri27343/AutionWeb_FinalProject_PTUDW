@@ -22,6 +22,10 @@ export type Product = {
   created_at: Date;
   updated_at: Date | null;
 };
+export type SoldProduct = Pick<
+  Product,
+  "id" | "name" | "current_price" | "initial_price" | "main_image"
+> & { top_bidder: Pick<User, "id" | "name" | "profile_img"> };
 
 export type Category = {
   id: number;
@@ -43,6 +47,7 @@ export type ProductPreview = Pick<
   | "created_at"
   | "initial_price"
   | "status"
+  | "top_bidder"
 > & {
   top_bidder_name: string | null;
   category: Pick<Category, "name">;

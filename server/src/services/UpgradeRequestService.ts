@@ -39,15 +39,34 @@ export class UpgradeService extends BaseService {
   }
 
   async updateApproveRequest(payload: { id: number }) {
-    const status = "approved";
-    const sql = `
+    const queryClient = await this.getClient();
+    try {
+      await queryClient.query("BEGIN");
+      const status = "approved";
+      let sql = `
                 UPDATE admin.user_upgrade_requests
                 SET status = $1
-                WHERE id = $2;
+                WHERE id = $2
+                RETURNING bidder_id
                 `;
-    const params = [status, payload.id];
+      let params = [status, payload.id];
+      const bidder_id: any = await this.safeQueryWithClient(
+        queryClient,
+        sql,
+        params
+      );
 
-    return this.safeQuery(sql, params);
+      const role = "seller";
+      sql = ` UPDATE admin.users
+                SET role = $1
+                WHERE id = $2`;
+      params = [role, bidder_id[0].bidder_id];
+      await this.safeQueryWithClient(queryClient, sql, params);
+      await queryClient.query("COMMIT");
+    } catch (error) {
+      console.log("Loi update upgrade");
+      await queryClient.query("ROLLBACK");
+    }
   }
 
   async updateRejectRequest(payload: { id: number }) {

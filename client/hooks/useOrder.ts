@@ -6,6 +6,7 @@ import {
   NewOrderRequest,
   OrderStatus,
 } from "../../shared/src/types";
+import { toast } from "react-toastify";
 
 class OrderHook {
   static useOrder() {
@@ -44,9 +45,13 @@ class OrderHook {
         OrderService.createOrder(params.payload),
 
       onSuccess: (_, params) => {
+        toast.success("Tạo đơn hàng thành công");
         queryClient.invalidateQueries({
           queryKey: ["order"],
         });
+      },
+      onError: (error) => {
+        toast.error("Tạo đơn hàng thất bại");
       },
     });
   }
@@ -59,9 +64,14 @@ class OrderHook {
         OrderService.updateOrderStatus(params.productId, params.status),
 
       onSuccess: (_, params) => {
+        toast.success("Cập nhật trạng thái thành công");
         queryClient.invalidateQueries({
           queryKey: ["order_by_id", params.productId],
         });
+      },
+
+      onError: (error) => {
+        toast.error("Cập nhật trạng thái thất bại");
       },
     });
   }
@@ -90,9 +100,13 @@ class OrderHook {
       }) => OrderService.createOrderChat(params.productId, params.payload),
 
       onSuccess: (_, params) => {
+        toast.success("Nhắn tin thành công");
         queryClient.invalidateQueries({
           queryKey: ["order_chat", params.productId],
         });
+      },
+      onError: (error) => {
+        toast.error("Nhắn tin thất bại");
       },
     });
   }
