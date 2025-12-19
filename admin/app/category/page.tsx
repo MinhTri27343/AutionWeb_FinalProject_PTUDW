@@ -119,7 +119,6 @@ const page = () => {
 
         createCategory(category, {
             onSuccess: () => {
-                alert("Thêm danh mục thành công!");
                 setNewCategoryName("");
                 setShowCreateModal(false);
                 setSearchQuery("");
@@ -132,7 +131,6 @@ const page = () => {
             },
             onError: (error) => {
                 console.error("Lỗi cập nhật:", error);
-                alert("Thêm danh mục thất bại.");
             }
         })
     }
