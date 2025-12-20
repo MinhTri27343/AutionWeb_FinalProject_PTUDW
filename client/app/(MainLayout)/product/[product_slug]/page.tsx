@@ -99,6 +99,7 @@ export default function ProductPage() {
   const [isBid, setIsBid] = useState(false);
   const [openBuyNowModal, setOpenBuyNowModal] = useState<boolean>(false);
   const [isPopup, setIsPopup] = useState<boolean>(false);
+  const [canBid, setIsCanBid] = useState<boolean>(false);
   const schemaBid = z.object({
     price: z
       .string()
@@ -372,12 +373,17 @@ export default function ProductPage() {
                   {product.status == "available" ? (
                     <>
                       <div className="relative">
-                        <PrimaryButton
-                          backgroundColor="#2563eb"
-                          hoverBackgroundColor="#3376eb"
-                          text="Đặt lệnh đấu giá"
-                          onClick={handleOnclickBid}
-                        />
+                        <div>
+                          <PrimaryButton
+                            backgroundColor={canBid ? "#2563eb" : "#3376eb"}
+                            hoverBackgroundColor={
+                              canBid ? "#3376eb" : "#dc2626"
+                            }
+                            text="Đặt lệnh đấu giá"
+                            onClick={handleOnclickBid}
+                            disabled={!canBid}
+                          />
+                        </div>
 
                         {isBid && (
                           <>
