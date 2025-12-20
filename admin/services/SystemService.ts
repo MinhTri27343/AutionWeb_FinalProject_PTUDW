@@ -5,6 +5,8 @@ export class SystemService {
   static async getProductRenewTime(): Promise<any> {
     return safeRequest(async () => {
       const res = await api.get(API_ROUTES.system.getProductRenewTime);
+      console.log("res1", res.data);
+
       return res.data;
     });
   }

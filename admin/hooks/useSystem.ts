@@ -37,6 +37,7 @@ class SystemHook {
       queryFn: () => SystemService.getProductMinTime(),
       staleTime: STALE_10_MIN,
       select: (data) => {
+        console.log("contro:", data.data);
         return data.data.result;
       },
     });
