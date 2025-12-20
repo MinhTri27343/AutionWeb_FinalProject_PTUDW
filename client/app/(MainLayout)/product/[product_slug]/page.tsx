@@ -640,7 +640,7 @@ export default function ProductPage() {
             onClose={() => setIsPopup(false)}
             onConfirm={() => {
               handleSubmitBid(handleBid)();
-              setIsPopup(false)
+              setIsPopup(false);
             }}
           />
         </>
