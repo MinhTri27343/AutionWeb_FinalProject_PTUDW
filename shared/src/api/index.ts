@@ -137,9 +137,11 @@ const API_ROUTES = {
     createOrderChat: (productId: number) => `${ORDER_API}/${productId}/chat`, // POST
   },
   system: {
-    getProductRenewTime: `${SYSTEM_API}/renew-time`,
-    updateProductRenewTime: `${SYSTEM_API}/renew-time`, // GET
-  }
+    getProductRenewTime: `${SYSTEM_API}/renew-time`, // GET
+    updateProductRenewTime: `${SYSTEM_API}/renew-time`, //PATCH
+    getProductMinTime: `${SYSTEM_API}/min-time`, //GET
+    updateProductMinTime: `${SYSTEM_API}/min-time`, //PATCH
+  },
 };
 
 export default API_ROUTES;
