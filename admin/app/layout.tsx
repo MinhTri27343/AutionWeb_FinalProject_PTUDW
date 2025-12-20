@@ -2,9 +2,9 @@
 
 import "./globals.css";
 import { Providers } from "./providers";
-import { Toaster } from "react-hot-toast";
 import Header from "@/components/Header";
 import { NavigationBar } from "@/components/NavigationBar";
+import { ToastContainer } from "react-toastify";
 
 export default function RootLayout({
   children,
@@ -28,7 +28,7 @@ export default function RootLayout({
             </div>
           </div>
         </Providers>
-        <Toaster position="top-center" reverseOrder={false} />
+        <ToastContainer position="top-right"/>
       </body>
     </html>
   );
