@@ -4,7 +4,7 @@ import API_ROUTES from "../../shared/src/api";
 export class SystemService {
   static async getProductRenewTime(): Promise<any> {
     return safeRequest(async () => {
-      const res = await api.get(API_ROUTES.system.updateProductRenewTime);
+      const res = await api.get(API_ROUTES.system.getProductRenewTime);
       return res.data;
     });
   }
@@ -18,7 +18,8 @@ export class SystemService {
   }
   static async getProductMinTime(): Promise<any> {
     return safeRequest(async () => {
-      const res = await api.get(API_ROUTES.system.updateProductMinTime);
+      const res = await api.get(API_ROUTES.system.getProductMinTime);
+      console.log("res", res.data);
       return res.data;
     });
   }

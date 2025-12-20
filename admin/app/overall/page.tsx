@@ -63,7 +63,7 @@ export default function SystemSettingsPage() {
 
   useEffect(() => {
     if (serverMinTime !== undefined && serverMinTime !== null) {
-      setLocalMinTime(serverMinTime[0].product_min_time);
+      setLocalMinTime(serverMinTime[0].new_product_min_time);
     }
   }, [serverMinTime]);
 
@@ -91,7 +91,7 @@ export default function SystemSettingsPage() {
     }
     updateMinTime(timeValue);
   };
-  console.log(localMinTime);
+  console.log("se", serverMinTime);
   return (
     <div className="min-h-screen bg-gray-50 pb-8">
       <div className="w-full px-15 py-8">
