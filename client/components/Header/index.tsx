@@ -58,13 +58,13 @@ const Header = () => {
               href="/user/favorite_products"
               className="block py-2 text-sm text-gray-600 hover:text-blue-600 font-medium"
             >
-              Watch List
+              Sản phẩm yêu thích
             </Link>
             <Link
               href="/user/info"
               className="block py-2 text-sm text-gray-600 hover:text-blue-600 font-medium"
             >
-              Profile
+              Hồ sơ
             </Link>
           </div>
         )}

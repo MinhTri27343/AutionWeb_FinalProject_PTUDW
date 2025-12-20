@@ -55,7 +55,7 @@ const InfoPage = () => {
         {inEditMode ? (
           <div>
             <EditDetail
-              user={userProfiile}
+              user={userProfile}
               onProfileSubmit={setSubmitProfileForm}
               setIsSaving={setIsSaving}
               onSaveSuccess={() => setInEditMode(false)}

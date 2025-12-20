@@ -7,7 +7,7 @@ import ProductHook from "@/hooks/useProduct";
 import {
   ProductQuestion,
   ProductQuestionPagination,
-} from "../../../../../../shared/src/types";
+} from "../../../../../../../shared/src/types";
 import { useForm, SubmitHandler } from "react-hook-form";
 import z from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -28,9 +28,8 @@ export function formatDate(date?: Date | string): string {
   const year = d.getFullYear();
   const hour = pad(d.getHours());
   const minute = pad(d.getMinutes());
-  const second = pad(d.getSeconds());
 
-  return `${day}/${month}/${year} ${hour}:${minute}:${second}`;
+  return `Ngày ${day}/${month}/${year}, ${hour} giờ ${minute} phút`;
 }
 
 export function formatCurrency(value: number | null, currency = "₫"): string {

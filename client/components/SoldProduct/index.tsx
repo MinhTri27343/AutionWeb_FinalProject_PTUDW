@@ -2,6 +2,8 @@ import Image from "next/image";
 
 import { useState } from "react";
 import RatingPopup from "../RatingPopUp";
+import { formatCurrency } from "@/app/(MainLayout)/product/[product_slug]/components/Question";
+
 import {
   CreateRating,
   Product,
@@ -57,7 +59,7 @@ const SoldProduct = ({ product }: SoldProps) => {
             <span className="text-slate-500 font-stretch-10% text-sm">
               Giá chốt:{" "}
               <span className="text-[#0D9488] font-bold text-md">
-                {product.current_price} đ
+                {formatCurrency(product.current_price)}
               </span>
             </span>
             <button
@@ -73,7 +75,7 @@ const SoldProduct = ({ product }: SoldProps) => {
             Giá ban đầu
           </span>
           <span className="text-[#0D9488] font-bold text-lg">
-            {product.initial_price} đ
+            {formatCurrency(product.initial_price)}
           </span>
         </div>
       </div>

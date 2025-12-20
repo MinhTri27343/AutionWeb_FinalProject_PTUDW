@@ -56,7 +56,8 @@ function diffToHMS(A: Date, B: Date) {
   const minutes = Math.floor(diff / 60);
   const seconds = Math.floor(diff % 60);
 
-  return `${hours} giờ ${minutes} phút ${seconds} giây`;
+  if (hours > 0) return `${hours} giờ ${minutes} phút`;
+  else return `${minutes} phút ${seconds} giây`;
 }
 interface Time {
   endTime?: Date | null;
@@ -64,14 +65,14 @@ interface Time {
 
 function EndTime({ endTime }: Time) {
   const now = new Date();
-  const localString = endTime?.toLocaleString("vi-VN", {
-    hour12: false,
-  });
+  const localString = formatDate(endTime || "");
 
   return (
     <div className="pb-6 border-b  mb-6 border-slate-200 ">
       <p className="text-sm text-slate-600 mb-2 font-light">
-        Thời gian còn lại
+        {endTime && isLessThreeDays(now, endTime)
+          ? "Thời gian còn lại"
+          : "Thời gian kết thúc"}
       </p>
       {endTime && endTime.getTime() <= now.getTime() ? (
         <p className="text-xl font-bold text-slate-600">Đã kết thúc</p>
