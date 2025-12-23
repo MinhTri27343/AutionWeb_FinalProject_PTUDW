@@ -324,14 +324,49 @@ export class BidService extends BaseService {
     }
   }
   async createReject(bid: BidLog): Promise<MutationResult> {
-    let sql = `INSERT INTO auction.black_list(user_id, product_id, created_at, updated_at)
+    const poolClient = await this.getClient();
+
+    const getEmailBidder = async (id: number) => {
+      const sql = `
+      SELECT u.email 
+      FROM admin.users as u 
+      WHERE u.id = $1 `;
+      const params = [id];
+      const result: { email: string }[] = await this.safeQueryWithClient(
+        poolClient,
+        sql,
+        params
+      );
+      return result[0]?.email ?? "";
+    };
+    try {
+      await poolClient.query("BEGIN");
+      let sql = `INSERT INTO auction.black_list(user_id, product_id, created_at, updated_at)
                 VALUES
                 ($1, $2, NOW(), NOW())`;
-    await this.safeQuery(sql, [bid.user, bid.product_id]);
-    sql = "DELETE FROM auction.bid_logs WHERE user_id = $1 and product_id = $2";
-    await this.safeQuery(sql, [bid.user, bid.product_id]);
-    return { success: true };
-  }
+      await this.safeQueryWithClient(poolClient, sql, [
+        bid.user,
+        bid.product_id,
+      ]);
+      sql =
+        "DELETE FROM auction.bid_logs WHERE user_id = $1 and product_id = $2";
+      await this.safeQueryWithClient(poolClient, sql, [
+        bid.user,
+        bid.product_id,
+      ]);
 
-  // async getBiddingProduct(userId: number): Promise<>
+      const emailBidder: string = await getEmailBidder(bid.user.id);
+
+      sendEmailToUser(
+        emailBidder,
+        "Thông báo về sản phẩm đang đấu giá",
+        "Bạn đã bị người bán chặn đấu giá"
+      ); //Old bidder
+      await poolClient.query("COMMIT");
+      return { success: true };
+    } catch (error) {
+      await poolClient.query("ROLLBACK");
+      return { success: false };
+    }
+  }
 }
