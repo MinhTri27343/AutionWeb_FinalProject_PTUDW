@@ -8,6 +8,7 @@ const CATEGORY_API = `${BASE_API}/category`;
 const BID_API = `${BASE_API}/bid`;
 const FAVORITE_API = `${BASE_API}/favorite`;
 const ORDER_API = `${BASE_API}/order`;
+const SYSTEM_API = `${BASE_API}/system`;
 import { Pagination } from "../types/Pagination";
 
 const API_ROUTES = {
@@ -87,6 +88,7 @@ const API_ROUTES = {
       sort: string
     ) => `${CATEGORY_API}/${slug}?page${page}&limit=${limit}&sort=${sort}`, //GET
     getSoldProduct: `${PRODUCT_API}/sold`, // GET
+    getSellingProduct: `${PRODUCT_API}/selling`, // GET
     getBiddingProduct: (limit: number, page: number) =>
       `${PRODUCT_API}/bidding?limit=${limit}&page=${page}`, // GET
     getWinningProduct: (limit: number, page: number) =>
@@ -126,9 +128,21 @@ const API_ROUTES = {
     createOrder: ORDER_API, // POST
     updateOrderStatus: (productId: number, status: string) =>
       `/${ORDER_API}/${productId}/${status}`, // PATCH
+    buyerPayOrder: (productId: number) =>
+      `${ORDER_API}/${productId}/buyer/pay-order`, // PATCH
+    sellerConfirmOrder: (productId: number, buyerId: number) =>
+      `${ORDER_API}/${productId}/seller/confirm-order/${buyerId}`, // PATCH
+    buyerConfirmShipped: (productId: number) =>
+      `${ORDER_API}/${productId}/buyer/confirm-shipped`, // PATCH
+    sellerRejectOrder: (productId: number, buyerId: number) =>
+      `${ORDER_API}/${productId}/seller/reject-order/${buyerId}`, // PATCH
     getOrderChat: (productId: number) => `${ORDER_API}/${productId}/chat`, // GET
     createOrderChat: (productId: number) => `${ORDER_API}/${productId}/chat`, // POST
   },
+  system: {
+    getProductRenewTime: `${SYSTEM_API}/renew-time`,
+    updateProductRenewTime: `${SYSTEM_API}/renew-time`, // GET
+  }
 };
 
 export default API_ROUTES;

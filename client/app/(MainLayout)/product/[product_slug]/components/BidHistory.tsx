@@ -47,7 +47,7 @@ export const BidHistory = ({ productId }: ProductId) => {
                   {formatDate(his.created_at)}
                 </td>
                 <td className="py-3 px-1 sm:px-3 truncate max-w-[90px] text-[12px] sm:text-sm font-medium text-gray-700">
-                  {user?.id === String(his.user.id)
+                  {user?.id === his.user.id
                     ? `${his.user.name} (Bạn)`
                     : `${his.user.name[0]}***`}
                 </td>

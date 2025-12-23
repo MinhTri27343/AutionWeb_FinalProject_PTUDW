@@ -139,12 +139,21 @@ export class ProductController extends BaseController {
     };
   }
   async getSoldProducts(req: Request, res: Response) {
-    const soldProducts = await this.service.getSoldProducts();
+    const userId = Number(req.user?.id);
+    const soldProducts = await this.service.getSoldProducts(userId);
     return {
       soldProducts: soldProducts,
     };
   }
-
+  async getSellingProducts(req: Request, res: Response) {
+    console.log("contro:", req.user);
+    const userId = Number(req.user?.id);
+    console.log("Controller:", userId);
+    const sellingProducts = await this.service.getSellingProducts(userId);
+    return {
+      sellingProducts: sellingProducts,
+    };
+  }
   async createProduct(req: Request, res: Response) {
     const userId = req.headers["user-id"];
 
@@ -257,10 +266,10 @@ export class ProductController extends BaseController {
     };
   }
   async getWinningProducts(req: Request, res: Response) {
-    const userId = req.headers["user-id"];
+    const userId = req.user?.id;
     const page = Number(req.query.page) || null;
     const limit = Number(req.query.limit) || null;
-
+    
     const products = await this.service.getWinningProducts(userId, limit, page);
     const totalProducts = await this.service.getTotalWinningProductsByUser(
       userId
@@ -271,7 +280,7 @@ export class ProductController extends BaseController {
     };
   }
   async getBiddingProducts(req: Request, res: Response) {
-    const userId = req.headers["user-id"];
+    const userId = req.user?.id;
     const limit = Number(req.query.limit) || null;
     const page = Number(req.query.page) || null;
     const products = await this.service.getBiddingProducts(userId, limit, page);

@@ -4,8 +4,12 @@ import { User } from "./User";
 export type Product = {
   id: number;
   slug: string;
-  seller: Pick<User, "id" | "name" | "profile_img">;
+  seller: Pick<
+    User,
+    "id" | "name" | "profile_img" | "positive_points" | "negative_points"
+  >;
   category_id: number;
+  category_name?: string;
   main_image: string;
   extra_images?: string[];
   name: string;
@@ -22,6 +26,10 @@ export type Product = {
   created_at: Date;
   updated_at: Date | null;
 };
+export type SoldProduct = Pick<
+  Product,
+  "id" | "name" | "current_price" | "initial_price" | "main_image"
+> & { top_bidder: Pick<User, "id" | "name" | "profile_img"> };
 
 export type Category = {
   id: number;
@@ -43,6 +51,7 @@ export type ProductPreview = Pick<
   | "created_at"
   | "initial_price"
   | "status"
+  | "top_bidder"
 > & {
   top_bidder_name: string | null;
   category: Pick<Category, "name">;
