@@ -246,9 +246,6 @@ export class BidService extends BaseService {
       //Gửi Mail
       const emailSeller: string = await getEmailSeller();
       const emailBidder: string = await getEmailBidder(bid.user_id);
-      const emailOldBidder: string = await getEmailBidder(
-        productBidStatus.top_bidder_id
-      );
 
       sendEmailToUser(
         emailSeller,
@@ -261,11 +258,7 @@ export class BidService extends BaseService {
         "Thông báo về sản phẩm đang đấu giá",
         "Bạn đã đấu giá thành công"
       ); //Bidder
-      sendEmailToUser(
-        emailOldBidder,
-        "Thông báo về sản phẩm đang đấu giá",
-        " Đã có người đấu giá thành công sản phẩm bạn đang đấu giá"
-      ); //Old bidder
+
       // 5. Thực hiện so sánh và lưu kết quả đấu giá
       if (productBidStatus.top_bidder_id == bid.user_id) {
         console.log("Bidder vẫn đang thắng đấu giá");
@@ -306,6 +299,15 @@ export class BidService extends BaseService {
           const updateTopBidderPromise = updateTopBidderId(bid.user_id);
 
           await Promise.all([writeBidLogPromise, updateTopBidderPromise]);
+
+          const emailOldBidder: string = await getEmailBidder(
+            productBidStatus.top_bidder_id
+          );
+          sendEmailToUser(
+            emailOldBidder,
+            "Thông báo về sản phẩm đang đấu giá",
+            " Đã có người đấu giá thành công sản phẩm bạn đang đấu giá"
+          ); //Old bidder
         }
       }
       await poolClient.query("COMMIT");
