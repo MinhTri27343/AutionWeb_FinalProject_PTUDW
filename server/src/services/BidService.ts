@@ -286,7 +286,7 @@ export class BidService extends BaseService {
           </tr>
           <tr>
             <td style="padding:20px; font-size:16px; line-height:1.5; color:#333;">
-              <p><strong>Bidder:</strong> ${bidderInfo.name}}</p>
+              <p><strong>Bidder:</strong> ${bidderInfo.name}</p>
               <p>Đã đấu giá sản phẩm <strong>${productInfo.name}</strong> của bạn</p>
               <p><strong>Với mức giá:</strong> ${bid.price}</p>
               <p><strong>Mức giá hiện tại:</strong> ${productBidStatus.current_price}</p>
