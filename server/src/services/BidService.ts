@@ -6,6 +6,7 @@ import {
 import { BaseService } from "./BaseService";
 import { MutationResult } from "../../../shared/src/types/Mutation";
 import { sendEmailToUser } from "../utils/mailer";
+import { Product, User } from "../../../shared/src/types";
 
 type BidStatusType = {
   top_bidder_id: number;
@@ -180,32 +181,51 @@ export class BidService extends BaseService {
       const upperboundPrice = current + minSignificantGap;
       return upperboundPrice - (upperboundPrice > max ? increment : 0);
     };
-    const getEmailSeller = async () => {
+    //Lấy thông tin người bán
+    const getSellerInfo = async () => {
       const sql = `
-      SELECT u.email 
+      SELECT u.*
       FROM admin.users as u 
       JOIN product.products as p ON u.id = p.seller_id
       WHERE p.id = $1 `;
       const params = [bid.product_id];
-      const result: { email: string }[] = await this.safeQueryWithClient(
+      const result: User[] = await this.safeQueryWithClient(
         poolClient,
         sql,
         params
       );
-      return result[0]?.email ?? "";
+      return result[0];
     };
-    const getEmailBidder = async (id: number) => {
+
+    //Lấy thông tin người đấu giá
+    const getBidderInfo = async (id: number) => {
       const sql = `
       SELECT u.email 
       FROM admin.users as u 
       WHERE u.id = $1 `;
       const params = [id];
-      const result: { email: string }[] = await this.safeQueryWithClient(
+      const result: User[] = await this.safeQueryWithClient(
         poolClient,
         sql,
         params
       );
-      return result[0]?.email ?? "";
+
+      return result[0];
+    };
+    //Lấy thông tin sản phẩm
+    const getProductInfo = async (id: number) => {
+      const sql = `
+      SELECT p.*
+      FROM product.products as p 
+      WHERE p.id = $1 `;
+      const params = [id];
+      const result: Product[] = await this.safeQueryWithClient(
+        poolClient,
+        sql,
+        params
+      );
+
+      return result[0];
     };
     try {
       await poolClient.query("BEGIN");
@@ -248,14 +268,40 @@ export class BidService extends BaseService {
 
       console.log(5);
       //Gửi Mail
-      const emailSeller: string = await getEmailSeller();
-      const emailBidder: string = await getEmailBidder(bid.user_id);
-
-      sendEmailToUser(
-        emailSeller,
-        "Thông báo về sản phẩm đang bán",
-        "Đã có người đấu giá sản phẩm của bạn"
-      ); //Seller
+      const sellerInfo: User | undefined = await getSellerInfo();
+      const bidderInfo: User | undefined = await getBidderInfo(bid.user_id);
+      const productInfo: Product | undefined = await getProductInfo(
+        bid.product_id
+      );
+      if (sellerInfo && bidderInfo && productInfo) {
+        sendEmailToUser(
+          sellerInfo.email,
+          "THÔNG BÁO VỀ SẢN PHẨM ĐANG BÁN",
+          `
+        <table style="width:100%; max-width:600px; margin:auto; font-family:Arial,sans-serif; border-collapse:collapse; border:1px solid #ddd;">
+          <tr>
+            <td style="background-color:#173E8C; color:white; padding:20px; text-align:center; font-size:20px; font-weight:bold;">
+              Thông báo đấu giá
+            </td>
+          </tr>
+          <tr>
+            <td style="padding:20px; font-size:16px; line-height:1.5; color:#333;">
+              <p><strong>Bidder:</strong> ${bidderInfo.name} - ${bidderInfo.email}</p>
+              <p>Đã đấu giá sản phẩm <strong>${productInfo.name} - </strong> của bạn</p>
+              <p><strong>Với mức giá:</strong> ${productBidStatus.current_price}</p>
+              <p><strong>Mức giá hiện tại:</strong> [Mức giá hiện tại]</p>
+              <p><strong>Giá mua ngay:</strong> [Giá mua ngay]</p>
+            </td>
+          </tr>
+          <tr>
+            <td style="background-color:#f5f5f5; text-align:center; padding:15px; font-size:14px; color:#777;">
+              © 2025 Your Company. All rights reserved.
+            </td>
+          </tr>
+        </table>
+           `
+        ); //Seller
+      }
 
       sendEmailToUser(
         emailBidder,
@@ -438,20 +484,17 @@ export class BidService extends BaseService {
       FROM admin.users as u 
       WHERE u.id = $1 `;
       const params = [id];
-      const result: { email: string }[] = await this.safeQuery(
-        sql,
-        params
-      );
+      const result: { email: string }[] = await this.safeQuery(sql, params);
       return result[0]?.email ?? "";
     };
 
     const emailBidder: string = await getEmailBidder(buyer_id);
 
-      sendEmailToUser(
-        emailBidder,
-        "Thông báo về sản phẩm đang đấu giá",
-        "Bạn đã bị người bán chặn đấu giá"
-      ); //Old bidder
+    sendEmailToUser(
+      emailBidder,
+      "Thông báo về sản phẩm đang đấu giá",
+      "Bạn đã bị người bán chặn đấu giá"
+    ); //Old bidder
     if (product?.[0]?.top_bidder_id != buyer_id) return { success: true };
 
     // Người bị blacklist đang dẫn đầu -> phải cập nhật lại top_bidder
