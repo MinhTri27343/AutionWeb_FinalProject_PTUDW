@@ -138,6 +138,7 @@ export class ProductRoute extends BaseRoute {
     );
     this.router.post(
       "/:productId/questions",
+       protectedRoutes,
       BaseController.handleRequest(
         this.controller.createQuestion.bind(this.controller)
       )

@@ -24,15 +24,12 @@ export type RegisterRequest = {
 export type ForgetPasswordRequest = {
   username: string;
   email: string;
-}
-
-
+};
 
 export type ResetPasswordRequest = {
   newPassword: string;
   confirmPassword: string;
-}
-
+};
 
 export type SignRequest = {
   username: string;
@@ -59,11 +56,13 @@ export type UserEntity = {
   id: User["id"];
   email: User["email"];
   username: string;
-  role: User["role"]
+  role: User["role"];
+  positive_points: User["positive_points"];
+  negative_points: User["negative_points"];
 };
 
 export type UserConfirm = {
-  id: User["id"],
+  id: User["id"];
   newPassword: string;
   confirmPassword: string;
-}
+};

@@ -228,7 +228,8 @@ export class ProductController extends BaseController {
   }
 
   async createQuestion(req: Request, res: Response) {
-    const userId = req.headers["user-id"];
+    console.log("req: ", req.user);
+    const userId = req.user?.id;
     const productId = req.params.productId;
     const createQuestion: CreateQuestion = req.body;
     const question = await this.service.createQuestion(

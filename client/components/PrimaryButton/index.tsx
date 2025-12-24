@@ -10,6 +10,7 @@ interface Button {
   hoverBackgroundColor?: string;
   icon?: FC<SVGProps<SVGSVGElement>>;
   onClick?: () => void;
+  disabled?: boolean;
 }
 
 export default function PrimaryButton({
@@ -20,17 +21,24 @@ export default function PrimaryButton({
   hoverTextColor,
   backgroundColor,
   hoverBackgroundColor,
-} : Button) {
+  disabled,
+}: Button) {
   const [isHovered, setIsHovered] = useState(false);
   return (
     <>
       <button
+        disabled={disabled}
         onClick={onClick}
         onMouseEnter={() => setIsHovered(true)}
         onMouseLeave={() => setIsHovered(false)}
         style={{
-           color:  isHovered ? (hoverTextColor || "#FFFFFF") : (textColor ||  "#FFFFFF"),
-          backgroundColor: isHovered ? (hoverBackgroundColor || "var(--chart-6)") : (backgroundColor || "var(--chart-2)"),
+          color: isHovered
+            ? hoverTextColor || "#FFFFFF"
+            : textColor || "#FFFFFF",
+          backgroundColor: isHovered
+            ? hoverBackgroundColor || "var(--chart-6)"
+            : backgroundColor || "var(--chart-2)",
+          cursor: disabled ? "not-allowed" : "pointer",
         }}
         className={`w-full flex items-center gap-2 justify-center py-2 font-medium rounded-lg `}
       >
@@ -38,8 +46,7 @@ export default function PrimaryButton({
       </button>
     </>
   );
-};
-
+}
 
 /*
  <PrimaryButton text="Click me" icon={LoveIcon} onClick={() => console.log("123")} textColor="#333333" hoverBackgroundColor="#FF00FF" backgroundColor="#808080"  />;

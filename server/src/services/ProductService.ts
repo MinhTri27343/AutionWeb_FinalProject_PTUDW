@@ -19,6 +19,7 @@ import { createSlugUnique } from "../utils";
 import { R2Service } from "./R2Service";
 import { Pagination } from "../../../shared/src/types/Pagination";
 import { PoolClient } from "pg";
+import { sendEmailToUser } from "../utils/mailer";
 
 export class ProductService extends BaseService {
   private static instance: ProductService;
@@ -832,6 +833,17 @@ WHERE pc.parent_id is not null
     userId: number,
     questionId: number
   ) {
+    const getEmailUser = async () => {
+      const sql = `
+      SELECT u.email 
+      FROM product.product_questions as q
+      JOIN admin.users as u ON u.id = q.user_id
+      WHERE q.id = $1 `;
+      const params = [questionId];
+      const result: { email: string }[] = await this.safeQuery(sql, params);
+      return result[0]?.email ?? "";
+    };
+
     const sql = `
     INSERT INTO feedback.product_answers(
     question_id,
@@ -847,6 +859,14 @@ WHERE pc.parent_id is not null
       userId,
       createAnswer.comment,
     ]);
+
+    const emailUser: string = await getEmailUser();
+
+    sendEmailToUser(
+      emailUser,
+      "Sản phẩm bạn đang đặt câu hỏi",
+      "Người bán đã trả lời câu hỏi của bạn, hãy vào chi tiết sản phẩm để xem"
+    );
     return answer[0];
   }
 

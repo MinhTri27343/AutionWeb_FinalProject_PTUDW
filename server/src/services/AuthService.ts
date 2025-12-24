@@ -84,7 +84,9 @@ export class AuthService extends BaseService {
    SELECT 
       u.id,
       u.name,
-      u.role
+      u.role,
+      u.positive_points,
+      u.negative_points
     FROM admin.users u
     WHERE id = $1
     `;

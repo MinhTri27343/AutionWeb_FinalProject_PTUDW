@@ -11,9 +11,17 @@ export class SystemController extends BaseController {
     return { result };
   }
   async updateProductRenewTime(req: Request, res: Response) {
-    const result = await this.service.updateProductRenewTime(
-      req.body.time
-    );
+    const result = await this.service.updateProductRenewTime(req.body.time);
+    return { result };
+  }
+
+  async getProductMinTime(req: Request, res: Response) {
+    const result = await this.service.getProductMinTime();
+    console.log(result);
+    return { result };
+  }
+  async updateProductMinTime(req: Request, res: Response) {
+    const result = await this.service.updateProductMinTime(req.body.time);
     return { result };
   }
 }

@@ -36,3 +36,23 @@ export const sendEmail = async (email: string, otp: string) => {
     console.log(error);
   }
 };
+
+export const sendEmailToUser = async (
+  receiver: string,
+  subject: string,
+  text: string
+) => {
+  try {
+    const info = await transporter.sendMail({
+      from: `"Auction bid" <${process.env.EMAIL_USER}>`,
+      to: receiver,
+      subject: subject,
+      text: text,
+    });
+
+    console.log("Email sent: " + info.response);
+    return true;
+  } catch (error) {
+    console.log(error);
+  }
+};

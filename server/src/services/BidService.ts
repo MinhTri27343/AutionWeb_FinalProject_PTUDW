@@ -5,6 +5,7 @@ import {
 } from "../../../shared/src/types/Bid";
 import { BaseService } from "./BaseService";
 import { MutationResult } from "../../../shared/src/types/Mutation";
+import { sendEmailToUser } from "../utils/mailer";
 
 type BidStatusType = {
   top_bidder_id: number;
@@ -106,6 +107,7 @@ export class BidService extends BaseService {
           [bid.price, bid.user_id, bid.product_id]
         );
       }
+
       return saveBidPromise;
     };
 
@@ -174,7 +176,33 @@ export class BidService extends BaseService {
       const upperboundPrice = current + minSignificantGap;
       return upperboundPrice - (upperboundPrice > max ? increment : 0);
     };
-
+    const getEmailSeller = async () => {
+      const sql = `
+      SELECT u.email 
+      FROM admin.users as u 
+      JOIN product.products as p ON u.id = p.seller_id
+      WHERE p.id = $1 `;
+      const params = [bid.product_id];
+      const result: { email: string }[] = await this.safeQueryWithClient(
+        poolClient,
+        sql,
+        params
+      );
+      return result[0]?.email ?? "";
+    };
+    const getEmailBidder = async (id: number) => {
+      const sql = `
+      SELECT u.email 
+      FROM admin.users as u 
+      WHERE u.id = $1 `;
+      const params = [id];
+      const result: { email: string }[] = await this.safeQueryWithClient(
+        poolClient,
+        sql,
+        params
+      );
+      return result[0]?.email ?? "";
+    };
     try {
       await poolClient.query("BEGIN");
 
@@ -215,6 +243,22 @@ export class BidService extends BaseService {
       }
 
       console.log(5);
+      //Gửi Mail
+      const emailSeller: string = await getEmailSeller();
+      const emailBidder: string = await getEmailBidder(bid.user_id);
+
+      sendEmailToUser(
+        emailSeller,
+        "Thông báo về sản phẩm đang bán",
+        "Đã có người đấu giá sản phẩm của bạn"
+      ); //Seller
+
+      sendEmailToUser(
+        emailBidder,
+        "Thông báo về sản phẩm đang đấu giá",
+        "Bạn đã đấu giá thành công"
+      ); //Bidder
+
       // 5. Thực hiện so sánh và lưu kết quả đấu giá
       if (productBidStatus.top_bidder_id == bid.user_id) {
         console.log("Bidder vẫn đang thắng đấu giá");
@@ -229,6 +273,7 @@ export class BidService extends BaseService {
           bid.user_id,
           current_price + price_increment
         );
+
         await Promise.all([updateTopBidderPromise, writeBidLogPromise]);
       } else {
         // TH2: Sản phẩm đã được đấu giá trước đó
@@ -254,11 +299,20 @@ export class BidService extends BaseService {
           const updateTopBidderPromise = updateTopBidderId(bid.user_id);
 
           await Promise.all([writeBidLogPromise, updateTopBidderPromise]);
+
+          const emailOldBidder: string = await getEmailBidder(
+            productBidStatus.top_bidder_id
+          );
+          sendEmailToUser(
+            emailOldBidder,
+            "Thông báo về sản phẩm đang đấu giá",
+            " Đã có người đấu giá thành công sản phẩm bạn đang đấu giá"
+          ); //Old bidder
         }
       }
-
       await poolClient.query("COMMIT");
-      console.log("Commit thành công");
+
+      console.log("Commit thành công 2");
 
       return { success: true };
     } catch (e) {
@@ -270,14 +324,49 @@ export class BidService extends BaseService {
     }
   }
   async createReject(bid: BidLog): Promise<MutationResult> {
-    let sql = `INSERT INTO auction.black_list(user_id, product_id, created_at, updated_at)
+    const poolClient = await this.getClient();
+
+    const getEmailBidder = async (id: number) => {
+      const sql = `
+      SELECT u.email 
+      FROM admin.users as u 
+      WHERE u.id = $1 `;
+      const params = [id];
+      const result: { email: string }[] = await this.safeQueryWithClient(
+        poolClient,
+        sql,
+        params
+      );
+      return result[0]?.email ?? "";
+    };
+    try {
+      await poolClient.query("BEGIN");
+      let sql = `INSERT INTO auction.black_list(user_id, product_id, created_at, updated_at)
                 VALUES
                 ($1, $2, NOW(), NOW())`;
-    await this.safeQuery(sql, [bid.user, bid.product_id]);
-    sql = "DELETE FROM auction.bid_logs WHERE user_id = $1 and product_id = $2";
-    await this.safeQuery(sql, [bid.user, bid.product_id]);
-    return { success: true };
-  }
+      await this.safeQueryWithClient(poolClient, sql, [
+        bid.user,
+        bid.product_id,
+      ]);
+      sql =
+        "DELETE FROM auction.bid_logs WHERE user_id = $1 and product_id = $2";
+      await this.safeQueryWithClient(poolClient, sql, [
+        bid.user,
+        bid.product_id,
+      ]);
 
-  // async getBiddingProduct(userId: number): Promise<>
+      const emailBidder: string = await getEmailBidder(bid.user.id);
+
+      sendEmailToUser(
+        emailBidder,
+        "Thông báo về sản phẩm đang đấu giá",
+        "Bạn đã bị người bán chặn đấu giá"
+      ); //Old bidder
+      await poolClient.query("COMMIT");
+      return { success: true };
+    } catch (error) {
+      await poolClient.query("ROLLBACK");
+      return { success: false };
+    }
+  }
 }
