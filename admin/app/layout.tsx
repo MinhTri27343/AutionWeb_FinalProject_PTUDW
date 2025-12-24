@@ -4,6 +4,7 @@ import { Providers } from "./providers";
 import { ToastContainer } from "react-toastify";
 import AuthRoute from "@/components/auth/AuthRoute";
 import ProtectedRoute from "@/components/auth/ProtectedRoute";
+
 export default function RootLayout({
   children,
 }: {

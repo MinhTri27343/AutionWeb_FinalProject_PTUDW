@@ -155,6 +155,16 @@ export default function ProductPage() {
   const { mutate: removeFavorite, isPending: isRemoveFavorite } =
     FavoriteHook.useRemoveFavorite();
 
+  const bidderRating = useMemo(() => {
+    if (!product?.top_bidder) return 0;
+
+    const { positive_points, negative_points } = product.top_bidder;
+    const total = positive_points + negative_points;
+
+    if (total === 0) return 0;
+
+    return Math.round((positive_points / total) * 100);
+  }, [product?.top_bidder]);
   useEffect(() => {
     if (favorite_products && product) {
       const newSetFavorites: Set<number> = new Set(
@@ -313,11 +323,22 @@ export default function ProductPage() {
                       Người ra giá cao nhất
                     </p>
                     {product.top_bidder ? (
-                      product.top_bidder.id === user?.id ? (
-                        `${product.top_bidder.name} (Bạn)`
-                      ) : (
-                        `${product.top_bidder.name}`
-                      )
+                      <>
+                        <p className="font-semibold text-slate-900 mb-1">
+                          {product.top_bidder.id === user?.id
+                            ? `${product.top_bidder.name} (Bạn)`
+                            : `${product.top_bidder.name[0]}***${
+                                product.top_bidder.name[
+                                  product.top_bidder.name.length - 1
+                                ]
+                              }`}
+                        </p>
+                        <p className="text-xs text-slate-600">
+                          {bidderRating !== 0
+                            ? `⭐${" "}${bidderRating}%`
+                            : `Chưa có đánh giá`}
+                        </p>
+                      </>
                     ) : (
                       <p className=" ml-4 text-[16px] font-semibold text-slate-900">
                         Chưa có

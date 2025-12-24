@@ -1,7 +1,8 @@
 import { SystemService } from "@/services/SystemService";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { STALE_10_MIN } from "@/config/query.config";
-import toast from "react-hot-toast";
+import { toast } from "react-toastify"
+
 class SystemHook {
   static useGetProductRenewTime() {
     return useQuery({

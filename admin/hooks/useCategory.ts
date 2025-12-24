@@ -3,7 +3,7 @@ import { STALE_10_MIN } from "@/config/query.config";
 import { CreateCategory, UpdateCategory } from "../../shared/src/types";
 import { CategoryService } from "@/services/categoryService";
 import { Pagination } from "../../shared/src/types/Pagination";
-import toast from "react-hot-toast";
+import { toast } from "react-toastify"
 
 class CategoryHook {
   static useCategories() {

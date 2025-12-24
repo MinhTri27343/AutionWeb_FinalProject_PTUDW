@@ -186,6 +186,62 @@ export default function ProductCard({
           />
         </div>
         {(isAdding || isRemoving) && <LoadingSpinner />}
+        <div className="mt-3 h-10">
+          {product.top_bidder_name ? (
+            <div>
+              <p className="text-sm">Người trả giá cao nhất</p>
+              <p className="font-medium">
+                {product.top_bidder_name[0]}***
+                {product.top_bidder_name[product.top_bidder_name.length - 1]}
+              </p>
+            </div>
+          ) : (
+            <div>
+              <p className="text-sm text-gray-800">Chưa có lượt trả giá</p>
+            </div>
+          )}
+        </div>
+        <hr className="border-t border-solid border-gray-300 mt-3 mb-1.5" />
+        <section className="flex flex-col gap-1.5">
+          <p className="text-sm text-gray-500">
+            Ngày bắt đầu:{" "}
+            {new Date(product.created_at).toLocaleDateString("en-GB")}
+          </p>
+          <div className="flex flex-row gap-2 items-center">
+            <svg
+              className="w-6 h-6 text-gray-800 dark:text-white"
+              aria-hidden="true"
+              xmlns="http://www.w3.org/2000/svg"
+              width={24}
+              height={24}
+              fill="none"
+              viewBox="0 0 24 24"
+            >
+              <path
+                stroke="currentColor"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                strokeWidth={2}
+                d="M12 8v4l3 3m6-3a9 9 0 1 1-18 0 9 9 0 0 1 18 0Z"
+              />
+            </svg>
+            <span>
+              {getTimeDifference(new Date(), new Date(product.end_time))}
+            </span>
+          </div>
+        </section>
+
+        {/* Favourite Button */}
+        <div
+          className={`absolute top-1.5 left-1.5 opacity-0 group-hover:opacity-100 transition-opacity duration-200 ${
+            (isAdding || isRemoving) && "pointer-events-none"
+          }`}
+        >
+          <FavoriteButton
+            isFavorite={isFavorite}
+            onClick={() => handleFavorite(product.id, !isFavorite)}
+          />
+        </div>
       </div>
     </div>
   );

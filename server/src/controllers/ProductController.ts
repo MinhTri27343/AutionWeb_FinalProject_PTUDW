@@ -156,7 +156,7 @@ export class ProductController extends BaseController {
     };
   }
   async createProduct(req: Request, res: Response) {
-    const userId = req.headers["user-id"];
+    const userId = Number(req.user?.id);
 
     const files = req.files as Express.Multer.File[];
     if (!files) {
@@ -228,8 +228,8 @@ export class ProductController extends BaseController {
   }
 
   async createQuestion(req: Request, res: Response) {
-    console.log("req: ", req.user);
-    const userId = req.user?.id;
+    const userId = Number(req.user?.id);
+    console.log(userId);
     const productId = req.params.productId;
     const createQuestion: CreateQuestion = req.body;
     const question = await this.service.createQuestion(
@@ -243,7 +243,7 @@ export class ProductController extends BaseController {
   }
 
   async createAnswer(req: Request, res: Response) {
-    const userId = req.headers["user-id"];
+    const userId = Number(req.user?.id);
     const questionId = req.params.questionId;
     const createAnswer: CreateAnswer = req.body;
     const answer = await this.service.createAnswer(
@@ -268,7 +268,7 @@ export class ProductController extends BaseController {
     };
   }
   async getWinningProducts(req: Request, res: Response) {
-    const userId = req.user?.id;
+    const userId = Number(req.user?.id);
     const page = Number(req.query.page) || null;
     const limit = Number(req.query.limit) || null;
 
@@ -282,7 +282,7 @@ export class ProductController extends BaseController {
     };
   }
   async getBiddingProducts(req: Request, res: Response) {
-    const userId = req.user?.id;
+    const userId = Number(req.user?.id);
     const limit = Number(req.query.limit) || null;
     const page = Number(req.query.page) || null;
     const products = await this.service.getBiddingProducts(userId, limit, page);
@@ -295,7 +295,7 @@ export class ProductController extends BaseController {
     };
   }
   async getProducts(req: Request, res: Response) {
-    const userId = req.headers["user-id"];
+    const userId = Number(req.user?.id);
 
     const pagination: Pagination = {
       limit: Number(req.query.limit || "5"),
