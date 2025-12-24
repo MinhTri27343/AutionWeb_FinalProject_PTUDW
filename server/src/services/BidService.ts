@@ -372,6 +372,7 @@ export class BidService extends BaseService {
               oldBidderInfo.email,
               "THÔNG BÁO VỀ SẢN PHẨM ĐANG ĐẤU GIÁ",
               " Đã có người đấu giá thành công sản phẩm bạn đang đấu giá"
+              
             ); //Old bidder
           }
         }
