@@ -313,8 +313,8 @@ export class BidService extends BaseService {
               <td style="padding:20px; font-size:16px; line-height:1.5; color:#333;">
                 <p>Bạn đã đấu giá thành công sản phẩm: <strong>${productInfo.name}</strong></p>
                 <p>Của seller: <strong>${sellerInfo.name}</strong></p>
-                <p><strong>Với mức giá:</strong> ${bid.price}</p>
-                <p><strong>Giá hiện tại của sản phẩm:</strong> ${productBidStatus.current_price}</p>
+                <p>Với mức giá:<strong> ${bid.price}</strong></p>
+                <p>Giá hiện tại của sản phẩm: <strong>${productBidStatus.current_price}</strong></p>
               </td>
             </tr>
   
