@@ -67,7 +67,11 @@ function QuestionItem({
   });
 
   const handleSend: SubmitHandler<{ comment: string }> = (data) => {
-    createAnswer({ idProduct: product_id, idQuestion: id, data: data });
+    createAnswer({
+      idProduct: product_id,
+      idQuestion: id,
+      data: { comment: data.comment, productId: product_id },
+    });
     setValue("comment", "");
   };
   const date = new Date(created_at ?? "");
