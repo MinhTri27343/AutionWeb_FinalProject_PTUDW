@@ -25,6 +25,7 @@ export type Product = {
   price_increment: number | null;
   created_at: Date;
   updated_at: Date | null;
+  is_all_can_bid: Boolean;
 };
 export type SoldProduct = Pick<
   Product,
@@ -131,6 +132,7 @@ export type CreateProduct = Pick<
   | "end_time"
   | "description"
   | "auto_extend"
+  | "is_all_can_bid"
 >;
 export type WinningProduct = Pick<
   Product,
