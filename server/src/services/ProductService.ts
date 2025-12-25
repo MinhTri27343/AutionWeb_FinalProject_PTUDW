@@ -762,26 +762,28 @@ WHERE pc.parent_id is not null
     SELECT 
           pq.id, 
           pq.product_id, 
-          SELECT json_agg(
-            json_build_object(
-                'id', u.id,
-                'name', u.name,
-                'profile_img', u.profile_img
-            ) AS user
-          ),
+          json_build_object(
+              'id', u.id,
+              'name', u.name,
+              'profile_img', u.profile_img
+          ) AS user,
           pq.comment,
           pq.created_at,
           (
             SELECT 
-                json_build_object(
-                    'id', pa.id,
-                    'comment', pa.comment,
-                    'question_id', pa.question_id,
-                    'user', json_build_object(
-                        'id', u2.id,
-                        'name', u2.name,
-                        'profile_img', u2.profile_img
-                    )
+                (
+                  json_agg(
+                  json_build_object(
+                      'id', pa.id,
+                      'comment', pa.comment,
+                      'question_id', pa.question_id,
+                      'user', json_build_object(
+                          'id', u2.id,
+                          'name', u2.name,
+                          'profile_img', u2.profile_img
+                      )
+                  )
+                  )
                 )
             FROM feedback.product_answers pa
             JOIN admin.users u2 ON u2.id = pa.user_id

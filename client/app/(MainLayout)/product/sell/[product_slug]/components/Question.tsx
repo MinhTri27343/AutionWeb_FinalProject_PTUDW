@@ -82,14 +82,15 @@ function QuestionItem({
       </div>
       <p className="text-gray-600 mb-3">Câu hỏi: {comment}</p>
 
-      {answer && (
-        <div className="ml-4 pl-4 border-l-2 border-amber-400">
-          <p className="text-sm font-medium text-amber-600 mb-1">
-            Trả lời từ người bán:
-          </p>
-          <p className="text-sm text-gray-700">{answer.comment}</p>
-        </div>
-      )}
+      {answer &&
+        answer.map((item) => (
+          <div className="ml-4 pl-4 border-l-2 border-amber-400 my-4">
+            <p className="text-sm font-medium text-amber-600 mb-1">
+              Trả lời từ người bán:
+            </p>
+            <p className="text-sm text-gray-700">{item.comment}</p>
+          </div>
+        ))}
       <form className=" mb-8" onSubmit={handleSubmit(handleSend)}>
         <div className="w-full  ">
           <div className="flex flex-row">
@@ -147,7 +148,7 @@ export const Question = ({ productId }: ProductId) => {
     next.set("page", value.toString());
     router.replace(`${pathname}?${next.toString()}`, { scroll: false });
   };
-  console.log(questions)
+  console.log(questions);
   return (
     <div className="relative bg-white rounded-lg p-3 sm:p-6 mb-8 border border-slate-200">
       <h3 className="relative text-2xl font-bold text-slate-900 mb-4">
