@@ -351,7 +351,9 @@ export class BidService extends BaseService {
             bid.price
           );
           createBidLog(productBidStatus.top_bidder_id, opponentBidPrice);
+          console.log(5);
         } else {
+          console.log(6);
           // Đấu giá thắng
           const myBidPrice = getBidPrice(
             current_price,
@@ -382,9 +384,9 @@ export class BidService extends BaseService {
               </tr>
               <tr>
                 <td style="padding:20px; font-size:16px; line-height:1.5; color:#333;">
-                  <p>Đã có người đấu giá thành công sản phẩm: <strong>${productInfo.name}</strong> mà bạn đang tham gia</p>
-                  <p>Của seller: ${sellerInfo.name}<strong></strong></p>
-                  <p><strong>Mức giá hiện tại của sản phẩm:</strong> ${myBidPrice}</p>
+                  <p>Đã có người đấu giá thành công sản phẩm <strong>${productInfo.name}</strong> mà bạn đang tham gia</p>
+                  <p>Của seller:<strong>  ${sellerInfo.name}</strong></p>
+                  <p>Mức giá hiện tại của sản phẩm: <strong>${myBidPrice}</strong></p>
                 </td>
               </tr>
              
