@@ -50,6 +50,27 @@ function QuestionItem({
   answer,
   created_at,
 }: ProductQuestion) {
+  const { mutate: createAnswer, isPending: isCreateAnswer } =
+    ProductHook.useCreateProductAnswer();
+  const schema = z.object({
+    comment: z.string().nonempty("Vui lòng nhập câu trả lời"),
+  });
+
+  const {
+    register,
+    handleSubmit,
+    setValue,
+    formState: { errors },
+  } = useForm<{ comment: string }>({
+    resolver: zodResolver(schema),
+    defaultValues: { comment: "" },
+  });
+
+  const handleSend: SubmitHandler<{ comment: string }> = (data) => {
+    console.log(data);
+    //createAnswer({ id: productId, data: data });
+    setValue("comment", "");
+  };
   const date = new Date(created_at ?? "");
   return (
     <>
@@ -60,6 +81,31 @@ function QuestionItem({
         )}
       </div>
       <p className="text-gray-600 mb-3">Câu hỏi: {comment}</p>
+      <form className=" mb-8" onSubmit={handleSubmit(handleSend)}>
+        <div className="w-full  ">
+          <div className="flex flex-row">
+            <div className="flex-8 md:flex-9 mr-2">
+              <input
+                {...register("comment")}
+                placeholder="Nhập nội dung trả lời câu hỏi của người hỏi"
+                className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                type="text"
+              />
+            </div>
+            <button
+              type="submit"
+              className="flex-2 md:flex-1 bg-blue-600 text-white flex justify-center items-center gap-1 rounded-2xl hover:cursor-pointer"
+            >
+              <FlightOutlineIcon />
+
+              <span>Gửi</span>
+            </button>
+          </div>
+          <span className="text-red-600 text-sm mt-1 block mb-2">
+            {errors.comment ? errors.comment.message : ""}
+          </span>
+        </div>
+      </form>
       {answer && (
         <div className="ml-4 pl-4 border-l-2 border-amber-400">
           <p className="text-sm font-medium text-amber-600 mb-1">
@@ -101,59 +147,12 @@ export const Question = ({ productId }: ProductId) => {
     router.replace(`${pathname}?${next.toString()}`, { scroll: false });
   };
 
-  const { mutate: createQuestion, isPending: isCreateQuestion } =
-    ProductHook.useCreateProductQuestion();
-
-  const schema = z.object({
-    comment: z.string().nonempty("Vui lòng nhập câu hỏi"),
-  });
-
-  const {
-    register,
-    handleSubmit,
-    setValue,
-    formState: { errors },
-  } = useForm<{ comment: string }>({
-    resolver: zodResolver(schema),
-    defaultValues: { comment: "" },
-  });
-
-  const handleSend: SubmitHandler<{ comment: string }> = (data) => {
-    createQuestion({ id: productId, data: data });
-    setValue("comment", "");
-  };
-
   return (
     <div className="relative bg-white rounded-lg p-3 sm:p-6 mb-8 border border-slate-200">
       <h3 className="relative text-2xl font-bold text-slate-900 mb-4">
         Hỏi & Đáp
       </h3>
       <div className="relative">
-        <form className=" mb-8" onSubmit={handleSubmit(handleSend)}>
-          <div className="w-full  ">
-            <div className="flex flex-row">
-              <div className="flex-8 md:flex-9 mr-2">
-                <input
-                  {...register("comment")}
-                  placeholder="Bạn có câu hỏi về sản phẩm này?"
-                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                  type="text"
-                />
-              </div>
-              <button
-                type="submit"
-                className="flex-2 md:flex-1 bg-blue-600 text-white flex justify-center items-center gap-1 rounded-2xl hover:cursor-pointer"
-              >
-                <FlightOutlineIcon />
-
-                <span>Gửi</span>
-              </button>
-            </div>
-            <span className="text-red-600 text-sm mt-1 block mb-2">
-              {errors.comment ? errors.comment.message : ""}
-            </span>
-          </div>
-        </form>
         <div className="relative h-min-25">
           {isLoadingQuestion && <LoadingSpinner />}
           {!isLoadingQuestion &&
