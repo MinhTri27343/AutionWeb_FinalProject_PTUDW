@@ -8,14 +8,15 @@ import { formatDate } from "../../product/[product_slug]/components/Question"
 export default function ViewDetail({ user }: { user: User }) {
 
     // React Hook
-    const positiveRatingPercent = useMemo(() => (
-        (user.positive_points / (user.negative_points + user.positive_points) * 100)
-    ), [user]
-    )
+    const sumRating = useMemo(() => {
+        return user.positive_points + user.negative_points
+    }, [user])
 
-    const sumRating = useMemo(() => (
-        user.positive_points + user.negative_points
-    ), []
+    const positiveRatingPercent = useMemo(() => (
+        sumRating === 0
+            ? 0
+            : (user.positive_points / (user.negative_points + user.positive_points) * 100)
+    ), [user]
     )
 
     return <div>
@@ -44,13 +45,16 @@ export default function ViewDetail({ user }: { user: User }) {
                 <div className="flex flex-row gap-5 mt-3">
                     <div className="flex flex-col text-sm font-medium gap-1">
                         <p>Đánh giá tích cực</p>
-                        <p className="text-center text-2xl font-bold text-green-600">
-                            {positiveRatingPercent}%
+                        <p className="text-center text-xl font-bold text-green-600">
+                            {positiveRatingPercent !== 0
+                                ? `${positiveRatingPercent}%`
+                                : 'Chưa có đánh giá'
+                            }
                         </p>
                     </div>
                     <div className="flex flex-col text-sm font-medium gap-1">
                         <p>Tổng đánh giá</p>
-                        <p className="text-center text-2xl font-bold text-gray-600">{sumRating}</p>
+                        <p className="text-center text-xl font-bold text-gray-600">{sumRating}</p>
                     </div>
                 </div>
             </div>
@@ -68,10 +72,10 @@ export default function ViewDetail({ user }: { user: User }) {
             <div className="flex flex-col gap-1">
                 <p className="font-medium text-sm">Ngày sinh</p>
                 <p className="text-gray-600">{
-                    user.day_of_birth ? 
-                    new Date(user.day_of_birth).toLocaleDateString() : 
-                    'Chưa cập nhật ngày sinh'
-                    }
+                    user.day_of_birth ?
+                        new Date(user.day_of_birth).toLocaleDateString() :
+                        'Chưa cập nhật ngày sinh'
+                }
                 </p>
             </div>
             <div className="flex flex-col gap-1">
