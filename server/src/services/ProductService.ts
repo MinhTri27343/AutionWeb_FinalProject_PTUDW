@@ -832,16 +832,15 @@ WHERE pc.parent_id is not null
       const result: Product[] = await this.safeQuery(sql, params);
       return result[0];
     };
-
-    const getEmailUser = async () => {
+    //Lấy thông tin người đấu giá
+    const getBidderInfo = async () => {
       const sql = `
-      SELECT u.email 
-      FROM product.product_questions as q
-      JOIN admin.users as u ON u.id = q.user_id
-      WHERE q.id = $1 `;
-      const params = [questionId];
-      const result: { email: string }[] = await this.safeQuery(sql, params);
-      return result[0]?.email ?? "";
+      SELECT u.*
+      FROM admin.users as u
+      WHERE u.id = $1 `;
+      const params = [userId];
+      const result: User[] = await this.safeQuery(sql, params);
+      return result[0];
     };
 
     const sql = `
@@ -872,7 +871,7 @@ WHERE pc.parent_id is not null
           <tr>
             <td style="padding:20px; font-size:16px; line-height:1.5; color:#333;">
               <p>
-                <strong>Bidder:</strong> [Tên bidder] đã đặt câu hỏi về sản phẩm
+                Bidder <strong> [Tên bidder]</strong>  đã đặt câu hỏi về sản phẩm
                 <strong>[Tên sản phẩm]</strong> của bạn.
               </p>
               <p style="margin-top:15px;">
@@ -880,11 +879,7 @@ WHERE pc.parent_id is not null
               </p>
             </td>
           </tr>
-          <tr>
-            <td style="background-color:#f5f5f5; text-align:center; padding:15px; font-size:14px; color:#777;">
-              © 2025 Your Company. All rights reserved.
-            </td>
-          </tr>
+        
         </table>
        `
      );
