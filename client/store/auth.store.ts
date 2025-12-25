@@ -9,6 +9,7 @@ import {
 import { authService } from "@/services/authService";
 import { AuthState } from "@/types/store";
 import { toast } from "react-toastify";
+import { queryClient } from "@/app/providers";
 
 //  state đại diện cho toàn bộ store hiện tại
 // set(): Dùng để GHI (cậ  nhật/thay đổi) state (chỉ dùng bên trong store).
@@ -40,6 +41,7 @@ export const useAuthStore = create<AuthState>((set, get) => ({
   },
 
   clearState: () => {
+    queryClient.clear();
     set({ accessToken: null, user: null, loading: false });
   },
 
