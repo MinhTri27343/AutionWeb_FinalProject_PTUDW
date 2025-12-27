@@ -181,16 +181,16 @@ class OrderHook {
     return useMutation({
       mutationFn: (params: {
         productId: number;
-        payload: NewOrderMessageRequest;
+        payload: { message: string };
       }) => OrderService.createOrderChat(params.productId, params.payload),
 
       onSuccess: (_, params) => {
-        toast.success("Nhắn tin thành công");
         queryClient.invalidateQueries({
           queryKey: ["order_chat", params.productId],
         });
       },
-      onError: (error) => {
+
+      onError: () => {
         toast.error("Nhắn tin thất bại");
       },
     });
