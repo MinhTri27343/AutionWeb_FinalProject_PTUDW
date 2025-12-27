@@ -35,17 +35,25 @@ export type NewOrderRequest = {
 };
 
 export type OrderMessage = {
-  user_id: Pick<User, "id" | "name" | "profile_img">;
+  user: Pick<User, "id" | "name" | "profile_img">;
+  message: string;
+  created_at: Date;
+};
+
+export type OrderMessageV2 = {
+  id: number;
+  name: string;
+  profile_img: string;
   message: string;
   created_at: Date;
 };
 
 export type OrderConversation = {
   product_id: number;
+  buyer_id: number;
   messages: OrderMessage[];
 };
 
 export type NewOrderMessageRequest = {
-  user_id: number;
   message: string;
 };

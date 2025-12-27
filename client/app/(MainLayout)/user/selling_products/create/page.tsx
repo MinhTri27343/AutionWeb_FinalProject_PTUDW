@@ -9,9 +9,7 @@ import ProductHook from "@/hooks/useProduct";
 import { XIcon } from "lucide-react";
 
 import { api } from "@/config/axios.config";
-import {
-  ProductCategoryTree,
-} from "../../../../../../shared/src/types";
+import { ProductCategoryTree } from "../../../../../../shared/src/types";
 import ErrorMessage from "./ErrorMessage";
 import CategoryHook from "@/hooks/useCategory";
 import { formatPrice, parseNumber } from "@/utils";
@@ -132,6 +130,7 @@ const CreateProductPage = () => {
     setPreviewExtras(previews);
   };
   const onSubmit = (payload: NewProductType) => {
+    console.log(payload);
     if (!mainImage) {
       alert("Yêu cầu có ảnh chính");
       return;
@@ -410,16 +409,7 @@ const CreateProductPage = () => {
             <ErrorMessage message={errors.end_time.message} />
           )}
         </div>
-        <div className="space-y-4">
-          <label className="block text-sm font-semibold text-gray-900 mb-2 line-clamp-1">
-            Những người được đấu giá <span className="text-[12px] text-red-400 mb-2">(Cho phép những bidder chưa từng được đánh giá được phép đấu giá!)</span>
-          </label>
-          <input
-            className="p-4 border border-gray-400 cursor-pointer rounded-md"
-            type="checkbox"
-            {...register("is_all_can_bid")}
-          />
-        </div>
+
         <div>
           <h3 className="text-lg font-bold text-gray-900 mb-4">
             Mô tả sản phẩm
@@ -473,6 +463,24 @@ const CreateProductPage = () => {
             💡 Bạn có thể chỉnh sửa mô tả sau khi đăng (nội dung sẽ được thêm
             vào, không thay thế)
           </p>
+        </div>
+        <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
+          <label className="flex items-center gap-3 cursor-pointer">
+            <input
+              className="w-4 h-4"
+              type="checkbox"
+              {...register("is_all_can_bid")}
+            />
+            <div>
+              <p className="font-semibold text-blue-900">
+                Những người được đấu giá
+              </p>
+              <p className="text-xs text-blue-700">
+                (Cho phép những bidder chưa từng được đánh giá được phép đấu
+                giá!)
+              </p>
+            </div>
+          </label>
         </div>
         <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
           <label className="flex items-center gap-3 cursor-pointer">

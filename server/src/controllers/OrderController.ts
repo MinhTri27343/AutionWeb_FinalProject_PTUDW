@@ -73,15 +73,16 @@ export class OrderController extends BaseController {
 
   async getOrderChat(req: Request, res: Response) {
     const productId = Number(req.params.productId);
-
-    const chat = await this.service.getOrderChat(productId);
+    const userId = req.user?.id;
+    console.log('kk', req.user, userId);
+    const chat = await this.service.getOrderChat(productId, userId);
     return { order_chat: chat };
   }
 
   async createOrderChat(req: Request, res: Response) {
     const productId = Number(req.params.productId);
-
-    const result = await this.service.createOrderChat(productId, req.body);
+    const userId = req.user?.id;
+    const result = await this.service.createOrderChat(productId, userId, req.body);
     return result;
   }
 }

@@ -203,20 +203,19 @@ export default function ProductPage() {
       const neg = user.negative_points ? user.negative_points : 0;
 
       const total = pos + neg;
-      if (product.is_all_can_bid) {
-        setIsCanBid(true);
-      }
-      else {
-        if (total === 0) {
-        //Todo Ha
+      if (total === 0) {
+        if (product.is_all_can_bid) {
+          setIsCanBid(true);
         } else {
-            if (pos / total >= 0.8) {
-            setIsCanBid(true);
-            } else {
-            setIsCanBid(false);
-            }
+          setIsCanBid(false);
         }
-    }
+      } else {
+        if (pos / total >= 0.8) {
+          setIsCanBid(true);
+        } else {
+          setIsCanBid(false);
+        }
+      }
     }
     const order_navigate = searchParams.get("order_navigate");
 

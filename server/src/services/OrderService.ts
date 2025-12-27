@@ -8,6 +8,7 @@ import {
   OrderConversation,
   NewOrderMessageRequest,
   OrderPayment,
+  OrderMessageV2,
 } from "./../../../shared/src/types";
 
 import { MutationResult } from "../../../shared/src/types/Mutation";
@@ -252,7 +253,8 @@ export class OrderService extends BaseService {
   }
 
   async getOrderChat(
-    productId: number
+    productId: number,
+    userId: number
   ): Promise<OrderConversation | undefined> {
     const sql = `
       SELECT 
@@ -263,16 +265,32 @@ export class OrderService extends BaseService {
         M.CREATED_AT
       FROM AUCTION.ORDER_MESSAGES M
       JOIN ADMIN.USERS U ON U.ID = M.USER_ID
-      WHERE M.PRODUCT_ID = $1
+      WHERE M.PRODUCT_ID = $1 AND M.BUYER_ID = $2
+      ORDER BY M.CREATED_AT ASC
     `;
 
-    const orderMessages = await this.safeQuery<OrderMessage>(sql, [productId]);
-    if (!orderMessages) return undefined;
+    const order = await this.getOrderById(userId, productId);
+    if (!order) throw new Error("No active order");
 
+    if (userId !== order.buyer.id && userId !== order.seller.id) {
+      throw new Error("No order valid");
+    }
+
+    const buyerId = order?.buyer.id;
+
+    const orderMessages = await this.safeQuery<OrderMessageV2>(sql, [productId, buyerId]);
+    if (!orderMessages) return undefined;
+    
     return {
       product_id: productId,
+      buyer_id: buyerId,
       messages: orderMessages.map((message) => ({
-        ...message,
+        user: {
+          id: message.id,
+          name: message.name,
+          profile_img: message.profile_img,
+        },
+        message: message.message,
         created_at: new Date(message.created_at),
       })),
     };
@@ -280,16 +298,25 @@ export class OrderService extends BaseService {
 
   async createOrderChat(
     productId: number,
+    userId: number,
     payload: NewOrderMessageRequest
   ): Promise<MutationResult> {
-    const { user_id, message } = payload;
+    const { message } = payload;
 
+    const order = await this.getOrderById(userId, productId);
+
+    if (!order) throw new Error("No active order");
+
+    if (userId !== order.buyer.id && userId !== order.seller.id) {
+      throw new Error("No order valid");
+    }
+    const buyerId = order?.buyer.id;
     const sql = `
-      INSERT INTO AUCTION.ORDER_MESSAGES (PRODUCT_ID, USER_ID, MESSAGE)
-      VALUES ($1, $2, $3)
+      INSERT INTO AUCTION.ORDER_MESSAGES (PRODUCT_ID, USER_ID, BUYER_ID, MESSAGE)
+      VALUES ($1, $2, $3, $4)
     `;
 
-    await this.safeQuery(sql, [productId, user_id, message]);
+    await this.safeQuery(sql, [productId, userId, buyerId, message]);
 
     return {
       success: true,

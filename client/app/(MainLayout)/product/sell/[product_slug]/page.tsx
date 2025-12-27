@@ -11,7 +11,7 @@ import { ImageCarousel } from "@/components/ImageCarousel";
 import PrimaryButton from "@/components/PrimaryButton";
 import SecondaryButton from "@/components/SecondaryButton";
 import Image from "next/image";
-import { useState, useEffect, useMemo } from "react";
+import { useState, useEffect } from "react";
 import ProductHook from "@/hooks/useProduct";
 import { useParams, useRouter, useSearchParams } from "next/navigation";
 import { Question, formatCurrency, formatDate } from "./components/Question";
