@@ -288,10 +288,17 @@ export class BidService extends BaseService {
           <tr>
             <td style="padding:20px; font-size:16px; line-height:1.5; color:#333;">
               <p>Người đấu giá <strong> ${bidderInfo.name}</strong> </p>
-              <p>Đã đấu giá sản phẩm <strong>${productInfo.name}</strong> của bạn</p>
+              <p>Đã đấu giá sản phẩm <strong>${
+                productInfo.name
+              }</strong> của bạn</p>
               <p>Với mức giá:<strong> ${bid.price}</strong> </p>
-              <p>Mức giá hiện tại:<strong> ${productBidStatus.current_price}</strong> </p>
-              <p>Giá mua ngay:<strong> ${productInfo.buy_now_price}</strong> </p> 
+              <p>Mức giá hiện tại:<strong> ${
+                productBidStatus.current_price +
+                productBidStatus.price_increment
+              }</strong> </p>
+              <p>Giá mua ngay:<strong> ${
+                productInfo.buy_now_price
+              }</strong> </p> 
 
             </td>
           </tr>
@@ -312,10 +319,15 @@ export class BidService extends BaseService {
             </tr>
             <tr>
               <td style="padding:20px; font-size:16px; line-height:1.5; color:#333;">
-                <p>Bạn đã đấu giá thành công sản phẩm: <strong>${productInfo.name}</strong></p>
+                <p>Bạn đã đấu giá thành công sản phẩm: <strong>${
+                  productInfo.name
+                }</strong></p>
                 <p>Của người bán: <strong>${sellerInfo.name}</strong></p>
                 <p>Với mức giá:<strong> ${bid.price}</strong></p>
-                <p>Giá hiện tại của sản phẩm: <strong>${productBidStatus.current_price}</strong></p>
+                <p>Giá hiện tại của sản phẩm: <strong>${
+                  productBidStatus.current_price +
+                  productBidStatus.price_increment
+                }</strong></p>
               </td>
             </tr>
   

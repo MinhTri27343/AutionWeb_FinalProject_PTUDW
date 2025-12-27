@@ -325,13 +325,7 @@ export default function ProductPage() {
                     {product.top_bidder ? (
                       <>
                         <p className="font-semibold text-slate-900 mb-1">
-                          {product.top_bidder.id === user?.id
-                            ? `${product.top_bidder.name} (Bạn)`
-                            : `${product.top_bidder.name[0]}***${
-                                product.top_bidder.name[
-                                  product.top_bidder.name.length - 1
-                                ]
-                              }`}
+                          {product.top_bidder.name}
                         </p>
                         <p className="text-xs text-slate-600">
                           {bidderRating !== 0
