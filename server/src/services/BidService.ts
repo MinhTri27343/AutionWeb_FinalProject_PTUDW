@@ -1,5 +1,6 @@
 import {
   BidLog,
+  CanBid,
   CreateBidLog,
   UserBidInfo,
 } from "../../../shared/src/types/Bid";
@@ -717,5 +718,20 @@ export class BidService extends BaseService {
     }
 
     return { success: true, id: product?.[0]?.id, slug: product?.[0]?.slug };
+  }
+  async getCanBid(userId: number, product_slug: string): Promise<CanBid> {
+    const sql = `
+              SELECT user_id
+              FROM product.products as p
+              JOIN auction.black_list as l ON p.id = l.product_id
+              WHERE p.slug = $1 AND l.user_id = $2
+                `;
+    const params = [product_slug, userId];
+    const rs: { user_id: number }[] = await this.safeQuery(sql, params);
+    if (rs.length === 0) {
+      return { canBid: true };
+    } else {
+      return { canBid: false };
+    }
   }
 }
