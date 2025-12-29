@@ -14,6 +14,7 @@ import ErrorMessage from "./ErrorMessage";
 import CategoryHook from "@/hooks/useCategory";
 import { formatPrice, parseNumber } from "@/utils";
 import LoadingSpinner from "@/components/LoadingSpinner";
+import { toast } from "react-toastify";
 
 const Editor = dynamic(
   () =>
@@ -132,11 +133,11 @@ const CreateProductPage = () => {
   const onSubmit = (payload: NewProductType) => {
     console.log(payload);
     if (!mainImage) {
-      alert("Yêu cầu có ảnh chính");
+      toast.error("Yêu cầu có ảnh chính");
       return;
     }
     if ((extraImages && extraImages.length < 3) || !extraImages) {
-      alert("Số lượng ảnh phụ không phù hợp");
+      toast.error("Cần ít nhất 3 ảnh phụ");
       return;
     }
 
@@ -144,7 +145,7 @@ const CreateProductPage = () => {
       payload.buy_now_price &&
       payload.buy_now_price <= payload.initial_price
     ) {
-      alert("Giá mua ngay phải cao hơn giá khởi điểm.");
+      toast.error("Giá mua ngay phải cao hơn giá khởi điểm.");
       return;
     }
 
