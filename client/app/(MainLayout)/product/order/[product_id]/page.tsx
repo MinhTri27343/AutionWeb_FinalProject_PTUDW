@@ -20,6 +20,7 @@ import DeliveringStep from "./DeliveringStep";
 import FinishStep from "./FinishStep";
 import OrderChat from "../../sell/order/[product_id]/components/OrderChat";
 import OrderInfoCard from "./OrderInfoCard";
+import CancelledCard from "./CancelledCard";
 
 const stepperIndexDict: Record<OrderStatus, number> = {
   pending: 0,
@@ -78,11 +79,7 @@ const ProductOrderPage = () => {
               <BuyingProductCard product={product} order={order} />
 
               {order.status == "cancelled" ? (
-                <div className="w-full h-100 flex justify-center items-center">
-                  <p className="text-red-500 text-3xl font-medium">
-                    Đơn hàng đã bị hủy
-                  </p>
-                </div>
+                <CancelledCard order={order} />
               ) : (
                 <Stepper active={active} className="mt-8">
                   <Stepper.Step

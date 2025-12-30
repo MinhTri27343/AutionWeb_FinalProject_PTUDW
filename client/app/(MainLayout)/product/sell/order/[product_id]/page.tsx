@@ -70,7 +70,7 @@ const ProductOrderPage = () => {
         <div className="w-full h-150">
           <LoadingSpinner />
         </div>
-      ) : user && order && user.id === order.seller?.id ? (
+      ) : user && order && product && user.id === order.seller?.id ? (
         <>
           <h1 className="text-2xl">Thông tin đơn hàng</h1>
           <div className="w-full grid grid-cols-12 gap-5">
@@ -97,7 +97,11 @@ const ProductOrderPage = () => {
                     description={`Đóng gói đơn hàng`}
                     className="mb-4"
                   >
-                    <ConfirmStep setActive={setActive} order={order} />
+                    <ConfirmStep
+                      setActive={setActive}
+                      order={order}
+                      product={product}
+                    />
                   </Stepper.Step>
                   <Stepper.Step
                     label="Giao hàng"
