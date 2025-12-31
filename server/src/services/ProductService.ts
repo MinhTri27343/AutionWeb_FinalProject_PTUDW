@@ -689,15 +689,27 @@ WHERE pc.parent_id is not null
 
   async updateProductDescription(productId: number, description: string) {
     const sql = `
-    UPDATE product.products
-    SET description = 
-        CASE
-            WHEN description IS NULL THEN $1
-            ELSE description || E'\n\n' || $1
-        END,
-        updated_at = NOW()
-    WHERE id = $2
-    RETURNING *;
+   UPDATE product.products
+SET description =
+    CASE
+        WHEN description IS NULL THEN
+            '<p><strong>Cập nhật lúc:</strong> '
+            || TO_CHAR(NOW(), 'HH24:MI:SS DD-MM-YYYY')
+            || '</p><p>'
+            || $1
+            || '</p>'
+        ELSE
+            description
+            || '<hr/>'
+            || '<p><strong>Cập nhật lúc:</strong> '
+            || TO_CHAR(NOW(), 'HH24:MI:SS DD-MM-YYYY')
+            || '</p><p>'
+            || $1
+            || '</p>'
+    END,
+    updated_at = NOW()
+WHERE id = $2
+RETURNING *;
     `;
     const updateProduct = await this.safeQuery(sql, [description, productId]);
     return updateProduct;
@@ -924,7 +936,7 @@ WHERE pc.parent_id is not null
       `;
       const params = [questionId];
       const result: { id: number }[] = await this.safeQuery(sql, params);
-      return result[0]?.id ;
+      return result[0]?.id;
     };
     const getRelatedUsersInUserBids = async () => {
       const sql = `
