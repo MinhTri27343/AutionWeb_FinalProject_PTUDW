@@ -3,6 +3,7 @@ import {
   UserRegisterOTP,
 } from "./../../shared/src/types/ResetPasswordOTP";
 import {
+  ChangePasswordRequest,
   ForgetPasswordRequest,
   RegisterRequest,
   ResetPasswordRequest,
@@ -44,6 +45,8 @@ export const authService = {
       throw error?.response?.data ?? error;
     }
   },
+
+ 
 
   verifyOTP: async (user: UserOTP) => {
     try {

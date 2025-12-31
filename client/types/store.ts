@@ -1,3 +1,4 @@
+import { ChangePasswordRequest } from './../../shared/src/types/User';
 import { useQueryClient } from "@tanstack/react-query";
 import {
   ForgetPasswordRequest,
@@ -84,6 +85,7 @@ export interface AuthState {
    */
   signOut: () => Promise<void>;
 
+  // changePassword: (user: ChangePasswordRequest) => Promise<void>;
   forgetPassword: (user: ForgetPasswordRequest) => Promise<void>;
 
   /**

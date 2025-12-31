@@ -6,10 +6,14 @@ import SecondaryButton from "@/components/SecondaryButton";
 import UserHook from "@/hooks/useUser";
 import { useForm, SubmitHandler } from "react-hook-form";
 import { EditProfileInputs, EditProfileSchema } from "./validation";
+import { ChangePasswordInputs, ChangePasswordSchema } from "./validation";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { User } from "../../../../../shared/src/types";
+import { ChangePasswordRequest, User } from "../../../../../shared/src/types";
 import { url } from "inspector";
 import { formatDate } from "../../product/[product_slug]/components/Question";
+import PrimaryButton from "@/components/PrimaryButton";
+import { useAuthStore } from "@/store/auth.store";
+import { useRouter } from "next/navigation";
 
 interface EditDetailProps {
   user: User;
@@ -33,6 +37,14 @@ export default function EditDetail({
   // --- Custom Hook ---
   const { mutate: updateProfile, isPending: isLoading } =
     UserHook.useUpdateProfile();
+
+  const { mutate: changePassword, isPending: isLoadingChangePassword } =
+    UserHook.useChangePassword();
+  // const changePassword = useAuthStore((s) => s.changePassword);
+  // const isLoadingPassword = useAuthStore((s) => s.loading);
+
+  // console.log("gia tri loading: ", isLoadingPassword);
+  const router = useRouter();
   const {
     register,
     handleSubmit,
@@ -45,10 +57,18 @@ export default function EditDetail({
       email: user.email || "",
       address: user.address || "",
       day_of_birth: user.day_of_birth
-      ? formatDate(user.day_of_birth) // YYYY-MM-DD
-      : "",
+        ? formatDate(user.day_of_birth) // YYYY-MM-DD
+        : "",
     },
     mode: "onChange",
+  });
+
+  const {
+    register: registerPassword,
+    handleSubmit: handleSubmitPassword,
+    formState: { errors: passwordErrors },
+  } = useForm<ChangePasswordInputs>({
+    resolver: zodResolver(ChangePasswordSchema),
   });
 
   // --- Define handler ---
@@ -59,9 +79,8 @@ export default function EditDetail({
       formData.append("email", data.email);
       formData.append("address", data.address);
       if (data.day_of_birth) {
-        formData.append("day_of_birth", data.day_of_birth); 
+        formData.append("day_of_birth", data.day_of_birth);
       }
-
 
       if (avatarFile) {
         formData.append("profile_img", avatarFile); // file object
@@ -79,8 +98,19 @@ export default function EditDetail({
     [updateProfile, onSaveSuccess, avatarFile]
   );
 
+  const onSubmitPassword: SubmitHandler<ChangePasswordInputs> = async (
+    data
+  ) => {
+    try {
+      const user: ChangePasswordRequest = data;
+      await changePassword(user);
+    } catch (error) {
+      console.error(error);
+    }
+  };
+
   const handleChangeAvatar = useCallback(
-    (data: { file: File; url: String }) => {
+    (data: { file: File; url: string }) => {
       setAvatar(data.url);
       setAvatarFile(data.file);
     },
@@ -102,9 +132,9 @@ export default function EditDetail({
       setValue("email", user.email || "");
       setValue("address", user.address || "");
       setValue(
-      "day_of_birth",
-      user.day_of_birth ? formatDate(user.day_of_birth) : ""
-    );
+        "day_of_birth",
+        user.day_of_birth ? formatDate(user.day_of_birth) : ""
+      );
     }
   }, [user, setValue]);
 
@@ -176,13 +206,12 @@ export default function EditDetail({
             id="day_of_birth"
             type="date"
             className="text-black rounded-lg mr-10"
-            />
-            {errors.day_of_birth && (
+          />
+          {errors.day_of_birth && (
             <p className="text-red-500 text-xs mt-1">
-                {errors.day_of_birth.message}
+              {errors.day_of_birth.message}
             </p>
           )}
-
 
           <button type="submit" hidden aria-hidden="true" tabIndex={-1} />
         </form>
@@ -202,6 +231,7 @@ export default function EditDetail({
           <form
             aria-disabled={!isEditingPassword}
             className="relative flex flex-col gap-2 p-6 border border-gray-500 rounded-sm aria-disabled:pointer-events-none"
+            onSubmit={handleSubmitPassword(onSubmitPassword)}
           >
             {/* Overlay */}
             {!isEditingPassword && (
@@ -212,39 +242,63 @@ export default function EditDetail({
             </label>
             <div className="grid grid-cols-[4fr_2.5fr] gap-2.5">
               <input
-                name="old-password"
                 id="old-password"
                 type="password"
                 disabled={!isEditingPassword}
                 className="text-black rounded-lg basis-4/5 flex-1"
+                {...registerPassword("oldPassword")}
               />
+              {passwordErrors.oldPassword && (
+                <p className="text-red-500 text-xs mt-1">
+                  {passwordErrors.oldPassword.message}
+                </p>
+              )}
               <SecondaryButton
                 text="Quên mật khẩu"
                 type="button"
-                onClick={() => console.log("Clicked on 'Quên mật khẩu'")}
+                onClick={() => router.replace("/forget-password")}
               />
             </div>
-            <label htmlFor="old-password" className="mt-3 font-medium text-sm">
+            <label htmlFor="new-password" className="mt-3 font-medium text-sm">
               Mật khẩu mới
             </label>
             <input
-              name="old-password"
-              id="old-password"
+              id="new-password"
               type="password"
               disabled={!isEditingPassword}
               className="text-black rounded-lg"
+              {...registerPassword("newPassword")}
             />
+            {passwordErrors.newPassword && (
+              <p className="text-red-500 text-xs mt-1">
+                {passwordErrors.newPassword.message}
+              </p>
+            )}
 
-            <label htmlFor="old-password" className="mt-3 font-medium text-sm">
+            <label
+              htmlFor="confirm-password"
+              className="mt-3 font-medium text-sm"
+            >
               Xác nhận mật khẩu mới
             </label>
             <input
-              name="old-password"
-              id="old-password"
+              id="confirm-password"
               type="password"
               disabled={!isEditingPassword}
               className="text-black rounded-lg"
+              {...registerPassword("confirmPassword")}
             />
+            {passwordErrors.confirmPassword && (
+              <p className="text-red-500 text-xs mt-1">
+                {passwordErrors.confirmPassword.message}
+              </p>
+            )}
+
+            <div className="mt-4">
+              <PrimaryButton
+                text={isLoadingChangePassword ? "Đang lưu..." : "Lưu  thay đổi"}
+              />
+            </div>
           </form>
         </div>
       </div>

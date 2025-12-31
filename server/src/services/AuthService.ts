@@ -117,11 +117,12 @@ export class AuthService extends BaseService {
       email,
       password_hash,
       user_name,
+      address,
       role,
       created_at,
       updated_at
       )
-      VALUES ($1, $2, $3, $4, 'bidder', NOW(), NOW())
+      VALUES ($1, $2, $3, $4, $5,  'bidder', NOW(), NOW())
       RETURNING *
       `;
     await this.safeQuery(sql, [
@@ -129,6 +130,7 @@ export class AuthService extends BaseService {
       user.email,
       user.password_hash,
       user.username,
+      user.address
     ]);
   }
 
@@ -155,10 +157,11 @@ export class AuthService extends BaseService {
       email,
       password_hash,
       user_name,
+      address,
       expired_at,
       otp_hash 
       )
-      VALUES ($1, $2, $3, $4, $5, $6)
+      VALUES ($1, $2, $3, $4, $5, $6, $7)
       RETURNING *
       `;
     await this.safeQuery(sql, [
@@ -166,6 +169,7 @@ export class AuthService extends BaseService {
       user.email,
       user.password_hash,
       user.username,
+      user.address,
       user.expired_at,
       user.otp_hash,
     ]);

@@ -1,3 +1,4 @@
+import { ChangePasswordRequest } from "./../../shared/src/types/User";
 import { STALE_10_MIN } from "@/config/query.config";
 import { UserService } from "@/services/userService";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
@@ -36,6 +37,21 @@ class UserHook {
         queryClient.invalidateQueries({
           queryKey: ["user_profile"],
         });
+      },
+
+      onError: (error) => {
+        toast.error("Cập nhật thông tin thất bại");
+      },
+    });
+  }
+
+  static useChangePassword() {
+    return useMutation({
+      mutationFn: (user: ChangePasswordRequest) =>
+        UserService.changePassword(user),
+
+      onSuccess: () => {
+        toast.success("Thay đổi mật khẩu thành công");
       },
 
       onError: (error) => {

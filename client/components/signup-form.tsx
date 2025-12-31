@@ -28,6 +28,7 @@ const signUpSchema = z
     name: z.string().min(1, "Tên không được để trống"),
     username: z.string().min(1, "Tên đăng nhập không được để trống"),
     email: z.email("Email không hợp lệ"),
+    address: z.string().min(1, "Bắt buộc phải nhập địa chỉ"),
     password: z.string().min(6, "Mật khẩu phải có ít nhất 8 kí tự"),
     confirmPassword: z.string().min(1, "Vui lòng nhập lại mật khẩu"),
     captchaToken: z
@@ -46,7 +47,7 @@ export function SignupForm({
   ...props
 }: React.ComponentProps<"div">) {
   const recaptchaRef = useRef<ReCAPTCHA>(null);
-  const { signUp } = useAuthStore();
+  const signUp = useAuthStore((s) => s.signUp);
   const router = useRouter();
   const {
     register,
@@ -75,7 +76,7 @@ export function SignupForm({
       router.push("/verify-otp");
     } catch (error) {
       console.log(error);
-    } finally{
+    } finally {
       recaptchaRef.current?.reset();
     }
   };
@@ -92,7 +93,9 @@ export function SignupForm({
                 </p>
               </div>
               <Field>
-                <FieldLabel htmlFor="name">Họ và tên</FieldLabel>
+                <FieldLabel htmlFor="name">
+                  Họ và tên <span className="text-red-500 mt-1">*</span>
+                </FieldLabel>
                 <Input
                   id="name"
                   type="text"
@@ -106,7 +109,9 @@ export function SignupForm({
                 )}
               </Field>
               <Field>
-                <FieldLabel htmlFor="username">Tên đăng nhập</FieldLabel>
+                <FieldLabel htmlFor="username">
+                  Tên đăng nhập <span className="text-red-500 mt-1">*</span>
+                </FieldLabel>
                 <Input
                   id="username"
                   type="text"
@@ -120,7 +125,9 @@ export function SignupForm({
                 )}
               </Field>
               <Field>
-                <FieldLabel htmlFor="email">Email</FieldLabel>
+                <FieldLabel htmlFor="email">
+                  Email <span className="text-red-500 mt-1">*</span>
+                </FieldLabel>
                 <Input
                   id="email"
                   type="email"
@@ -134,9 +141,27 @@ export function SignupForm({
                 )}
               </Field>
               <Field>
+                <FieldLabel htmlFor="address">
+                  Địa chỉ <span className="text-red-500 mt-1">*</span>
+                </FieldLabel>
+                <Input
+                  id="address"
+                  type="text"
+                  placeholder="Đồng tháp"
+                  {...register("address")}
+                />
+                {errors.address && (
+                  <p className="text-destructive text-sm">
+                    {errors.address.message}
+                  </p>
+                )}
+              </Field>
+              <Field>
                 <Field className="grid gap-4">
                   <Field>
-                    <FieldLabel htmlFor="password">Mật khẩu</FieldLabel>
+                    <FieldLabel htmlFor="password">
+                      Mật khẩu <span className="text-red-500 mt-1">*</span>{" "}
+                    </FieldLabel>
                     <Input
                       id="password"
                       type="password"

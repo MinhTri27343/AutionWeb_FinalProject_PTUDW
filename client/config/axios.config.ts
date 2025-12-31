@@ -94,9 +94,7 @@ export async function safeRequest<T>(fn: () => Promise<T>) {
     };
   } catch (error: any) {
     console.log(error);
-    const message =
-      error?.response?.data?.message || error.message || "Request failed";
 
-    throw new Error(message);
+    throw error?.response?.data ?? error;
   }
 }

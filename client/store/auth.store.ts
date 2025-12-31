@@ -4,6 +4,7 @@ import {
 } from "./../../shared/src/types/ResetPasswordOTP";
 import { create } from "zustand";
 import {
+  ChangePasswordRequest,
   ForgetPasswordRequest,
   RegisterRequest,
   ResetPasswordRequest,
@@ -87,6 +88,20 @@ export const useAuthStore = create<AuthState>((set, get) => ({
     }
   },
 
+  // changePassword: async (user: ChangePasswordRequest) => {
+  //   try {
+  //     set({ loading: true });
+  //     const data = await authService.changePassword(user);
+  //     console.log(data);
+  //     toast.success(data.message);
+  //   } catch (error: any) {
+  //     console.log(error);
+  //     toast.error(error.message);
+  //     throw error;
+  //   }finally {
+  //     set({ loading: false });
+  //   }
+  // },
   forgetPassword: async (user: ForgetPasswordRequest) => {
     try {
       set({ loading: true });
@@ -208,7 +223,7 @@ export const useAuthStore = create<AuthState>((set, get) => ({
       console.log(error);
       toast.error(error.message);
       throw error;
-    }finally {
+    } finally {
       set({ loading: false });
     }
   },
@@ -216,14 +231,14 @@ export const useAuthStore = create<AuthState>((set, get) => ({
   reSendRResetPasswordOTP: async () => {
     try {
       set({ loading: true });
-      const userId = get().forgetUserId
+      const userId = get().forgetUserId;
       const data = await authService.reSendRResetPasswordOTP(userId);
       toast.success(data.message);
     } catch (error: any) {
       console.log(error);
       toast.error(error.message);
       throw error;
-    }finally {
+    } finally {
       set({ loading: false });
     }
   },

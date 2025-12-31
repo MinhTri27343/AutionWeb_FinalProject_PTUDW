@@ -13,4 +13,11 @@ export const EditProfileSchema = z.object({
     ),
 });
 
+export const ChangePasswordSchema = z.object({
+  oldPassword: z.string().min(8, "Mật khẩu phải có ít nhất 8 kí tự"),
+  newPassword: z.string().min(8, "Mật khẩu phải có ít nhất 8 kí tự"),
+  confirmPassword: z.string().min(8, "Mật khẩu phải có ít nhất 8 kí tự"),
+})
+
 export type EditProfileInputs = z.infer<typeof EditProfileSchema>;
+export type ChangePasswordInputs = z.infer<typeof ChangePasswordSchema>;

@@ -22,6 +22,7 @@ export type RegisterRequest = {
   password: string;
   email: User["email"];
   name: User["name"];
+  address: User["address"];
   captchaToken: string;
 };
 
@@ -29,6 +30,7 @@ export type ForgetPasswordRequest = {
   username: string;
   email: string;
 };
+
 
 export type ResetPasswordRequest = {
   newPassword: string;
@@ -51,12 +53,14 @@ export type CreateUser = {
   username: string;
   email: User["email"];
   password_hash: string;
+  address: User["address"];
 };
 
 export type CreateTempUser = {
   name: User["name"];
   username: string;
   email: User["email"];
+  address: User["address"];
   password_hash: string;
   expired_at: Date;
   otp_hash: string;

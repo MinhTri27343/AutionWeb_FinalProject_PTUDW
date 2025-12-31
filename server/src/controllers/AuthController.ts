@@ -46,6 +46,7 @@ export class AuthController extends BaseController {
       !registerUser.password ||
       !registerUser.name ||
       !registerUser.username ||
+      !registerUser.address ||
       !registerUser.captchaToken
     ) {
       throw new Error(
@@ -82,6 +83,7 @@ export class AuthController extends BaseController {
       email: registerUser.email,
       password_hash: hashPassword,
       name: registerUser.name,
+      address: registerUser.address,
       expired_at: new Date(Date.now() + VERIFY_EMAIL_OTP_TTL),
       otp_hash: otp_hash,
     };
@@ -256,6 +258,7 @@ export class AuthController extends BaseController {
       name: otpRes.name,
       username: otpRes.user_name,
       email: otpRes.email,
+      address: otpRes.address,
       password_hash: otpRes.password_hash,
     };
 
@@ -506,8 +509,10 @@ export class AuthController extends BaseController {
       throw new Error("Tài khoản không tồn tại");
     }
 
+    console.log("Thong tin user trong db: ", userInfo);
     const oldHashPassword = userInfo.password_hash;
-    const isCorrectPassword = bcrypt.compare(
+    console.log("compare: ", oldHashPassword, userConfirm.oldPassword);
+    const isCorrectPassword = await  bcrypt.compare(
       userConfirm.oldPassword,
       oldHashPassword
     );
