@@ -529,7 +529,11 @@ export class ProductService extends BaseService {
         return productType;
       })
     );
-    return sellingProduct;
+    console.log("gia tri selling: ", sellingProduct);
+    const availableProducts = sellingProduct.filter(
+      (p) => p?.status === "available"
+    );
+    return availableProducts;
   }
   async getCategoryProductList(): Promise<CategoryProduct[]> {
     let sql = `
