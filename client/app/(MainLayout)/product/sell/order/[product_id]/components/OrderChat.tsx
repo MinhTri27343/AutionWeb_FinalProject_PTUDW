@@ -132,7 +132,7 @@ const OrderChat = ({ productId }: Props) => {
                 <div className="relative group">
                   <div
                     className={clsx(
-                      "inline-block px-4 py-2.5 rounded-[20px] text-[15px] shadow-sm transition-all hover:shadow-md",
+                      "inline-block px-4 py-2.5 rounded-[20px] text-[15px] shadow-sm transition-all hover:shadow-md max-w-70 break-words",
                       isMe
                         ? "bg-sky-500 text-white rounded-tr-md"
                         : "bg-slate-100 text-slate-900 rounded-tl-md"
