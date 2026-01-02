@@ -286,7 +286,8 @@ export default function ProductPage() {
 
     if (
       product.current_price &&
-      data.price < product.current_price + product.price_increment!
+      Number(data.price) <
+        Number(product.current_price) + Number(product.price_increment!)
     ) {
       toast.error("Giá đấu không thể thấp hơn giá tối thiểu");
       return;
