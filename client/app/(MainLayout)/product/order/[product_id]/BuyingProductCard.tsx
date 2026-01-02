@@ -82,7 +82,7 @@ const BuyingProductCard = ({
             <p className="text-slate-400 text-[11px] font-bold uppercase tracking-wider mb-1">
               Giá thanh toán
             </p>
-            <p className="text-teal-600 font-black text-2xl tracking-tight leading-none">
+            <p className="text-teal-600 font-black text-2xl leading-none">
               {formatCurrency(order.price)}
             </p>
           </div>
