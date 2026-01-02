@@ -147,12 +147,19 @@ const page = () => {
         onSearch={setSearchQuery}
         onCreateClick={() => setShowCreateModal(true)}
       />
-      <div className="p-6">
-        <h1 className="text-2xl font-bold text-text mb-6">Quản lý danh mục</h1>
-        {pageData.map((item, index) => (
-          <CategoryCard category={item} key={index} />
-        ))}
-        <div className="mt-10 flex justify-center">
+      {/* RESPONSIVE PADDING: p-3 cho mobile, sm:p-4, md:p-6 cho tablet/desktop */}
+      <div className="p-3 sm:p-4 md:p-6">
+        <h1 className="text-xl sm:text-2xl font-bold text-text mb-4 sm:mb-6">
+          Quản lý danh mục
+        </h1>
+
+        <div className="flex flex-col gap-3 sm:gap-4">
+          {pageData.map((item, index) => (
+            <CategoryCard category={item} key={index} />
+          ))}
+        </div>
+
+        <div className="mt-6 sm:mt-10 flex justify-center">
           <Pagination
             totalPages={totalPages}
             onPageChange={setCurrentPage}
@@ -162,9 +169,10 @@ const page = () => {
       </div>
 
       {showCreateModal && (
-        <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50">
-          <div className="bg-white rounded-lg shadow-lg p-6 max-w-md w-full mx-4">
-            <h2 className="text-xl font-bold text-text mb-4r">
+        <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 px-4">
+          {/* RESPONSIVE MODAL: w-full cho mobile nhưng max-width để không quá to trên desktop */}
+          <div className="bg-white rounded-lg shadow-lg p-5 sm:p-6 w-full max-w-sm sm:max-w-md mx-auto">
+            <h2 className="text-lg sm:text-xl font-bold text-text mb-4">
               Tạo danh mục mới
             </h2>
             <input
@@ -172,12 +180,12 @@ const page = () => {
               placeholder="Tên danh mục"
               value={newCategoryName}
               onChange={(e) => setNewCategoryName(e.target.value)}
-              className="w-full px-4 py-2 border border-surface rounded-lg mb-4 focus:outline-none focus:ring-2 focus:ring-primary"
+              className="w-full px-4 py-2 border border-surface rounded-lg mb-4 focus:outline-none focus:ring-2 focus:ring-primary text-sm sm:text-base"
             />
             <div className="flex gap-2 justify-end">
               <button
                 onClick={() => setShowCreateModal(false)}
-                className="px-4 py-2 text-text border border-surface rounded-lg hover:bg-surface transition-colors"
+                className="px-3 py-1.5 sm:px-4 sm:py-2 text-sm sm:text-base text-text border border-surface rounded-lg hover:bg-surface transition-colors"
               >
                 Hủy
               </button>
@@ -185,7 +193,7 @@ const page = () => {
                 onClick={() =>
                   handleCreateParentCategory({ name: newCategoryName })
                 }
-                className="px-4 py-2 bg-primary text-white rounded-lg hover:bg-blue-600 transition-colors"
+                className="px-3 py-1.5 sm:px-4 sm:py-2 text-sm sm:text-base bg-primary text-white rounded-lg hover:bg-blue-600 transition-colors"
               >
                 Tạo
               </button>

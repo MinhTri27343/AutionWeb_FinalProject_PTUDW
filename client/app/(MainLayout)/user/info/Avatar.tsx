@@ -4,12 +4,14 @@ import { EditIcon } from "@/components/icons";
 import Image from "next/image";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { defaultImage } from "@/app/const";
+import { cn } from "@/lib/utils";
 
 type ImageProps = {
   src: string;
   alt?: string;
   width?: number;
   height?: number;
+  className?: string;
 };
 
 export default function Avatar({
@@ -99,7 +101,7 @@ export default function Avatar({
         width={120}
         height={120}
         onClick={() => setViewAvatar(true)}
-        className="border-1 border-black rounded-full object-cover cursor-pointer"
+        className={`border-1 border-black rounded-full object-cover cursor-pointer ${cn(imageProps.className)}`}
       />
 
       {/* View full image */}

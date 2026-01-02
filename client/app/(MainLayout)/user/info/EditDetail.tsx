@@ -32,7 +32,7 @@ export default function EditDetail({
 }: EditDetailProps) {
   // --- State ---
   const [isEditingPassword, setIsEditingPassword] = useState<boolean>(false);
-  const [avatar, setAvatar] = useState<String>(user.profile_img);
+  const [avatar, setAvatar] = useState<string>(user.profile_img);
   const [avatarFile, setAvatarFile] = useState<File | null>(null);
   // --- Custom Hook ---
   const { mutate: updateProfile, isPending: isLoading } =

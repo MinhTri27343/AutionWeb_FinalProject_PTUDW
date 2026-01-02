@@ -1,5 +1,6 @@
 "use client";
 
+import { cn } from "@/lib/utils";
 import { FC, SVGProps, useState } from "react";
 
 interface Button {
@@ -11,6 +12,7 @@ interface Button {
   icon?: FC<SVGProps<SVGSVGElement>>;
   onClick?: () => void;
   disabled?: boolean;
+  className?: string;
 }
 
 export default function PrimaryButton({
@@ -22,6 +24,7 @@ export default function PrimaryButton({
   backgroundColor,
   hoverBackgroundColor,
   disabled,
+  className
 }: Button) {
   const [isHovered, setIsHovered] = useState(false);
   return (
@@ -40,7 +43,7 @@ export default function PrimaryButton({
             : backgroundColor || "var(--chart-2)",
           cursor: disabled ? "not-allowed" : "pointer",
         }}
-        className={`w-full flex items-center gap-2 justify-center py-2 font-medium rounded-lg `}
+        className={`w-full flex items-center gap-2 justify-center py-2 font-medium rounded-lg ${cn(className)} `}
       >
         {Icon && <Icon />} {text}
       </button>

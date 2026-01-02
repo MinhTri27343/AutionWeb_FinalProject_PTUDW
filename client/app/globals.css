@@ -97,6 +97,11 @@
 
 @theme inline {
   /* optional: --font-sans, --font-serif, --font-mono if they are applied in the layout.tsx */
+  --color-blue-500: #3b82f6;
+  --color-blue-800: #1e40af;
+  --color-sky-500: #0ea5e9;
+  --color-indigo-400: #818cf8;
+  --color-indigo-500: #6366f1;
   --color-background: var(--background);
   --color-foreground: var(--foreground);
   --color-card: var(--card);
