@@ -30,7 +30,11 @@ export default function SidebarLayout({
 
   return (
     <>
-      {isLoading && <LoadingSpinner />}
+      {isLoading && (
+        <div className="w-screen h-screen inset-0 z-100">
+          <LoadingSpinner />
+        </div>
+      )}
       {error && <div>Error...</div>}
       {data && (
         <>

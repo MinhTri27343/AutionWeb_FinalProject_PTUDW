@@ -40,7 +40,7 @@ const BiddingProductPage = () => {
   return (
     <>
       {isLoadingBiddingProduct && (
-        <div className="fixed inset-0 z-100">
+        <div className="w-screen h-screen inset-0 z-100">
           <LoadingSpinner />
         </div>
       )}

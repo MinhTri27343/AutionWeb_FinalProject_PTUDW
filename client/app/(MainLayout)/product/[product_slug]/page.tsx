@@ -364,8 +364,10 @@ export default function ProductPage() {
       isLoadingIsCanBid ||
       isCreatingBid ||
       isCreatingOrder ? (
-        <div className="fixed inset-0 z-100">
-          <LoadingSpinner />
+        <div className="h-screen">
+          <div className="fixed inset-0 z-100">
+            <LoadingSpinner />
+          </div>
         </div>
       ) : (
         <>

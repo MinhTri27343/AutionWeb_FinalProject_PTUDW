@@ -221,7 +221,9 @@ export default function ProductPage() {
       isLoadingProductCategory ||
       isLoadingOrder ||
       isLoadingUserBid ? (
-        <LoadingSpinner />
+        <div className="w-screen h-screen inset-0 z-100">
+          <LoadingSpinner />
+        </div>
       ) : (
         <>
           <div className="mb-4">

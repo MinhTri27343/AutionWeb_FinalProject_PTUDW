@@ -31,16 +31,20 @@ const FavoriteProductPage = () => {
   return (
     <div className="background-user">
       <div className="text-xl sm:text-2xl font-medium">Sản phẩm đang bán</div>
-      {(isLoading || isLoadingSellingProducts) && <LoadingSpinner />}
+      {(isLoading || isLoadingSellingProducts) && (
+        <div className="w-screen h-screen inset-0 z-100">
+          <LoadingSpinner />
+        </div>
+      )}
       {error && <div>{error.message}</div>}
       {!isLoading &&
         !isLoadingSellingProducts &&
         !error &&
         (sellingProducts && sellingProducts.length === 0 ? (
           <EmptyList
-              content=" Bạn hiện không bán sản phẩm nào. Hãy tìm kiếm những
+            content=" Bạn hiện không bán sản phẩm nào. Hãy tìm kiếm những
                 món đồ ưng ý và từ đó đưa ra lựa chọn để tạo sản phẩm nhé"
-            />
+          />
         ) : (
           <div className="mt-2 grid min-[390px]:grid-cols-2 min-[500px]:grid-cols-3 min-[700px]:grid-cols-4 min-[900px]:grid-cols-5 gap-3">
             {sellingProducts.map((item) => {
