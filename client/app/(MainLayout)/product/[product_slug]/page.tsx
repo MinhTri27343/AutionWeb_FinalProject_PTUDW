@@ -104,7 +104,7 @@ export default function ProductPage() {
   const [warningAutoBuyNowModal, setWarningAutoBuyNowModal] =
     useState<boolean>(false);
   const [isPopup, setIsPopup] = useState<boolean>(false);
-  const [canBid, setIsCanBid] = useState<boolean>(false);
+  const [canBid, setCanBid] = useState<boolean>(false);
   const [navToOrderConfirm, setNavToOrderConfirm] = useState<boolean>(false);
   const [isEnd, setIsEnd] = useState<boolean>(false);
   const resolveRef = useRef<((value: boolean) => void) | null>(null);
@@ -206,13 +206,13 @@ export default function ProductPage() {
   }, [favorite_products, product]);
 
   useEffect(() => {
-    if (!router || !user || !product || !order || !searchParams || canBid)
+    if (!router || !user || !product || !order || !searchParams || !isCanBid)
       return;
-    console.log(order);
+
     //Check can bid
     if (user) {
       if (!isCanBid) {
-        setIsCanBid(false);
+        setCanBid(false);
       } else {
         const pos = user.positive_points ? user.positive_points : 0;
         const neg = user.negative_points ? user.negative_points : 0;
@@ -220,15 +220,15 @@ export default function ProductPage() {
         const total = pos + neg;
         if (total === 0) {
           if (product.is_all_can_bid) {
-            setIsCanBid(true);
+            setCanBid(true);
           } else {
-            setIsCanBid(false);
+            setCanBid(false);
           }
         } else {
           if (pos / total >= 0.8) {
-            setIsCanBid(true);
+            setCanBid(true);
           } else {
-            setIsCanBid(false);
+            setCanBid(false);
           }
         }
       }
@@ -249,7 +249,7 @@ export default function ProductPage() {
     if (order_navigate != "false" && user.id == order.buyer?.id) {
       setNavToOrderConfirm(true);
     }
-  }, [router, user, order, product, searchParams]);
+  }, [router, user, order, product, searchParams, isCanBid]);
 
   useEffect(() => {
     setValue("price", "");
@@ -358,6 +358,7 @@ export default function ProductPage() {
       isLoadingOrder ||
       isLoadingUserBid ||
       isLoadingIsCanBid ||
+      isCreatingBid ||
       isCreatingOrder ? (
         <div className="fixed inset-0 z-100">
           <LoadingSpinner />
@@ -876,13 +877,17 @@ export default function ProductPage() {
                   </div>
                 )}
                 <div>
-                  <div
-                    onClick={handleLike}
-                    className="flex-1 flex items-center justify-center gap-2 py-2 border border-slate-300 rounded-lg hover:bg-slate-100  hover:cursor-pointer"
-                  >
-                    {isFavorite ? <LoveFullIcon /> : <LoveIcon />}
-                    <span className="text-sm font-medium">Yêu thích</span>
-                  </div>
+                  {isAddFavorite || isRemoveFavorite ? (
+                    <LoadingSpinner />
+                  ) : (
+                    <div
+                      onClick={handleLike}
+                      className="flex-1 flex items-center justify-center gap-2 py-2 border border-slate-300 rounded-lg hover:bg-slate-100  hover:cursor-pointer"
+                    >
+                      {isFavorite ? <LoveFullIcon /> : <LoveIcon />}
+                      <span className="text-sm font-medium">Yêu thích</span>
+                    </div>
+                  )}
                 </div>
               </div>
             </div>
