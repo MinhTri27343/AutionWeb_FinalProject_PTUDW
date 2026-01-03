@@ -96,7 +96,7 @@ const WinProduct = ({ product }: { product: WinningProduct }) => {
                   className="flex items-center gap-1.5 px-3 py-1 bg-white border border-emerald-200 text-emerald-600 rounded-full hover:bg-emerald-600 hover:text-white transition-all text-[10px] font-bold uppercase tracking-wide shadow-sm"
                 >
                   <Star className="w-3 h-3 fill-current" />
-                  Đánh giá
+                  <span className="text-[10px] md:text-sm">Đánh giá</span>
                 </button>
               )}
             </div>

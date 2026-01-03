@@ -1,10 +1,8 @@
+"use client";
+
 import React, { useState } from "react";
-import {
-  Order,
-  Product,
-  UserRating,
-  CreateRating,
-} from "../../../shared/src/types";
+import { UserRating } from "../../../shared/src/types";
+import { ThumbsUp, ThumbsDown, MessageSquare } from "lucide-react";
 
 type FeedbackType = "plus" | "minus" | null;
 
@@ -33,20 +31,25 @@ const FeedbackBox = ({ targetName, rating, onRating }: FeedbackProps) => {
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    console.log({ type, comment });
+    if (!type) return;
     setSubmitted(true);
   };
 
   if (submitted) {
     return (
-      <div className="max-w-md p-6 bg-white rounded-xl shadow-lg text-center border border-gray-100">
-        <h3 className="text-xl font-bold text-green-600">Cảm ơn bạn!</h3>
-        <p className="text-gray-500 mt-2">
-          Đánh giá của bạn sẽ được gửi tới {targetName}
+      <div className="w-full p-6 md:p-8 bg-white md:rounded-xl md:shadow-lg text-center md:border border-gray-100 animate-in fade-in duration-300">
+        <div className="inline-flex items-center justify-center w-12 h-12 rounded-full bg-green-50 text-green-500 mb-4">
+          <ThumbsUp size={24} />
+        </div>
+        <h3 className="text-lg md:text-xl font-bold text-slate-800">
+          Cảm ơn bạn!
+        </h3>
+        <p className="text-gray-500 mt-2 text-sm md:text-base px-4">
+          Đánh giá của bạn giúp cộng đồng tin cậy {targetName} hơn.
         </p>
         <button
           onClick={() => setSubmitted(false)}
-          className="mt-4 text-blue-500 hover:underline text-sm"
+          className="mt-6 text-blue-500 font-semibold hover:text-blue-600 text-xs md:text-sm uppercase tracking-wider"
         >
           Chỉnh sửa đánh giá
         </button>
@@ -55,59 +58,67 @@ const FeedbackBox = ({ targetName, rating, onRating }: FeedbackProps) => {
   }
 
   return (
-    <div className="max-w-md p-6 bg-white rounded-xl shadow-lg border border-gray-100">
-      <h2 className="text-lg font-semibold text-gray-800 mb-4">
-        Bạn thấy giao dịch thế nào?
-      </h2>
+    <div className="w-full p-4 md:p-6 bg-white md:rounded-xl md:shadow-lg md:border border-gray-100">
+      <div className="flex items-center gap-2 mb-4 md:mb-6">
+        <MessageSquare size={18} className="text-blue-500" />
+        <h2 className="text-base md:text-lg font-bold text-slate-800">
+          Trải nghiệm của bạn?
+        </h2>
+      </div>
 
-      <form onSubmit={handleSubmit} className="space-y-4">
+      <form onSubmit={handleSubmit} className="space-y-4 md:space-y-6">
         {/* Nút chọn + hoặc - */}
-        <div className="flex gap-4">
+        <div className="flex gap-3 md:gap-4">
           <button
             type="button"
             onClick={() => setType("plus")}
-            className={`flex-1 py-3 rounded-lg border-2 transition-all flex items-center justify-center gap-2 ${
+            className={`flex-1 py-3 md:py-4 rounded-xl border-2 transition-all flex flex-col md:flex-row items-center justify-center gap-1 md:gap-2 ${
               type === "plus"
-                ? "border-green-500 bg-green-50 text-green-600"
-                : "border-gray-200 hover:border-green-300 text-gray-400 hover:text-green-300"
+                ? "border-green-500 bg-green-50 text-green-600 shadow-sm shadow-green-100"
+                : "border-slate-100 bg-slate-50/50 text-slate-400 hover:border-green-200"
             }`}
           >
-            <span className="text-2xl font-bold">+</span>
-            <span className="font-medium">Hài lòng</span>
+            <ThumbsUp
+              size={isMobileSize() ? 18 : 20}
+              className={type === "plus" ? "animate-bounce" : ""}
+            />
+            <span className="text-[11px] md:text-sm font-bold uppercase tracking-tight">
+              Hài lòng
+            </span>
           </button>
 
           <button
             type="button"
             onClick={() => setType("minus")}
-            className={`flex-1 py-3 rounded-lg border-2 transition-all flex items-center justify-center gap-2 ${
+            className={`flex-1 py-3 md:py-4 rounded-xl border-2 transition-all flex flex-col md:flex-row items-center justify-center gap-1 md:gap-2 ${
               type === "minus"
-                ? "border-red-500 bg-red-50 text-red-600"
-                : "border-gray-200 hover:border-red-300 text-gray-400 hover:text-red-300"
+                ? "border-red-500 bg-red-50 text-red-600 shadow-sm shadow-red-100"
+                : "border-slate-100 bg-slate-50/50 text-slate-400 hover:border-red-200"
             }`}
           >
-            <span className="text-2xl font-bold">−</span>
-            <span className="font-medium">Chưa tốt</span>
+            <ThumbsDown size={isMobileSize() ? 18 : 20} />
+            <span className="text-[11px] md:text-sm font-bold uppercase tracking-tight">
+              Chưa tốt
+            </span>
           </button>
         </div>
-
         {/* Dòng comment */}
-        <div>
+        <div className="space-y-2">
           <label
             htmlFor="comment"
-            className="block text-sm font-medium text-gray-700 mb-2"
+            className="block text-[10px] md:text-xs font-bold text-slate-400 uppercase tracking-widest"
           >
-            Chia sẻ thêm ý kiến của bạn cho {targetName}
+            Nhận xét chi tiết
           </label>
           <textarea
             value={comment}
             id="comment"
             onChange={(e) => setComment(e.target.value)}
-            className="w-full p-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none transition-all resize-none"
-            placeholder="Tại sao bạn chọn như vậy?..."
-            rows={3}
+            className="w-full p-3 md:p-4 bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 outline-none transition-all resize-none text-sm md:text-base text-slate-700 placeholder:text-slate-300"
+            placeholder="Chia sẻ lý do bạn hài lòng hoặc chưa hài lòng..."
+            rows={isMobileSize() ? 2 : 3}
           />
         </div>
-
         {/* Nút gửi */}
         <button
           type="submit"
@@ -125,5 +136,9 @@ const FeedbackBox = ({ targetName, rating, onRating }: FeedbackProps) => {
     </div>
   );
 };
+
+// Helper để check size nhanh trong component nếu cần (Optional)
+const isMobileSize = () =>
+  typeof window !== "undefined" && window.innerWidth < 640;
 
 export default FeedbackBox;

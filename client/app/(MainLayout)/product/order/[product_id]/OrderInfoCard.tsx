@@ -16,8 +16,8 @@ const OrderInfoCard = ({ product, order }: ComponentProps) => {
 
   return (
     <div className="bg-white border border-slate-200 rounded-xl overflow-hidden shadow-sm w-full transition-all hover:border-blue-500">
-      {/* Phần thân trên: Đã thêm min-w-0 để tiêu đề không đẩy avatar */}
-      <div className="p-5 flex items-center gap-4">
+      {/* Phần thân trên: Avatar & Tên */}
+      <div className="p-4 sm:p-5 flex items-center gap-3 sm:gap-4">
         <div className="relative shrink-0">
           {product.seller.profile_img ? (
             <Image
@@ -25,29 +25,27 @@ const OrderInfoCard = ({ product, order }: ComponentProps) => {
               alt={`Ảnh đại diện của ${product.seller.name}`}
               width={56}
               height={56}
-              className="w-14 h-14 object-cover rounded-full border border-slate-100 shadow-sm"
+              className="w-12 h-12 sm:w-14 sm:h-14 object-cover rounded-full border border-slate-100 shadow-sm"
             />
           ) : (
-            <div className="w-14 h-14 rounded-full bg-slate-50 flex items-center justify-center border border-slate-200">
-              <User className="w-8 h-8 text-slate-400" />
+            <div className="w-12 h-12 sm:w-14 sm:h-14 rounded-full bg-slate-50 flex items-center justify-center border border-slate-200">
+              <User className="w-6 h-6 sm:w-8 sm:h-8 text-slate-400" />
             </div>
           )}
         </div>
 
         <div className="flex flex-col min-w-0">
-          {" "}
-          {/* Cực kỳ quan trọng để truncate hoạt động */}
-          <div className="flex flex-wrap items-center gap-2 mb-1">
-            <h3 className="font-bold text-slate-900 text-lg leading-tight truncate">
+          <div className="flex flex-wrap items-center gap-1.5 sm:gap-2 mb-0.5 sm:mb-1">
+            <h3 className="font-bold text-slate-900 text-base sm:text-lg leading-tight truncate max-w-[150px] sm:max-w-none">
               {product.seller.name}
             </h3>
-            <span className="inline-flex items-center gap-1 px-2 py-0.5 rounded-md bg-blue-50 border border-blue-100 text-[10px] font-bold text-blue-600 uppercase tracking-wider shrink-0">
-              <ShieldCheck className="w-3 h-3 fill-blue-600/10" />
+            <span className="inline-flex items-center gap-1 px-1.5 py-0.5 rounded-md bg-blue-50 border border-blue-100 text-[9px] sm:text-[10px] font-bold text-blue-600 uppercase tracking-wider shrink-0">
+              <ShieldCheck className="w-2.5 h-2.5 sm:w-3 sm:h-3 fill-blue-600/10" />
               Người bán
             </span>
           </div>
           <div className="flex items-center">
-            <span className="text-sm font-semibold text-blue-600">
+            <span className="text-xs sm:text-sm font-semibold text-blue-600">
               {`⭐ ${
                 sellerRating > 0 ? `${sellerRating}%` : `Chưa có đánh giá`
               }`}
@@ -56,16 +54,16 @@ const OrderInfoCard = ({ product, order }: ComponentProps) => {
         </div>
       </div>
 
-      {/* Phần thân dưới: Thay grid bằng flex-wrap để tự nhảy dòng thông minh */}
-      <div className="flex flex-wrap bg-slate-50/50 border-t border-slate-100">
+      {/* Phần thân dưới: Thông tin thời gian */}
+      <div className="flex flex-wrap bg-slate-50/50">
         {/* Cột 1: Đơn tạo lúc */}
-        <div className="flex-1 min-w-[200px] flex items-center gap-3 p-4 border-r border-slate-100">
-          <Clock className="w-4 h-4 text-slate-400 shrink-0" />
+        <div className="flex-1 min-w-[160px] sm:min-w-[200px] flex items-center gap-2.5 sm:gap-3 p-3 sm:p-4">
+          <Clock className="w-3.5 h-3.5 sm:w-4 sm:h-4 text-slate-400 shrink-0" />
           <div className="flex flex-col">
-            <span className="text-[10px] text-slate-500 uppercase font-bold tracking-wider">
+            <span className="text-[9px] sm:text-[10px] text-slate-500 uppercase font-bold tracking-wider">
               Đơn tạo lúc
             </span>
-            <span className="text-sm text-slate-700 font-medium whitespace-nowrap">
+            <span className="text-xs sm:text-sm text-slate-700 font-medium whitespace-nowrap">
               {new Date(order.created_at).toLocaleString("vi-VN", {
                 hour: "2-digit",
                 minute: "2-digit",
@@ -78,19 +76,19 @@ const OrderInfoCard = ({ product, order }: ComponentProps) => {
         </div>
 
         {/* Cột 2: Đơn hoàn thành lúc */}
-        <div className="flex-1 min-w-[200px] flex items-center gap-3 p-4">
+        <div className="flex-1 min-w-[160px] sm:min-w-[200px] flex items-center gap-2.5 sm:gap-3 p-3 sm:p-4">
           <CheckCircle2
-            className={`w-4 h-4 shrink-0 ${
+            className={`w-3.5 h-3.5 sm:w-4 sm:h-4 shrink-0 ${
               order.status === "shipped" || order.status === "completed"
                 ? "text-green-500"
                 : "text-slate-300"
             }`}
           />
           <div className="flex flex-col">
-            <span className="text-[10px] text-slate-500 uppercase font-bold tracking-wider">
+            <span className="text-[9px] sm:text-[10px] text-slate-500 uppercase font-bold tracking-wider">
               Đơn hoàn thành
             </span>
-            <span className="text-sm text-slate-700 font-medium whitespace-nowrap">
+            <span className="text-xs sm:text-sm text-slate-700 font-medium whitespace-nowrap">
               {order.status === "shipped" || order.status === "completed"
                 ? new Date(order.updated_at || "").toLocaleString("vi-VN", {
                     hour: "2-digit",
