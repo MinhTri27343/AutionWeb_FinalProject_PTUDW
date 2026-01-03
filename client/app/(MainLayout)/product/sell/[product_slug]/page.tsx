@@ -176,7 +176,7 @@ export default function ProductPage() {
   useEffect(() => {
     if (favorite_products && product) {
       const newSetFavorites: Set<number> = new Set(
-        favorite_products.map((p: Product) => p.id)
+        favorite_products.map((p: Product) => Number(p.id))
       );
 
       setSetFavorites(newSetFavorites);
