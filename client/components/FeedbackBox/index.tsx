@@ -37,7 +37,7 @@ const FeedbackBox = ({ targetName, rating, onRating }: FeedbackProps) => {
 
   if (submitted) {
     return (
-      <div className="w-full p-6 md:p-8 bg-white md:rounded-xl md:shadow-lg text-center md:border border-gray-100 animate-in fade-in duration-300">
+      <div className="w-full p-6 md:p-8 bg-white md:rounded-xl md:shadow-lg text-center border border-gray-100 rounded-lg shadow-md shadow-slate-100 animate-in fade-in duration-300">
         <div className="inline-flex items-center justify-center w-12 h-12 rounded-full bg-green-50 text-green-500 mb-4">
           <ThumbsUp size={24} />
         </div>
@@ -58,7 +58,7 @@ const FeedbackBox = ({ targetName, rating, onRating }: FeedbackProps) => {
   }
 
   return (
-    <div className="w-full p-4 md:p-6 bg-white md:rounded-xl md:shadow-lg md:border border-gray-100">
+    <div className="w-full p-4 md:p-6 bg-white md:rounded-xl borderrounded-lg shadow-md rounded-lg border-gray-100">
       <div className="flex items-center gap-2 mb-4 md:mb-6">
         <MessageSquare size={18} className="text-blue-500" />
         <h2 className="text-base md:text-lg font-bold text-slate-800">
