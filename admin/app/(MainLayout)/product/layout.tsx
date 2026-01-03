@@ -4,6 +4,7 @@ import LoadingSpinner from "@/components/LoadingSpinner";
 import ProductCategoryTable from "@/components/ProductCategoryTable";
 import { SearchBar } from "@/components/SearchBar";
 import CategoryHook from "@/hooks/useCategory";
+import { PackageSearch } from "lucide-react";
 
 export default function ProductLayout({
   children,
@@ -38,9 +39,12 @@ export default function ProductLayout({
         </div>
       )}
 
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-        <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-8">
-          <h1 className="text-2xl font-bold text-gray-900">Quản lý sản phẩm</h1>
+      <div className="p-6 max-w-7xl mx-auto">
+        <div className="flex items-center gap-3 mb-8">
+          <PackageSearch className="w-8 h-8 text-primary" />
+          <h1 className="text-2xl font-bold text-gray-900">
+            Quản lý sản phẩm
+          </h1>
         </div>
         <div className="w-full md:w-96 mb-4">
           <SearchBar />

@@ -28,7 +28,7 @@ export default function AdminHeader({
   }
 
   return (
-    <header className="bg-white border-b border-surface shadow-sm px-6 py-4 flex items-center justify-between">
+    <header className="bg-white border-b border-t border-slate-200 rounded-xl shadow-sm px-6 py-4 flex items-center justify-between">
       <div className="flex-1 max-w-md">
         <div className="relative">
           <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-text-light w-5 h-5" />
@@ -37,7 +37,7 @@ export default function AdminHeader({
             placeholder="Tìm kiếm..."
             value={searchQuery}
             onChange={handleSearchChange}
-            className="w-full pl-10 pr-4 py-2 border border-surface rounded-lg bg-bg focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent"
+            className="w-full pl-10 pr-4 py-2 border border-slate-300 rounded-lg bg-bg focus:outline-none focus:ring-2 focus:ring-primary focus:border-transparent"
           />
         </div>
       </div>

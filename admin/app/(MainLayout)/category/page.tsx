@@ -10,6 +10,7 @@ import Fuse from "fuse.js";
 import { CategoryWithProductCount } from "@/components/CategoryCard";
 import { toast } from "react-toastify";
 import { useAuthStore } from "@/store/auth.store";
+import { BookCopy } from "lucide-react";
 const attachProductCount = (
   category: ProductCategoryTree,
   countMap: Map<number, number>
@@ -142,17 +143,19 @@ const page = () => {
   if (isCategoriesLoading || isCountProductsLoading)
     return <div>Loading...</div>;
   return (
-    <>
+    <div className="p-6 max-w-7xl mx-auto">
+      <div className="flex items-center gap-3 mb-8">
+        <BookCopy className="w-8 h-8 text-primary" />
+        <h1 className="text-xl sm:text-2xl font-bold text-text">
+          Quản lý danh mục
+        </h1>
+      </div>
       <AdminHeader
         onSearch={setSearchQuery}
         onCreateClick={() => setShowCreateModal(true)}
       />
       {/* RESPONSIVE PADDING: p-3 cho mobile, sm:p-4, md:p-6 cho tablet/desktop */}
-      <div className="p-3 sm:p-4 md:p-6">
-        <h1 className="text-xl sm:text-2xl font-bold text-text mb-4 sm:mb-6">
-          Quản lý danh mục
-        </h1>
-
+      <div className="py-3 sm:py-4 md:py-6">
         <div className="flex flex-col gap-3 sm:gap-4">
           {pageData.map((item, index) => (
             <CategoryCard category={item} key={index} />
@@ -201,7 +204,7 @@ const page = () => {
           </div>
         </div>
       )}
-    </>
+    </div>
   );
 };
 

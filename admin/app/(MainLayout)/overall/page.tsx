@@ -143,8 +143,8 @@ export default function SystemSettingsPage() {
   };
 
   return (
-    <div className="min-h-screen bg-gray-50 pb-8">
-      <div className="w-full px-15 py-8">
+    <div className="min-h-screen bg-gray-50 p-6">
+      <div className="w-full">
         <div className="flex items-center gap-3 mb-8">
           <Settings className="w-8 h-8 text-primary" />
           <h1 className="text-2xl font-bold text-gray-800">
