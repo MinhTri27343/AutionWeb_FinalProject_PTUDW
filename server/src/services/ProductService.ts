@@ -1008,7 +1008,7 @@ RETURNING *;
                 Người đấu giá <strong> ${bidderInfo.name}</strong>  đã đặt câu hỏi về sản phẩm
                 <strong>
                  <a 
-                    href="http://localhost:3000/product/${productInfo.slug}" 
+                    href="http://localhost:3000/product/sell/${productInfo.slug}" 
                     target="_blank" 
                     rel="noopener noreferrer"
                     style="color: inherit; text-decoration: underline;"
@@ -1142,7 +1142,16 @@ RETURNING *;
             <td style="padding:20px; font-size:16px; line-height:1.5; color:#333;">
               <p>
                 Người bán <strong>${sellerInfo.name}</strong> đã trả lời câu hỏi của bạn
-                tại sản phẩm <strong> ${productInfo.name}</strong>.
+                tại sản phẩm <strong>
+                  <a 
+                    href="http://localhost:3000/product/${productInfo.slug}" 
+                    target="_blank" 
+                    rel="noopener noreferrer"
+                    style="color: inherit; text-decoration: underline;"
+                  >
+                    ${productInfo.name}
+                  </a>
+                </strong>.
               </p>
               <p style="margin-top:15px;">
                 Hãy truy cập sản phẩm để xem chi tiết nội dung phản hồi.
@@ -1163,7 +1172,16 @@ RETURNING *;
             <td style="padding:20px; font-size:16px; line-height:1.5; color:#333;">
               <p>
                 Người bán <strong>${sellerInfo.name}</strong> đã trả lời câu hỏi của người khác
-                tại sản phẩm <strong> ${productInfo.name}</strong>.
+                tại sản phẩm <strong>
+                  <a 
+                    href="http://localhost:3000/product/${productInfo.slug}" 
+                    target="_blank" 
+                    rel="noopener noreferrer"
+                    style="color: inherit; text-decoration: underline;"
+                  >
+                    ${productInfo.name}
+                  </a>
+                </strong>.
               </p>
               <p style="margin-top:15px;">
                 Hãy truy cập sản phẩm để xem chi tiết nội dung phản hồi.

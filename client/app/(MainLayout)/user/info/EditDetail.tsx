@@ -13,6 +13,7 @@ import { formatDate } from "../../product/[product_slug]/components/Question";
 import PrimaryButton from "@/components/PrimaryButton";
 import { useRouter } from "next/navigation";
 import { LockIcon, UserIcon } from "lucide-react"; // Thêm icon cho sinh động
+import { formatDateISO } from "@/utils";
 
 interface EditDetailProps {
   user: User;
@@ -105,7 +106,6 @@ export default function EditDetail({
           // Reset form và tắt chế độ edit khi thành công
           setIsEditingPassword(false);
           resetPasswordForm();
-          alert("Đổi mật khẩu thành công!");
         },
       });
     } catch (error) {
@@ -140,7 +140,7 @@ export default function EditDetail({
       setValue("address", user.address || "");
       setValue(
         "day_of_birth",
-        user.day_of_birth ? formatDate(user.day_of_birth) : ""
+        user.day_of_birth ? formatDateISO(user.day_of_birth) : ""
       );
     }
   }, [user, setValue]);
@@ -379,7 +379,6 @@ export default function EditDetail({
 
             <div className="pt-2 mt-auto">
               <PrimaryButton
-                type="submit"
                 disabled={!isEditingPassword || isLoadingChangePassword}
                 text={
                   isLoadingChangePassword

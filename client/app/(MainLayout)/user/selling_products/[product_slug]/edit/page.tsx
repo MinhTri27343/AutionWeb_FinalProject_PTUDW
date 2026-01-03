@@ -143,7 +143,7 @@ const EditProductPage = () => {
                   </p>
                   <p className="text-3xl font-bold text-teal-600">
                     {product.buy_now_price
-                      ? product.buy_now_price.toLocaleString("en-US") + " ₫"
+                      ? formatPrice(product.buy_now_price) + " ₫"
                       : "Không có giá mua ngay"}
                   </p>
                 </div>

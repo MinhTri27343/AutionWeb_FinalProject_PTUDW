@@ -29,14 +29,12 @@ const InfoPage = () => {
 
   // --- Custom hook ---
   const { data: userProfile, isLoading, error } = UserHook.useGetProfile();
-  
+
   // --- React hook ---
   useEffect(() => {
-    if (!user || user.role === 'guest')
-        router.replace('/login');
-    else 
-        return;
-  }, [user, router])
+    if (!user || user.role === "guest") router.replace("/login");
+    else return;
+  }, [user, router]);
   // --- Handler ---
 
   const handleEditButton = () => setInEditMode(true);
@@ -109,8 +107,8 @@ const InfoPage = () => {
               </section>
             </div>
           ) : (
-            <div>
-              <section className="flex flex-row gap-5 mt-10 max-w-80">
+            <div className="w-full flex justify-center">
+              <div className="w-full flex justify-center gap-5 mt-10 max-w-80">
                 <PrimaryButton
                   text="Chỉnh sửa"
                   icon={() => <EditIcon className="text-white" />}
@@ -124,7 +122,7 @@ const InfoPage = () => {
                   hoverBackgroundColor="#FF5555"
                   onClick={handleLogout}
                 />
-              </section>
+              </div>
             </div>
           )}
         </div>

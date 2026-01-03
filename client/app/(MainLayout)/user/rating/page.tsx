@@ -6,7 +6,7 @@ import { useAuth } from "@/hooks/useAuth";
 import LoadingSpinner from "@/components/LoadingSpinner";
 import { useMemo, useState } from "react";
 import Pagination from "@/components/Pagination";
-import { SectionTitle } from "@/components/ui/typography"; 
+import { SectionTitle } from "@/components/ui/typography";
 
 const StatBox = ({
   label,
@@ -114,7 +114,7 @@ const RatingPage = () => {
           bgClass="bg-green-50"
         />
         <StatBox
-          label="Lượt khen"
+          label="Tích cực"
           value={sumPositiveRating}
           colorClass="text-blue-600"
           bgClass="bg-blue-50"
@@ -130,9 +130,7 @@ const RatingPage = () => {
         <div className="flex items-center justify-between">
           <div className="mb-6">
             <SectionTitle>Lịch sử đánh giá</SectionTitle>
-            <p className="text-gray-500 text-sm mt-1">
-              Những phản hồi gần đây
-            </p>
+            <p className="text-gray-500 text-sm mt-1">Những phản hồi gần đây</p>
           </div>
           <span className="text-xs font-medium px-2 py-1 bg-gray-100 rounded text-gray-600">
             Trang {currentPage}
