@@ -1,11 +1,10 @@
 "use client";
 
-import React, { useEffect, useState, useCallback } from "react";
+import React, { useState, useCallback } from "react";
 import ViewDetail from "./ViewDetail";
 import PrimaryButton from "@/components/PrimaryButton";
-import { EditIcon } from "lucide-react";
+import { EditIcon, SaveIcon, XIcon } from "lucide-react";
 import SecondaryButton from "@/components/SecondaryButton";
-import { LogoutIcon } from "@/components/icons";
 import EditDetail from "./EditDetail";
 import UserHook from "@/hooks/useUser";
 import LoadingSpinner from "@/components/LoadingSpinner";
@@ -14,9 +13,11 @@ import { useAuthStore } from "@/store/auth.store";
 import { useQueryClient } from "@tanstack/react-query";
 import ShortUserSidebar from "@/components/ShortUserSidebar";
 
+import { LogoutIcon } from "@/components/icons";
 const InfoPage = () => {
   const { signOut } = useAuthStore();
   const router = useRouter();
+  const queryClient = useQueryClient();
 
   // --- Define state ---
   const [inEditMode, setInEditMode] = useState<boolean>(false);
@@ -32,9 +33,17 @@ const InfoPage = () => {
   // --- Handler ---
 
   const handleEditButton = () => setInEditMode(true);
-  const handleCancelEditButton = () => setInEditMode(false);
-  const queryClient = useQueryClient();
+  const handleCancelEditButton = () => {
+    if (isFormDirty) {
+      const confirmed = window.confirm(
+        "Bạn có thay đổi chưa lưu. Bạn có chắc muốn hủy?"
+      );
+      if (!confirmed) return;
+    }
+    setInEditMode(false);
+  };
   const handleLogout = async () => {
+    // theem alert o day
     queryClient.cancelQueries();
     queryClient.clear();
 
@@ -57,7 +66,6 @@ const InfoPage = () => {
 
   return (
     <>
-      <ShortUserSidebar />
       <div className="bg-white w-full h-full border-2 border-gray-200 shadow-md rounded-lg p-7">
         <p className="text-2xl font-medium">Thông tin tài khoản</p>
         <div>

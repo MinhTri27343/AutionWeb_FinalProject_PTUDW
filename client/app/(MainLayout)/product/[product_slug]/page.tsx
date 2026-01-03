@@ -277,6 +277,7 @@ export default function ProductPage() {
     }
   };
 
+  console.log("gia tri user: ", user);
   const handleBid: SubmitHandler<{ price: number }> = async (data) => {
     if (product.buy_now_price && data.price >= product.buy_now_price) {
       setWarningAutoBuyNowModal(true);
@@ -284,9 +285,18 @@ export default function ProductPage() {
       if (!isConfirm) return;
     }
 
+    console.log("data.price: ", data.price);
+    console.log(
+      "product.current_price + product.price_increment!: ",
+      Number(product.current_price!) + Number(product.price_increment!)
+    );
     if (
       product.current_price &&
+<<<<<<< HEAD
       Number(data.price) <
+=======
+      data.price <
+>>>>>>> feed97c9bbbac271e501eacc51c934de50554828
         Number(product.current_price) + Number(product.price_increment!)
     ) {
       toast.error("Giá đấu không thể thấp hơn giá tối thiểu");
@@ -344,6 +354,7 @@ export default function ProductPage() {
     setOpenBuyNowModal(true);
   };
 
+  console.log("end time: ", product?.end_time);
   return (
     <div className="xl:bg-[#F8FAFC] w-full">
       {isLoadingProduct ||
@@ -352,7 +363,9 @@ export default function ProductPage() {
       isLoadingOrder ||
       isLoadingUserBid ||
       isCreatingOrder ? (
-        <LoadingSpinner />
+        <div className="fixed inset-0 z-100">
+          <LoadingSpinner />
+        </div>
       ) : (
         <>
           <div className="mb-4">
