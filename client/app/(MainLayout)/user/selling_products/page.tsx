@@ -7,6 +7,7 @@ import FavoriteHook from "@/hooks/useFavorite";
 import { useAuthStore } from "@/store/auth.store";
 import ProductHook from "@/hooks/useProduct";
 import LoadingSpinner from "@/components/LoadingSpinner";
+import EmptyList from "@/components/EmptyList";
 
 const FavoriteProductPage = () => {
   const {
@@ -35,8 +36,11 @@ const FavoriteProductPage = () => {
       {!isLoading &&
         !isLoadingSellingProducts &&
         !error &&
-        (sellingProducts.length === 0 ? (
-          <>Chưa có sản phẩm</>
+        (sellingProducts && sellingProducts.length === 0 ? (
+          <EmptyList
+              content=" Bạn hiện không bán sản phẩm nào. Hãy tìm kiếm những
+                món đồ ưng ý và từ đó đưa ra lựa chọn để tạo sản phẩm nhé"
+            />
         ) : (
           <div className="mt-2 grid grid-cols-5 gap-3">
             {sellingProducts.map((item) => {
