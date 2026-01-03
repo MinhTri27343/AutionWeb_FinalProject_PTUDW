@@ -1,11 +1,14 @@
+"use client";
+
 import React, { useState, useEffect } from "react";
-import { X } from "lucide-react"; // Đừng quên import icon để làm nút thoát
+import { X, ThumbsUp, ThumbsDown, MessageSquare } from "lucide-react";
+import { UserRating } from "../../../shared/src/types";
 
 type FeedbackProps = {
   targetName: string;
-  rating: any; // Thay bằng UserRating của bạn
+  rating: UserRating;
   onRating: (rating: number, message: string) => void;
-  onClose: () => void; // Thêm prop để đóng modal
+  onClose: () => void;
 };
 
 type FeedbackType = "plus" | "minus" | null;
@@ -20,6 +23,9 @@ const RatingDict: Record<string, number> = {
   minus: -1,
 };
 
+const isMobileSize = () =>
+  typeof window !== "undefined" && window.innerWidth < 640;
+
 const FeedbackPopup = ({
   targetName,
   rating,
@@ -32,7 +38,6 @@ const FeedbackPopup = ({
   const [comment, setComment] = useState<string>(rating?.comment || "");
   const [submitted, setSubmitted] = useState<boolean>(false);
 
-  // Chặn scroll trang web khi modal đang mở
   useEffect(() => {
     document.body.style.overflow = "hidden";
     return () => {
@@ -42,14 +47,14 @@ const FeedbackPopup = ({
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    onRating(RatingDict[type!], comment);
+    if (!type) return;
+    onRating(RatingDict[type], comment);
     setSubmitted(true);
   };
 
   return (
-    // Lớp nền mờ toàn màn hình (Overlay)
-    <div className="fixed inset-0 z-100 flex items-center justify-center p-4">
-      {/* Backdrop: click vào đây cũng có thể đóng modal */}
+    <div className="fixed inset-0 z-[100] flex items-center justify-center p-4">
+      {/* Backdrop */}
       <div
         className="absolute inset-0 bg-slate-900/60 backdrop-blur-sm animate-in fade-in duration-300"
         onClick={onClose}
@@ -57,78 +62,95 @@ const FeedbackPopup = ({
 
       {/* Nội dung Modal */}
       <div className="relative w-full max-w-md bg-white rounded-2xl shadow-2xl border border-gray-100 animate-in zoom-in-95 duration-300 overflow-hidden">
-        {/* Nút thoát góc trên bên phải */}
+        {/* Nút thoát */}
         <button
           onClick={onClose}
-          className="absolute top-4 right-4 p-1 rounded-full hover:bg-gray-100 text-gray-400 hover:text-gray-600 transition-colors z-10"
+          className="absolute top-4 right-4 p-2 rounded-full hover:bg-slate-100 text-slate-400 hover:text-slate-600 transition-colors z-10"
         >
           <X className="w-5 h-5" />
         </button>
 
         {submitted ? (
-          <div className="p-8 text-center">
-            <div className="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4">
-              <span className="text-3xl">🎉</span>
+          <div className="p-8 md:p-10 text-center animate-in fade-in duration-300">
+            <div className="inline-flex items-center justify-center w-12 h-12 md:w-16 md:h-16 rounded-full bg-green-50 text-green-500 mb-4">
+              <ThumbsUp size={isMobileSize() ? 24 : 32} />
             </div>
-            <h3 className="text-xl font-bold text-gray-800">Cảm ơn bạn!</h3>
-            <p className="text-gray-500 mt-2">
-              Đánh giá của bạn đã được gửi tới{" "}
-              <span className="font-semibold">{targetName}</span>
+            <h3 className="text-xl md:text-2xl font-bold text-slate-800">
+              Cảm ơn bạn!
+            </h3>
+            <p className="text-slate-500 mt-2 text-sm md:text-base px-2 leading-relaxed">
+              Đánh giá của bạn giúp cộng đồng tin cậy{" "}
+              <span className="font-semibold text-slate-700">{targetName}</span>{" "}
+              hơn.
             </p>
             <button
               onClick={onClose}
-              className="mt-6 w-full py-3 bg-gray-900 text-white rounded-xl font-semibold hover:bg-gray-800 transition-all"
+              className="mt-8 w-full py-3.5 bg-slate-900 text-white rounded-xl font-bold hover:bg-slate-800 transition-all shadow-lg active:scale-95"
             >
               Đóng cửa sổ
             </button>
           </div>
         ) : (
-          <div className="p-6">
-            <h2 className="text-xl font-bold text-gray-800 mb-1">
-              Bạn thấy giao dịch thế nào?
-            </h2>
-            <p className="text-sm text-gray-500 mb-6">
-              Trải nghiệm của bạn với {targetName} như thế nào?
-            </p>
+          <div className="p-5 md:p-8">
+            <div className="flex items-center gap-2 mb-5 md:mb-6">
+              <MessageSquare size={20} className="text-blue-500" />
+              <h2 className="text-lg md:text-xl font-bold text-slate-800">
+                Trải nghiệm của bạn?
+              </h2>
+            </div>
 
-            <form onSubmit={handleSubmit} className="space-y-5">
+            <form onSubmit={handleSubmit} className="space-y-5 md:space-y-6">
               {/* Nút chọn hài lòng / không hài lòng */}
-              <div className="flex gap-3">
+              <div className="flex gap-3 md:gap-4">
                 <button
                   type="button"
                   onClick={() => setType("plus")}
-                  className={`flex-1 py-3 rounded-lg border-2 transition-all flex items-center justify-center gap-2 ${
+                  className={`flex-1 py-3 md:py-4 rounded-xl border-2 transition-all flex flex-col md:flex-row items-center justify-center gap-1 md:gap-2 ${
                     type === "plus"
-                      ? "border-green-500 bg-green-50 text-green-600"
-                      : "border-gray-200 hover:border-green-300 text-gray-400 hover:text-green-300"
+                      ? "border-green-500 bg-green-50 text-green-600 shadow-sm shadow-green-100"
+                      : "border-slate-100 bg-slate-50/50 text-slate-400 hover:border-green-200"
                   }`}
                 >
-                  <span className="text-2xl font-bold">+</span>
-                  <span className="font-medium">Hài lòng</span>
+                  <ThumbsUp
+                    size={isMobileSize() ? 18 : 20}
+                    className={type === "plus" ? "animate-bounce" : ""}
+                  />
+                  <span className="text-[11px] md:text-sm font-bold uppercase tracking-tight">
+                    Hài lòng
+                  </span>
                 </button>
 
                 <button
                   type="button"
                   onClick={() => setType("minus")}
-                  className={`flex-1 py-3 rounded-lg border-2 transition-all flex items-center justify-center gap-2 ${
+                  className={`flex-1 py-3 md:py-4 rounded-xl border-2 transition-all flex flex-col md:flex-row items-center justify-center gap-1 md:gap-2 ${
                     type === "minus"
-                      ? "border-red-500 bg-red-50 text-red-600"
-                      : "border-gray-200 hover:border-red-300 text-gray-400 hover:text-red-300"
+                      ? "border-red-500 bg-red-50 text-red-600 shadow-sm shadow-red-100"
+                      : "border-slate-100 bg-slate-50/50 text-slate-400 hover:border-red-200"
                   }`}
                 >
-                  <span className="text-2xl font-bold">−</span>
-                  <span className="font-medium">Chưa tốt</span>
+                  <ThumbsDown size={isMobileSize() ? 18 : 20} />
+                  <span className="text-[11px] md:text-sm font-bold uppercase tracking-tight">
+                    Chưa tốt
+                  </span>
                 </button>
               </div>
 
               {/* Textarea */}
-              <div>
+              <div className="space-y-2">
+                <label
+                  htmlFor="popup-comment"
+                  className="block text-[10px] md:text-xs font-bold text-slate-400 uppercase tracking-widest"
+                >
+                  Nhận xét chi tiết
+                </label>
                 <textarea
                   value={comment}
+                  id="popup-comment"
                   onChange={(e) => setComment(e.target.value)}
-                  className="w-full p-4 bg-gray-50 border border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:bg-white outline-none transition-all resize-none text-sm"
-                  placeholder="Chia sẻ thêm chi tiết về giao dịch này..."
-                  rows={4}
+                  className="w-full p-3 md:p-4 bg-slate-50 border border-slate-200 rounded-xl focus:ring-2 focus:ring-blue-500/20 focus:border-blue-500 outline-none transition-all resize-none text-sm md:text-base text-slate-700 placeholder:text-slate-300"
+                  placeholder="Chia sẻ lý do bạn hài lòng hoặc chưa hài lòng..."
+                  rows={isMobileSize() ? 3 : 4}
                 />
               </div>
 
@@ -136,10 +158,10 @@ const FeedbackPopup = ({
               <button
                 type="submit"
                 disabled={!type}
-                className={`w-full py-4 rounded-xl font-bold text-white transition-all transform active:scale-[0.98] ${
+                className={`w-full py-3.5 md:py-4 rounded-xl font-bold text-white transition-all transform active:scale-[0.98] shadow-lg ${
                   type
-                    ? "bg-blue-600 hover:bg-blue-700 shadow-lg shadow-blue-200"
-                    : "bg-gray-200 cursor-not-allowed text-gray-400"
+                    ? "bg-blue-600 hover:bg-blue-700 shadow-blue-100"
+                    : "bg-slate-200 cursor-not-allowed text-slate-400 shadow-none"
                 }`}
               >
                 Gửi đánh giá ngay
