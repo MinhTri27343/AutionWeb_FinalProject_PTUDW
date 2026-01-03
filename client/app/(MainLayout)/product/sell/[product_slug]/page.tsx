@@ -18,13 +18,7 @@ import { Question, formatCurrency, formatDate } from "./components/Question";
 import { BidHistory } from "./components/BidHistory";
 import { RelatedProducts } from "./components/RelatedProducts";
 import { useAuth } from "@/hooks/useAuth";
-
-import { useForm, SubmitHandler } from "react-hook-form";
-import z from "zod";
-import { zodResolver } from "@hookform/resolvers/zod";
-
 import {
-  CreateBidLog,
   NewOrderRequest,
   Order,
   Product,
@@ -98,31 +92,7 @@ export default function ProductPage() {
   const { user } = useAuth();
   const [isFavorite, setIsFavorite] = useState<boolean>();
   const [setFavorites, setSetFavorites] = useState<Set<number>>();
-  const [isBid, setIsBid] = useState(false);
-  const [openBuyNowModal, setOpenBuyNowModal] = useState<boolean>(false);
   const [navToOrderConfirm, setNavToOrderConfirm] = useState<boolean>(false);
-
-  const schemaBid = z.object({
-    price: z
-      .string()
-      .nonempty("Giá tiền không được để trống")
-      .refine((val) => !isNaN(Number(val)), "Giá tiền phải là số")
-      .transform((val) => Number(val)),
-  });
-
-  const {
-    register: registerBid,
-    handleSubmit: handleSubmitBid,
-    formState: formStateBid,
-    reset,
-    setValue,
-    watch,
-  } = useForm<{ price: string }, any, { price: number }>({
-    resolver: zodResolver(schemaBid),
-    defaultValues: {
-      price: "",
-    },
-  });
 
   const { data: product, isLoading: isLoadingProduct } =
     ProductHook.useGetProductBySlug(product_slug as string) as {
@@ -176,7 +146,7 @@ export default function ProductPage() {
   useEffect(() => {
     if (favorite_products && product) {
       const newSetFavorites: Set<number> = new Set(
-        favorite_products.map((p: Product) => p.id)
+        favorite_products.map((p: Product) => Number(p.id))
       );
 
       setSetFavorites(newSetFavorites);
@@ -201,32 +171,7 @@ export default function ProductPage() {
     }
   }, [router, user, order, product]);
 
-  useEffect(() => {
-    setValue("price", "");
-  }, []);
-
-  const handleOnclickBid = () => {
-    setIsBid(true);
-  };
-  const handleOnclickCancleBid = () => {
-    setIsBid(false);
-  };
   if (favorite_products) console.log(favorite_products);
-
-  const handleBid: SubmitHandler<{ price: number }> = (data) => {
-    const bid: CreateBidLog = {
-      user_id: user?.id || 0,
-      price: data.price,
-      product_id: product.id,
-      product_slug: product_slug as string | undefined,
-    };
-    createBid(bid);
-    reset({
-      price: "",
-    });
-    reset();
-    setIsBid(false);
-  };
 
   const handleOrder = () => {
     const newOrder: NewOrderRequest = {
@@ -254,9 +199,6 @@ export default function ProductPage() {
         addFavorite({ productId: product.id });
       }
     }
-  };
-  const handleBuyNow = () => {
-    setOpenBuyNowModal(true);
   };
 
   if (
@@ -458,13 +400,17 @@ export default function ProductPage() {
                   />
                 </div>
                 <div>
-                  <div
-                    onClick={handleLike}
-                    className="flex-1 flex items-center justify-center gap-2 py-2 border border-slate-300 rounded-lg hover:bg-slate-100  hover:cursor-pointer"
-                  >
-                    {isFavorite ? <LoveFullIcon /> : <LoveIcon />}
-                    <span className="text-sm font-medium">Yêu thích</span>
-                  </div>
+                  {isAddFavorite || isRemoveFavorite ? (
+                    <LoadingSpinner />
+                  ) : (
+                    <div
+                      onClick={handleLike}
+                      className="flex-1 flex items-center justify-center gap-2 py-2 border border-slate-300 rounded-lg hover:bg-slate-100  hover:cursor-pointer"
+                    >
+                      {isFavorite ? <LoveFullIcon /> : <LoveIcon />}
+                      <span className="text-sm font-medium">Yêu thích</span>
+                    </div>
+                  )}
                 </div>
               </div>
             </div>
