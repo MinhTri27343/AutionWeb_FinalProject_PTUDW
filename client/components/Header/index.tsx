@@ -4,6 +4,7 @@ import { useState } from "react";
 import Link from "next/link";
 import { Menu, X, ShoppingCart, User } from "lucide-react";
 import { SearchBar } from "../SearchBar";
+import Image from "next/image";
 
 const Header = () => {
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
@@ -12,11 +13,16 @@ const Header = () => {
     <header className="fixed top-0 left-0 right-0 bg-white border-b border-gray-200 shadow-sm z-50">
       <div className="container-layout">
         <div className="flex items-center justify-between h-16">
-          <Link href="/" className="shrink-0">
-            <div className="text-2xl font-bold text-blue-600">
-              4<span className="text-amber-400"> thằng lỏ</span>
-            </div>
-          </Link>
+          <div className="relative h-full py-2">
+            <Link href="/" className="shrink-0">
+              <Image
+                src="/logo.png"
+                alt="Logo AuctionHub"
+                width={180}
+                height={180}
+              />
+            </Link>
+          </div>
 
           <div className="hidden md:flex flex-1 max-w-md mx-8 relative">
             <SearchBar />

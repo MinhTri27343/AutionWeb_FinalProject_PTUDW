@@ -6,8 +6,14 @@ import "react-toastify/dist/ReactToastify.css";
 import { Metadata, Viewport } from "next";
 
 export const metadata: Metadata = {
-  title: "Tên Website của bạn",
-  description: "Mô tả website",
+  title: "AuctionHub",
+  description: "Website đấu giá uy tín thịnh hành số 1 quốc tế",
+  icons: {
+    icon: [
+      { url: "/short-logo.png" }, // Đường dẫn tới file logo trong thư mục public/
+      { url: "/short-logo.png", sizes: "32x32", type: "image/png" },
+    ],
+  },
 };
 
 export const viewport: Viewport = {
