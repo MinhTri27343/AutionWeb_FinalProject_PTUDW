@@ -1,4 +1,5 @@
-const BASE_API = "http://localhost:8080/api";
+const BASE_API =
+  "https://aution-web-final-project-ptudw-serv-ruby.vercel.app/api/";
 const USER_API = `${BASE_API}/user`;
 const UPGRADE_API = `${BASE_API}/upgrade`;
 const RATING_API = `${BASE_API}/rating`;
@@ -15,7 +16,7 @@ const API_ROUTES = {
   user: {
     getUsers: (pagination: Pagination) =>
       `${USER_API}?page=${pagination.page}&limit=${pagination.limit}`, //GET
-    getUser: (id: number) => `${BASE_API}/users${id}`,
+    getUser: (id: number) => `${BASE_API}/users/${id}`,
     updateUser: (id: number) => `${BASE_API}/users${id}`,
     deleteUser: (id: number) => `${USER_API}/${id}`,
     createUSer: `${BASE_API}/users`,
@@ -88,7 +89,12 @@ const API_ROUTES = {
       `${PRODUCT_API}?page=${pagination.page}&limit=${pagination.limit}`, //GET
     getCategoryProductList: `${PRODUCT_API}/category`,
     getProductTop: `${PRODUCT_API}/top`, // GET
-    getProductsBySearch: (query: string, limit: number, page: number, sort: string) =>
+    getProductsBySearch: (
+      query: string,
+      limit: number,
+      page: number,
+      sort: string
+    ) =>
       `${PRODUCT_API}/search?page=${page}&limit=${limit}&query=${query}&sort=${sort}`, // GET
     getProductsBySearchSuggestion: (query: string, limit: number) =>
       `${PRODUCT_API}/search-suggestion?query=${query}&limit=${limit}`, // GET
@@ -100,8 +106,7 @@ const API_ROUTES = {
       sort: string
     ) => `${CATEGORY_API}/${slug}?page${page}&limit=${limit}&sort=${sort}`, //GET
     getSoldProduct: `${PRODUCT_API}/sold`, // GET
-    getSellingProduct: (pagination: Pagination) => 
-      `${PRODUCT_API}/selling`, // GET
+    getSellingProduct: (pagination: Pagination) => `${PRODUCT_API}/selling`, // GET
     getBiddingProduct: (limit: number, page: number) =>
       `${PRODUCT_API}/bidding?limit=${limit}&page=${page}`, // GET
     getWinningProduct: (limit: number, page: number) =>
