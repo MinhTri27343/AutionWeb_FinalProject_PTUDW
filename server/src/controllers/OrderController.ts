@@ -87,7 +87,6 @@ export class OrderController extends BaseController {
   async getOrderChat(req: Request, res: Response) {
     const productId = Number(req.params.productId);
     const userId = req.user?.id;
-    console.log("kk", req.user, userId);
     const chat = await this.service.getOrderChat(productId, userId);
     return { order_chat: chat };
   }

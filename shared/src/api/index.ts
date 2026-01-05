@@ -1,5 +1,4 @@
 const BASE_API = `${process.env.NEXT_PUBLIC_API_URL}/api`;
-console.log("BASE API: ", BASE_API);
 const USER_API = `${BASE_API}/user`;
 const UPGRADE_API = `${BASE_API}/upgrade`;
 const RATING_API = `${BASE_API}/rating`;
@@ -44,7 +43,6 @@ const API_ROUTES = {
       limit: number,
       sort: string
     ) => {
-      console.log("page:,", page);
       return `${CATEGORY_API}/slug/${slug}?page=${page}&limit=${limit}&sort=${sort}`;
     }, //GET
     createCategory: `${CATEGORY_API}`, //POST
@@ -107,7 +105,7 @@ const API_ROUTES = {
       sort: string
     ) => `${CATEGORY_API}/${slug}?page${page}&limit=${limit}&sort=${sort}`, //GET
     getSoldProduct: `${PRODUCT_API}/sold`, // GET
-    getSellingProduct: (pagination: Pagination) => 
+    getSellingProduct: (pagination: Pagination) =>
       `${PRODUCT_API}/selling?limit=${pagination.limit}&page=${pagination.page}`, // GET
     getBiddingProduct: (limit: number, page: number) =>
       `${PRODUCT_API}/bidding?limit=${limit}&page=${page}`, // GET

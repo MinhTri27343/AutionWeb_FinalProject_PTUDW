@@ -25,7 +25,6 @@ const attachProductCount = (
 
 const page = () => {
   const user = useAuthStore((s) => s.user);
-  console.log("user: ", user);
   // Define state
   const limit = 5;
   const [searchQuery, setSearchQuery] = useState("");

@@ -224,7 +224,6 @@ class ProductHook {
       mutationFn: (formData: FormData) =>
         ProductService.createProduct(formData),
       onSuccess: () => {
-        console.log("Tao san pham thanh cong");
         toast.success("Tạo sản phẩm thành công");
         queryClient.invalidateQueries({
           queryKey: ["products"],

@@ -274,7 +274,6 @@ export default function ProductPage() {
   const handleOnclickCancleBid = () => {
     setIsBid(false);
   };
-  if (favorite_products) console.log(favorite_products);
 
   const waitUserConfirm = async (): Promise<boolean> => {
     return new Promise((resolve) => {
@@ -296,11 +295,6 @@ export default function ProductPage() {
       if (!isConfirm) return;
     }
 
-    console.log("data.price: ", data.price);
-    console.log(
-      "product.current_price + product.price_increment!: ",
-      Number(product.current_price!) + Number(product.price_increment!)
-    );
     if (
       product.current_price &&
       data.price <

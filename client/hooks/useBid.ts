@@ -85,7 +85,6 @@ class BidHook {
       mutationFn: (payload: BlacklistPayload) =>
         BidService.createBlacklist(payload),
       onSuccess: (data, params) => {
-        console.log("data:", data);
         toast.success("Từ chối đấu giá thành công");
         queryClient.invalidateQueries({
           queryKey: ["bid_logs"],

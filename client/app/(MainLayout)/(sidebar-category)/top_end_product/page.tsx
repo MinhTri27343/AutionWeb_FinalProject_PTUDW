@@ -48,11 +48,9 @@ export default function Page() {
   };
 
   if (data) {
-    console.log("gia tri product: ", totalProducts);
     totalPages = Math.ceil(Number(totalProducts) / per_page);
     dataResult = topEndingSoonProducts as ProductPreview[];
   }
-  console.log("gia tri: ", dataResult);
   return (
     <>
       {(isLoadingTopEndingSoonProduct || isLoadingFavoriteProduct) && (

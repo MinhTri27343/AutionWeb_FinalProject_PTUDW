@@ -43,7 +43,6 @@ export class UserService extends BaseService {
     const rawUsers: User[] = await this.safeQuery(sql, params);
     const users = rawUsers.map((u) => {
       const { negative_points, positive_points, ...rest } = u;
-      console.log(negative_points === null);
       return {
         ...rest,
         negative_points: negative_points === null ? 0 : negative_points,

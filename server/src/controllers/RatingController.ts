@@ -30,7 +30,6 @@ export class RatingController extends BaseController {
   async createRating(req: Request, res: Response) {
     const userId = Number(req.user?.id);
     const result = await this.service.createRating(userId, req.body);
-    console.log(result);
     return { result };
   }
 

@@ -57,8 +57,6 @@ export class AuthController extends BaseController {
       );
     }
 
-    console.log("gia tri register: ", registerUser);
-
     // Kiem tra username co ton tai chua
     const duplicateUsername = await this.service.getUserByUserName(
       registerUser.username

@@ -24,7 +24,6 @@ export class ProductController extends BaseController {
     const limit = Number(req.query.limit) || 5;
     const query = req.query.query;
     const sort = req.query.sort;
-    console.log(page, limit, query);
     const [products, totalProducts] = await Promise.all([
       this.service.getProductsBySearch(query, limit, page, sort),
       this.service.getTotalProductsBySearch(query),
@@ -236,7 +235,6 @@ export class ProductController extends BaseController {
 
   async createQuestion(req: Request, res: Response) {
     const userId = Number(req.user?.id);
-    console.log(userId);
     const productId = req.params.productId;
     const createQuestion: CreateQuestion = req.body;
     const question = await this.service.createQuestion(

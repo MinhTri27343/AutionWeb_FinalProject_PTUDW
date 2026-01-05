@@ -173,8 +173,6 @@ export default function ProductPage() {
     }
   }, [router, user, order, product]);
 
-  if (favorite_products) console.log(favorite_products);
-
   const handleOrder = () => {
     const newOrder: NewOrderRequest = {
       product_id: product.id,

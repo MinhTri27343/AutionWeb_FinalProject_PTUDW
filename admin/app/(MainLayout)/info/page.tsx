@@ -31,7 +31,6 @@ const InfoPage = () => {
   const { data: userProfile, isLoading, error } = UserHook.useGetProfile();
 
   // --- React hook ---
-  console.log("hello ba");
   useEffect(() => {
     if (!user || user.role === "guest") router.replace("/login");
     else return;
@@ -69,7 +68,6 @@ const InfoPage = () => {
   if (isLoading) return <LoadingSpinner />;
   if (error) return <p>Lỗi tải dữ liệu</p>;
   if (!userProfile) return <p>Không tìm thấy thông tin người dùng</p>;
-  console.log("user:", user);
   return (
     <>
       <div className="px-[24px]">

@@ -47,7 +47,6 @@ class OrderHook {
 
       onSuccess: (data, params) => {
         toast.success("Tạo đơn hàng thành công");
-        console.log("data hook: ", data);
         queryClient.invalidateQueries({
           queryKey: ["order"],
         });
@@ -93,7 +92,6 @@ class OrderHook {
 
       onSuccess: (_, params) => {
         toast.success("Thanh toán và cập nhật thông tin đơn hàng thành công");
-        console.log("params.productId: ", params.productId);
         queryClient.invalidateQueries({
           queryKey: ["order_by_id", params.productId],
         });

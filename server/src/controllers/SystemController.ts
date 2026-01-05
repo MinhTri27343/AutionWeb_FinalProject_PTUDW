@@ -17,7 +17,6 @@ export class SystemController extends BaseController {
 
   async getProductMinTime(req: Request, res: Response) {
     const result = await this.service.getProductMinTime();
-    console.log(result);
     return { result };
   }
   async updateProductMinTime(req: Request, res: Response) {
@@ -26,7 +25,6 @@ export class SystemController extends BaseController {
   }
   async getProductThresholdTime(req: Request, res: Response) {
     const result = await this.service.getProductThresholdTime();
-    console.log(result);
     return { result };
   }
   async updateProductThresholdTime(req: Request, res: Response) {

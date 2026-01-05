@@ -66,7 +66,6 @@ export default function ProductCard({
 
   const { data: serverMinTime } = SystemHook.useGetProductMinTime();
 
-  console.log("user?.id::", user?.id);
   const isLeading = user?.id && user.id == product.top_bidder_id;
   const isSeller = user?.id && user.id === product.seller_id;
 

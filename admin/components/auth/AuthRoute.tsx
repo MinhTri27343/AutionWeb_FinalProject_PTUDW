@@ -43,7 +43,6 @@ const AuthRoute = ({ children }: { children: React.ReactNode }) => {
     return <LoadingSpinner />; // Hoặc <LoadingScreen /> rất quan trọng để tránh nháy
   }
 
-  console.log("hello");
   return <>{children}</>;
 };
 

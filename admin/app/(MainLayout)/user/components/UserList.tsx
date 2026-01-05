@@ -78,7 +78,6 @@ export const UserList = () => {
     }
     setIsResetPopup(false);
   };
-  console.log(users);
   return (
     <>
       {isLoading || isDeletingUser || isResetUserPassword ? (

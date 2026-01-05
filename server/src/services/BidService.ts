@@ -68,7 +68,6 @@ export class BidService extends BaseService {
   }
   async createBid(bid: CreateBidLog): Promise<MutationResult> {
     const poolClient = await this.getClient();
-    console.log(bid);
 
     const isUserInBlackList = async () => {
       const blackListSql = `SELECT COUNT(*) as total FROM auction.black_list as bl WHERE bl.user_id = $1 AND bl.product_id = $2`;
@@ -250,12 +249,6 @@ export class BidService extends BaseService {
       extend: number
     ) => {
       if (!auto_extend) return;
-      console.log("auto extend: ", {
-        auto_extend,
-        end_time,
-        threshold,
-        extend,
-      });
       const nowTime = new Date();
       const diffInMinutes: number =
         (end_time.getTime() - nowTime.getTime()) / (1000 * 60);
@@ -271,7 +264,6 @@ export class BidService extends BaseService {
         `,
           [newEndTime, bid.product_id]
         );
-        console.log("extend result: ", result);
       }
     };
 
@@ -289,16 +281,12 @@ export class BidService extends BaseService {
       console.log(2);
       // 2. Lưu thông tin đấu giá mới của người dùng
       const user_max_price = await getUserMaxPrice();
-      console.log("a");
       const saveBidPromise = getSaveUserBid(user_max_price);
-      console.log("b");
       const productBidStatusPromise = getProductBidStatusPromise();
-      console.log("c");
       const [_, productBidStatusResult] = await Promise.all([
         saveBidPromise,
         productBidStatusPromise,
       ]);
-      console.log("d");
 
       console.log(3);
       // 3. Lấy thông tin đấu giá hiện tại của sản phẩm

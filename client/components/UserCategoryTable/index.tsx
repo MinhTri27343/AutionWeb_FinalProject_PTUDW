@@ -33,7 +33,6 @@ export default function UserCategoryTable({
   const user = useAuthStore((s) => s.user);
   const isBidder = user?.role === USER_ROLES.BIDDER;
 
-  console.log("role", user?.role);
   const categories = userCategories.filter(
     (item) => user?.role && item.roles.includes(user.role)
   );
@@ -41,8 +40,6 @@ export default function UserCategoryTable({
   return (
     <div
       className={`relative w-70 ${
-        // isBidder ? "h-[468px]" : "h-[508px]"
-        //isBidder ? "h-[520px]" : "h-[580px]"
         " "
       } flex flex-col bg-white border border-slate-200 rounded-2xl shadow-sm overflow-hidden`}
     >
@@ -56,9 +53,6 @@ export default function UserCategoryTable({
       {/* Menu List */}
       <div className="grow px-3 pb-4 max-h-[60vh] min-h-0 overflow-y-auto minimal-scrollbar space-y-1">
         {categories.map((item) => {
-          // const isActive = item.id === idCurrent;
-          console.log("/user" + item.slug);
-          console.log("pathname: ", pathname);
           const isActive = "/user" + item.slug === pathname;
 
           return (

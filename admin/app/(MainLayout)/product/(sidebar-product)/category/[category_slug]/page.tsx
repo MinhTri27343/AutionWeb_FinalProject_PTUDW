@@ -41,7 +41,6 @@ function CategorySlugPage({
     next.set("page", String(value));
     router.replace(`?${next.toString()}`);
   };
-  console.log(data);
   if (data) {
     totalPages = Math.ceil(Number(totalPriceProducts) / per_page);
     dataResult = products as ProductPreview[];

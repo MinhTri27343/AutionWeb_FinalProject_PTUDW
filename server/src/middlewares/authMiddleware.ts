@@ -34,7 +34,7 @@ export const protectedRoutes = (
   try {
     // lay token tu header
     const authHeader = req.headers["authorization"];
-    console.log("Gia troi token: ", authHeader);
+    // console.log("Gia troi token: ", authHeader);
     const token = authHeader && authHeader.split(" ")[1];
 
     if (!token) {

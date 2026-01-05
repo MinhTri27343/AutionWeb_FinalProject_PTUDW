@@ -37,7 +37,6 @@ const CategoryCard = ({ category }: { category: CategoryWithProductCount }) => {
   const handleEdit = (categoryId: number, categoryName: string) => {
     setSelectedCategory({ id: categoryId, name: categoryName });
     setEditModalOpen(true);
-    console.log(selectedCategory)
   };
 
   const handleDelete = (

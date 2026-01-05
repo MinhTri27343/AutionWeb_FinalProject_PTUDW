@@ -132,7 +132,6 @@ const CreateProductPage = () => {
     setPreviewExtras(previews);
   };
   const onSubmit = (payload: NewProductType) => {
-    console.log(payload);
     if (!mainImage) {
       toast.error("Yêu cầu có ảnh chính");
       return;

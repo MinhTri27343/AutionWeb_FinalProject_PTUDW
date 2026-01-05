@@ -65,7 +65,6 @@ export class UpgradeService extends BaseService {
       await this.safeQueryWithClient(queryClient, sql, params);
       await queryClient.query("COMMIT");
     } catch (error) {
-      console.log("Loi update upgrade");
       await queryClient.query("ROLLBACK");
     }
   }

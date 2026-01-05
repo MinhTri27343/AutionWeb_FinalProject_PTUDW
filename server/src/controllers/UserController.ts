@@ -21,7 +21,6 @@ export class UserController extends BaseController {
   }
   async getProfile(req: Request, res: Response) {
     const userId = req.user?.id;
-    console.log(userId);
     const profile = await this.service.getProfile(userId);
     return { profile };
   }

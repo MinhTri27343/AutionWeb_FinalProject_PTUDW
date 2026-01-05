@@ -20,10 +20,8 @@ const ProtectedRoute = ({ children }: { children: React.ReactNode }) => {
   const router = useRouter();
   const accessToken = useAuthStore((s) => s.accessToken);
 
-  console.log("ProtectedRoute");
   useEffect(() => {
     if (!accessToken) {
-      console.log("ProtectedRoute");
       router.replace("/login");
     }
   }, [accessToken, router]);

@@ -31,8 +31,6 @@ const InfoPage = () => {
   // --- Custom hook ---
   const { data: userProfile, isLoading, error } = UserHook.useGetProfile();
 
-  // --- React hook ---
-  console.log("hello ba");
   useEffect(() => {
     if (!user || user.role === "guest") router.replace("/login");
     else return;

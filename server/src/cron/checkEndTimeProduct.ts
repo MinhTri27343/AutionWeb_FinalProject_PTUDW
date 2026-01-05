@@ -132,8 +132,6 @@ export const checkEndTimeProduct = () => {
                     </table>
                 `
                 );
-                console.log(sellerInfo.email);
-                console.log(buyerInfo.email);
 
                 sendEmailToUser(
                   buyerInfo.email,
@@ -162,7 +160,6 @@ export const checkEndTimeProduct = () => {
                     `
                 );
               } else {
-                console.log(sellerInfo.email);
                 sendEmailToUser(
                   sellerInfo.email,
                   "THôNG BÁO VỀ SẢN PHẨM ĐANG BÁN",

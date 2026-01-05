@@ -373,7 +373,6 @@ export class CategoryService extends BaseService {
       const offset = (page - 1) * limit;
       sql += "OFFSET $3 \n";
       params.push(offset);
-      console.log("vo limit");
     }
 
     const products = await this.safeQuery<ProductPreview>(sql, params);
@@ -384,7 +383,6 @@ export class CategoryService extends BaseService {
         return productType;
       })
     );
-    console.log("page:", page);
 
     return newProducts;
   }

@@ -303,7 +303,6 @@ export class ProductService extends BaseService {
 
     let products: ProductPreview[] = await this.safeQuery(sql, params);
 
-    console.log("gia tri: ", products);
     const newProducts = await Promise.all(
       products.map(async (item: any) => {
         const productType = this.getProductPreviewType(item.id);
@@ -649,8 +648,6 @@ WHERE pp.end_time >= NOW() and not exists (
    )
     `;
     const offset = limit && page ? (page - 1) * limit : 0;
-    // const params = [userId, limit, offset];
-    console.log("gia tri offset: ", offset, limit, page);
 
     const params = limit && page ? [userId, limit, offset] : [userId];
 
@@ -885,7 +882,6 @@ RETURNING *;
       WHERE l.product_id = $1
     `;
     const bidders: User[] = await this.safeQuery(sqlBidders, [productId]);
-    console.log(bidders);
     const getSellerInfo = async () => {
       const sql = `
           SELECT u.*
@@ -1253,8 +1249,6 @@ RETURNING *;
       await Promise.all([
         relatedUsers.forEach((user) => {
           let html: string = "";
-          console.log(questionerId);
-          console.log(user.id);
           if (user.id == questionerId) {
             html = `
        <table style="width:100%; max-width:600px; margin:auto; font-family:Arial,sans-serif; border-collapse:collapse; border:1px solid #ddd;">

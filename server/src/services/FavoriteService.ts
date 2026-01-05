@@ -69,7 +69,6 @@ export class FavoriteService extends BaseService {
   }
 
   async getAllFavorite(userId: number): Promise<ProductPreview[]> {
-    console.log(userId);
     const sql = `
       SELECT 
         P.*,

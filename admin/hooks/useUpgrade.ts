@@ -56,7 +56,6 @@ class UpgradeRequestHook {
         UpgradeRequestService.updateApproveRequest(id),
 
       onSuccess: () => {
-        console.log('vao ne');
         toast.success("Chấp nhận yêu cầu thành công!")
         queryClient.invalidateQueries({
           queryKey: ["request"],
