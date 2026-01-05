@@ -856,10 +856,21 @@ RETURNING *;
     `;
     const bidders: User[] = await this.safeQuery(sql, [productId]);
     console.log(bidders);
-
+    const getSellerInfo = async () => {
+      const sql = `
+          SELECT u.*
+          FROM admin.users as u 
+          JOIN product.products as p ON u.id = p.seller_id
+          WHERE p.id = $1 `;
+      const params = [productId];
+      const result: User[] = await this.safeQuery(sql, params);
+      return result[0];
+    };
+    const sellerInfo: User | undefined = await getSellerInfo();
     if (updateProduct && bidders) {
       const productInfo: Product | undefined = updateProduct[0];
-      if (productInfo) {
+
+      if (productInfo && sellerInfo) {
         await Promise.all([
           bidders.map((item) =>
             sendEmailToUser(
