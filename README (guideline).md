@@ -119,29 +119,29 @@ Npm workspaces will install dependencies automatically for: `client`, `admin`, `
 ---
 
 ## 🧱 Database Setup (PostgreSQL)
-### 1️⃣: Use Neon Database (có sẵn)
+### 1️⃣: Use Neon Database (already setup)
 Backend is already setup for Neon PostgreSQL.
 ```bash
 DATABASE_URL="postgresql://neondb_owner:npg_im2UE6JSAIKP@ep-green-shape-a1pc3qjd-pooler.ap-southeast-1.aws.neon.tech/neondb?sslmode=require&channel_binding=require"
 ```
 
 ### 2️⃣: Create database from db.zip 
-Bước 1: Unzip script in file db.zip
+#### Step 1: Unzip script in file db.zip
 
-Bước 2: Create new database using pgAdmin
+#### Step 2: Create new database using pgAdmin
   1. Open pgAdmin
   2. Right-click on Databases → Create → Database
   3. Database name: auction_db
   4. Owner: postgres
    
-Bước 3: Import data
+#### Step 3: Import data
   1. Right-click database auction_db
   2. Choose Restore
   3. File: choose .sql file in db.zip
   4. Format: Custom or tar
   5. Restore
 
-Bước 4: Setup DATABASE_URL for backend
+#### Step 4: Setup DATABASE_URL for backend
 ```bash
 DATABASE_URL="postgresqlpostgresql://postgres:your_password@localhost:5432/auction_db"
 ```
