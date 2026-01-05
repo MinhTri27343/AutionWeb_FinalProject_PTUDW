@@ -11,7 +11,7 @@
   "dependencies": {
     "@tanstack/react-query": "^5.90.12",
     "fuse.js": "^7.1.0",
-    "next": "16.0.7",
+    "next": "^16.0.7",
     "react": "19.2.0",
     "react-dom": "19.2.0",
     "react-hot-toast": "^2.6.0",
@@ -27,5 +27,9 @@
     "eslint-config-next": "16.0.7",
     "tailwindcss": "^4",
     "typescript": "^5"
+  },
+  "optionalDependencies": {
+    "@tailwindcss/oxide-linux-x64-gnu": "^4.1.18",
+    "lightningcss-linux-x64-gnu": "^1.30.2"
   }
 }
