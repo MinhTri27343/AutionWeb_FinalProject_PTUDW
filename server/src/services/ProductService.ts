@@ -923,6 +923,7 @@ RETURNING *;
 
     const sql =
       "DELETE FROM product.products WHERE id = $1 RETURNING MAIN_IMAGE, EXTRA_IMAGES";
+
     const result = await this.safeQuery<{
       main_image: string;
       extra_images: string[];
