@@ -11,6 +11,7 @@ import { X, Star, TrendingUp, MessageSquare } from "lucide-react";
 import RatingLog from "@/app/(MainLayout)/user/rating/RatingLog";
 import { RatingHook } from "@/hooks/useRating";
 import LoadingSpinner from "@/components/LoadingSpinner";
+import { useAuth } from "@/hooks/useAuth";
 
 interface ViewRatingPopupProps {
   isOpen: boolean;
@@ -43,6 +44,7 @@ const ViewRatingPopup = ({
   onClose,
 }: ViewRatingPopupProps) => {
   const limit = 5;
+  const {user} = useAuth();
   const [logs, setLogs] = useState<any[]>([]);
   const [offset, setOffset] = useState(0);
   const [hasMore, setHasMore] = useState(true);
@@ -50,14 +52,14 @@ const ViewRatingPopup = ({
 
   // 1. Lấy tổng quan (Stats)
   const { data: totalData, isLoading: isTotalLoading } =
-    RatingHook.useGetTotalRating(ratee_id);
+    RatingHook.useGetTotalRating(ratee_id, user ? true : false);
 
   // 2. Lấy danh sách phân trang
   const {
     data: pageData,
     isLoading: isPageLoading,
     isFetching,
-  } = RatingHook.useGetRating(ratee_id, offset);
+  } = RatingHook.useGetRating(ratee_id, offset, user ? true : false);
 
   // Xử lý khi có dữ liệu mới từ API phân trang
   useEffect(() => {

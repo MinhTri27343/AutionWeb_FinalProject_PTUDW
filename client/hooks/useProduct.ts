@@ -289,11 +289,11 @@ class ProductHook {
     });
   }
 
-  static useGetProductQuestionsByPage(id: number, page: number, limit: number) {
+  static useGetProductQuestionsByPage(id: number, page: number, limit: number, isPrivate: boolean = true) {
     return useQuery({
       queryKey: ["product_question", id, page, limit],
 
-      queryFn: () => ProductService.getProductQuestionsByPage(id, page, limit),
+      queryFn: () => ProductService.getProductQuestionsByPage(id, page, limit, isPrivate),
 
       staleTime: STALE_10_MIN,
 

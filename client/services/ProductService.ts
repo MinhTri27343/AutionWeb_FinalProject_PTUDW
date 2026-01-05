@@ -162,12 +162,13 @@ export class ProductService {
   static async getProductQuestionsByPage(
     id: number,
     page: number = 1,
-    limit: number = 10
+    limit: number = 10,
+    isPrivate: boolean = true,
   ): Promise<any> {
     return safeRequest(async () => {
-      const res = await api.get(
-        API_ROUTES.product.getProductQuestionsByPage(id, page, limit)
-      );
+      const res = isPrivate 
+      ? await api.get(API_ROUTES.product.getProductQuestionsByPage(id, page, limit)) 
+      : await publicApi.get(API_ROUTES.product.getProductQuestionsByPage(id, page, limit));
       return res.data;
     });
   }

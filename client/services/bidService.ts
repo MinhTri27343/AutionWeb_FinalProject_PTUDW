@@ -1,11 +1,14 @@
 import { api, safeRequest } from "../config/axios.config";
 import API_ROUTES from "../../shared/src/api";
 import { BidLog, BlacklistPayload, CreateBidLog } from "../../shared/src/types";
+import { publicApi } from "@/config/publicApi.config";
 
 export class BidService {
-  static async getBidlogs(product_id: number): Promise<any> {
+  static async getBidlogs(product_id: number, isPrivate: boolean = true): Promise<any> {
     return safeRequest(async () => {
-      const res = await api.get(API_ROUTES.bid.getBidLogs(product_id));
+      const res = isPrivate 
+        ? await api.get(API_ROUTES.bid.getBidLogs(product_id))
+        : await publicApi.get(API_ROUTES.bid.getBidLogs(product_id));
       return res.data;
     });
   }

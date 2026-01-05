@@ -11,11 +11,11 @@ interface CreateRatingPayload extends UserRating {
 import { toast } from "react-toastify";
 
 export class RatingHook {
-  static useGetRating(userId: number, offset: number) {
+  static useGetRating(userId: number, offset: number, isPrivate: boolean = true) {
     return useQuery({
       queryKey: ["user_rating", userId, offset],
 
-      queryFn: () => RatingService.getRating(userId, offset),
+      queryFn: () => RatingService.getRating(userId, offset, isPrivate),
 
       staleTime: STALE_10_MIN,
 
@@ -43,11 +43,11 @@ export class RatingHook {
     });
   }
 
-  static useGetTotalRating(userId: number) {
+  static useGetTotalRating(userId: number, isPrivate: boolean = true) {
     return useQuery({
       queryKey: ["total_user_rating", userId],
 
-      queryFn: () => RatingService.getTotalRating(userId),
+      queryFn: () => RatingService.getTotalRating(userId, isPrivate),
 
       staleTime: STALE_10_MIN,
 

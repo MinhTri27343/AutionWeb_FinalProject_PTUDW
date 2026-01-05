@@ -46,6 +46,7 @@ api.interceptors.response.use(
       // Chuyển hướng về trang đăng nhập (Hard redirect)
       if (typeof window !== "undefined") {
         window.location.href = "/login";
+        console.log('chuyen')
       }
       return Promise.reject(error);
     }

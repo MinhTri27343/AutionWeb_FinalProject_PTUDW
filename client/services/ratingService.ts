@@ -1,11 +1,14 @@
 import { api, safeRequest } from "@/config/axios.config";
 import API_ROUTES from "../../shared/src/api";
 import { CreateRating, UserRating } from "../../shared/src/types";
+import { publicApi } from "@/config/publicApi.config";
 
 export class RatingService {
-  static async getRating(userId: number, offset: number): Promise<any> {
+  static async getRating(userId: number, offset: number, isPrivate: boolean = true): Promise<any> {
     return safeRequest(async () => {
-      const res = await api.get(API_ROUTES.rating.getRating(userId, offset));
+      const res = isPrivate 
+        ? await api.get(API_ROUTES.rating.getRating(userId, offset))
+        : await publicApi.get(API_ROUTES.rating.getRating(userId, offset));
       return res.data;
     });
   }
@@ -19,9 +22,11 @@ export class RatingService {
     });
   }
 
-  static async getTotalRating(userId: number): Promise<any> {
+  static async getTotalRating(userId: number, isPrivate: boolean = true): Promise<any> {
     return safeRequest(async () => {
-      const res = await api.get(API_ROUTES.rating.getTotalRating(userId));
+      const res = isPrivate 
+        ? await api.get(API_ROUTES.rating.getTotalRating(userId))
+        : await publicApi.get(API_ROUTES.rating.getTotalRating(userId));
       return res.data;
     });
   }

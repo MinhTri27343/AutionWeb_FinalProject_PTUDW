@@ -3,6 +3,7 @@ import ProductCard from "@/components/ProductCard";
 import { Product, ProductPreview } from "../../../../../../shared/src/types";
 import CategoryHook from "@/hooks/useCategory";
 import { Pagination } from "../../../../../../shared/src/types/Pagination";
+import { useAuth } from "@/hooks/useAuth";
 
 interface RelatedProductsProps {
   categoryId: number;
@@ -12,6 +13,7 @@ export const RelatedProducts = ({
   categoryId,
   favorite_products,
 }: RelatedProductsProps) => {
+  const { user } = useAuth();
   const pagination: Pagination = {
     id: categoryId,
     page: 1,
@@ -24,7 +26,7 @@ export const RelatedProducts = ({
   }: {
     data: ProductPreview[] | undefined;
     isLoading: boolean;
-  } = CategoryHook.useProductsByCategoryId(pagination);
+  } = CategoryHook.useProductsByCategoryId(pagination, user ? true : false);
 
   return (
     <div>

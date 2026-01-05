@@ -46,10 +46,10 @@ class CategoryHook {
     });
   }
 
-  static useProductsByCategoryId(pagination: Pagination) {
+  static useProductsByCategoryId(pagination: Pagination, isPrivate: boolean = true) {
     return useQuery({
       queryKey: ["products_by_category", pagination],
-      queryFn: () => CategoryService.getProductsByCategoryId(pagination),
+      queryFn: () => CategoryService.getProductsByCategoryId(pagination, isPrivate),
       staleTime: STALE_10_MIN,
       select: (data) => {
         return data.data.products;

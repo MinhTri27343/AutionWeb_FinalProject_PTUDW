@@ -16,9 +16,12 @@ export class CategoryService {
     });
   }
 
-  static async getCategoryDetailById(id: number, isPrivate: boolean = true): Promise<any> {
+  static async getCategoryDetailById(
+    id: number,
+    isPrivate: boolean = true
+  ): Promise<any> {
     return safeRequest(async () => {
-      const res = isPrivate 
+      const res = isPrivate
         ? await api.get(API_ROUTES.category.getCategoryDetailById(id))
         : await publicApi.get(API_ROUTES.category.getCategoryDetailById(id));
       return res.data;
@@ -39,11 +42,16 @@ export class CategoryService {
     });
   }
 
-  static async getProductsByCategoryId(pagination: Pagination): Promise<any> {
+  static async getProductsByCategoryId(
+    pagination: Pagination,
+    isPrivate: boolean = true
+  ): Promise<any> {
     return safeRequest(async () => {
-      const res = await api.get(
-        API_ROUTES.category.getProductsByCategoryId(pagination)
-      );
+      const res = isPrivate
+        ? await api.get(API_ROUTES.category.getProductsByCategoryId(pagination))
+        : await publicApi.get(
+            API_ROUTES.category.getProductsByCategoryId(pagination)
+          );
       return res.data;
     });
   }

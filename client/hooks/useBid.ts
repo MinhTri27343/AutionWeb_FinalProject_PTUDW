@@ -13,7 +13,7 @@ class BidHook {
   static useBidLogs(product_id: number, isPrivate: boolean = true) {
     return useQuery({
       queryKey: ["bid_logs", product_id],
-      queryFn: () => BidService.getBidlogs(product_id),
+      queryFn: () => BidService.getBidlogs(product_id, isPrivate),
       staleTime: STALE_10_MIN,
       enabled: !!product_id && !!isPrivate,
       select: (data) => {

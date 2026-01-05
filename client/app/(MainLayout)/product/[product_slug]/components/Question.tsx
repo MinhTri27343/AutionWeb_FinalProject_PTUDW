@@ -115,7 +115,7 @@ export const Question = ({ productId }: ProductId) => {
   }: {
     data: ProductQuestionPagination | undefined;
     isLoading: boolean;
-  } = ProductHook.useGetProductQuestionsByPage(productId, page, per_page);
+  } = ProductHook.useGetProductQuestionsByPage(productId, page, per_page, user ? true : false);
 
   const questions = questionPagination?.questions || [];
   const totalPages = questionPagination
