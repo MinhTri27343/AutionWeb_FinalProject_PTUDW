@@ -1,5 +1,5 @@
 const BASE_API =
-  "https://aution-web-final-project-ptudw-serv-ruby.vercel.app/api/";
+  "https://aution-web-final-project-ptudw-serv-ruby.vercel.app/api";
 const USER_API = `${BASE_API}/user`;
 const UPGRADE_API = `${BASE_API}/upgrade`;
 const RATING_API = `${BASE_API}/rating`;
