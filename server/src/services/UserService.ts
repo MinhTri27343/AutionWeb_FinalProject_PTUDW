@@ -33,7 +33,7 @@ export class UserService extends BaseService {
 
     const sql = `
             SELECT * FROM admin.users as u
-            WHERE u.role != $1 
+            WHERE u.role != $1 AND u.role != $4
             ORDER BY u.created_at desc
             OFFSET $2
             LIMIT $3
