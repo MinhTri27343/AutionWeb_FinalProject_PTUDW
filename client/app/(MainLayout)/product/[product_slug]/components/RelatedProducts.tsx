@@ -31,22 +31,7 @@ export const RelatedProducts = ({
       <h3 className="text-2xl font-bold text-slate-900 mb-4">
         Sản phẩm liên quan
       </h3>
-      <div className="block lg:hidden">
-        <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 sm:gap-4 ">
-          {products &&
-            (products || []).map((product, index) => (
-              <div
-                key={`mobile-${index}`}
-                className="w-[70%] mx-auto max-w-[300px] sm:w-full sm:max-w-none"
-              >
-                <ProductCard
-                  product={product as ProductPreview}
-                  isFavorite={favorite_products.has(Number(product.id))}
-                />
-              </div>
-            ))}
-        </div>
-      </div>
+     
 
       <div className="hidden lg:grid lg:grid-cols-5  gap-4 xl:gap-6">
         {products &&
