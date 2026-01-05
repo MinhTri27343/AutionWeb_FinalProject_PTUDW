@@ -850,11 +850,11 @@ RETURNING *;
     ]);
     const sqlBidders = `
       SELECT u.*
-      FROM auction.bid_log as l 
-      JOIN admin.users as u ON l.user_id
+      FROM auction.user_bids as l 
+      JOIN admin.users as u ON l.user_id = u.id
       WHERE l.product_id = $1
     `;
-    const bidders: User[] = await this.safeQuery(sql, [productId]);
+    const bidders: User[] = await this.safeQuery(sqlBidders, [productId]);
     console.log(bidders);
     const getSellerInfo = async () => {
       const sql = `
