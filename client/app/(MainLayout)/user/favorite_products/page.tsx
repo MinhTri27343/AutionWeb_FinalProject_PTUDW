@@ -82,10 +82,13 @@ const FavoriteProductPage = () => {
           </div>
         </div>
       ) : (
-        <EmptyList
-          content=" Bạn hiện không có sản phẩm yêu thích nào. Hãy tìm kiếm những
+        favoriteProducts &&
+        favoriteProducts.length == 0 && (
+          <EmptyList
+            content=" Bạn hiện không có sản phẩm yêu thích nào. Hãy tìm kiếm những
                 món đồ ưng ý và bắt đầu ra giá nhé!"
-        />
+          />
+        )
       )}
     </div>
   );

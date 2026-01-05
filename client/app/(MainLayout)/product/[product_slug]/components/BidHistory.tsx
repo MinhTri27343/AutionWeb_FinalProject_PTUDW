@@ -15,7 +15,8 @@ interface ProductId {
 export const BidHistory = ({ productId }: ProductId) => {
   const { user } = useAuth();
   const { data: bidLogs, isLoading: isLoadingBigLogs } = BidHook.useBidLogs(
-    productId, user ? true : false
+    productId,
+    user ? true : false
   ) as { data: BidLog[]; isLoading: boolean };
   return (
     <div className="relative bg-white rounded-xl shadow-sm overflow-hidden  mb-8 border border-slate-200">
@@ -48,17 +49,19 @@ export const BidHistory = ({ productId }: ProductId) => {
                   key={index}
                   className="border-b border-gray-200 last:border-b-0 hover:bg-gray-50 transition"
                 >
-                  <td className="py-3 px-1 sm:px-3 truncate text-[12px] sm:text-sm text-gray-700">
+                  <td className="py-3 truncate text-[12px] sm:text-sm text-gray-700">
                     {new Date(String(his.created_at)).toLocaleString("vi-VN")}
                   </td>
-                  <td className="py-3 px-1 sm:px-3 truncate max-w-[90px] text-[12px] sm:text-sm font-medium text-gray-700">
-                    {user?.id === his.user.id
-                      ? `${his.user.name} (Bạn)`
-                      : `${his.user.name[0]}***${
-                          his.user.name[his.user.name.length - 1]
-                        }`}
+                  <td className="py-3 truncate max-w-[90px] text-[12px] sm:text-sm font-medium text-gray-700">
+                    {user?.id === his.user.id ? (
+                      <span className="font-bold text-blue-500">Bạn</span>
+                    ) : (
+                      `${his.user.name[0]}*****${
+                        his.user.name[his.user.name.length - 1]
+                      }`
+                    )}
                   </td>
-                  <td className="py-3 px-1 sm:px-3 truncate text-[12px] sm:text-sm font-bold text-blue-600 text-right">
+                  <td className="py-3 truncate text-[12px] sm:text-sm font-bold text-blue-600 text-right">
                     {formatCurrency(his.price)}
                   </td>
                 </tr>

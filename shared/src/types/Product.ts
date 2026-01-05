@@ -64,6 +64,8 @@ export type ProductPreview = Pick<
   | "status"
   | "top_bidder"
 > & {
+  seller_id?: number;
+  top_bidder_id?: number;
   top_bidder_name: string | null;
   category: Pick<Category, "name">;
   seller: Pick<User, "email">;
@@ -153,7 +155,7 @@ export type WinningProduct = Pick<
   status: OrderStatus;
 };
 export type BiddingProduct = Product & {
-  user_price: number; 
+  user_price: number;
 };
 export type CreateQuestion = Pick<ProductQuestion, "comment">;
 export type CreateAnswer = Pick<ProductAnswer, "comment"> & {

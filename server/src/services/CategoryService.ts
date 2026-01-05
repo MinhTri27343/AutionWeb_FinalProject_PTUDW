@@ -219,10 +219,15 @@ export class CategoryService extends BaseService {
       p.main_image,
       p.name,
       p.buy_now_price,
-      p.end_time,
+      COALESCE((
+        SELECT created_at
+        FROM auction.orders o
+        WHERE o.product_id = p.id AND o.status != 'cancelled'
+      ), p.end_time) as end_time,
       p.auto_extend,
       p.created_at,
       p.initial_price,
+      p.seller_id,
       u.email as seller_email,
       c.name as category_name
     FROM product.products p 
@@ -249,6 +254,7 @@ export class CategoryService extends BaseService {
 
     products = {
       ...rest,
+      top_bidder_id: top_bidder ? top_bidder.id : null,
       top_bidder_name: top_bidder ? top_bidder.name : null,
       current_price: current_price,
       bid_count: bid_count,

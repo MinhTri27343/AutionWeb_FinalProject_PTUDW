@@ -44,6 +44,7 @@ import { ConfirmPopup } from "@/app/(MainLayout)/product/[product_slug]/componen
 import { SimpleConfirmPopup } from "@/components/SimpleConfirmPopup";
 import { toast } from "react-toastify";
 import { useAuthStore } from "@/store/auth.store";
+import ViewRatingPopup from "@/components/ViewRatingPopup";
 
 function isLessThreeDays(dateA: Date, dateB: Date): boolean {
   const diffMs = Math.abs(dateA.getTime() - dateB.getTime()); // hiệu số milliseconds
@@ -110,6 +111,7 @@ export default function ProductPage() {
   const [navToOrderConfirm, setNavToOrderConfirm] = useState<boolean>(false);
   const [isEnd, setIsEnd] = useState<boolean>(false);
   const resolveRef = useRef<((value: boolean) => void) | null>(null);
+  const [sellerRatingPopup, setSellerRatingPopup] = useState<boolean>(false);
 
   const schemaBid = z.object({
     price: z
@@ -445,13 +447,17 @@ export default function ProductPage() {
                     {product.top_bidder ? (
                       <>
                         <p className="font-semibold text-slate-900 mb-1">
-                          {product.top_bidder.id === user?.id
-                            ? `${product.top_bidder.name} (Bạn)`
-                            : `${product.top_bidder.name[0]}***${
-                                product.top_bidder.name[
-                                  product.top_bidder.name.length - 1
-                                ]
-                              }`}
+                          {product.top_bidder.id === user?.id ? (
+                            <span className="font-bold text-blue-500">
+                              {product.top_bidder.name} (bạn)
+                            </span>
+                          ) : (
+                            `${product.top_bidder.name[0]}*****${
+                              product.top_bidder.name[
+                                product.top_bidder.name.length - 1
+                              ]
+                            }`
+                          )}
                         </p>
                         <p className="text-xs text-slate-600">
                           {bidderRating !== 0
@@ -467,13 +473,16 @@ export default function ProductPage() {
                   </div>
                 </div>
 
-                <div className="pb-4 md:pb-6 border-b  mb-4 md:mb-6 border-slate-200">
+                <div className="pb-4 md:pb-6 border-b mb-4 md:mb-6 border-slate-200">
                   <div>
-                    <p className="text-sm font-medium  text-slate-600 mb-3">
+                    <p className="text-sm font-medium text-slate-600 mb-3">
                       Người bán
                     </p>
                   </div>
-                  <div className="flex flex-row gap-4">
+                  <div
+                    className="flex flex-row gap-4 cursor-pointer hover:opacity-80 transition-opacity"
+                    onClick={() => setSellerRatingPopup(true)}
+                  >
                     <div className="rounded-[6px] overflow-hidden">
                       <Image
                         src={product.seller.profile_img || defaultImage}
@@ -1005,6 +1014,13 @@ export default function ProductPage() {
               setWarningAutoBuyNowModal(false);
               userConfirm(true);
             }}
+          />
+
+          <ViewRatingPopup
+            isOpen={sellerRatingPopup}
+            ratee_id={product.seller.id}
+            ratee_name={product.seller.name}
+            onClose={() => setSellerRatingPopup(false)}
           />
         </>
       )}

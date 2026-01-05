@@ -13,12 +13,16 @@ import {
   Star,
   Clock,
   Crown,
+  CheckCircle2, // Thêm icon mới để làm nổi bật
 } from "lucide-react";
 import { useAuthStore } from "@/store/auth.store";
 import { getTimeDifference } from "@/utils";
 
 const BidProduct = ({ product }: { product: BiddingProduct }) => {
   const user = useAuthStore((s) => s.user);
+
+  // Kiểm tra xem người dùng hiện tại có phải là người dẫn đầu không
+  const isLeading = user?.id === product.top_bidder?.id;
 
   const formatLeaderName = (name: string, id: number) => {
     if (!name) return "---";
@@ -37,7 +41,21 @@ const BidProduct = ({ product }: { product: BiddingProduct }) => {
 
   return (
     <Link href={`/product/${product.slug}`} className="block group">
-      <div className="relative bg-white border border-slate-200 rounded-2xl p-4 w-full transition-all hover:shadow-lg hover:border-teal-200 overflow-hidden">
+      <div
+        className={`relative bg-white border-2 rounded-2xl p-4 w-full transition-all hover:shadow-lg overflow-hidden ${
+          isLeading
+            ? "border-emerald-500 shadow-md shadow-emerald-50/50" // Màu nổi bật khi đang dẫn đầu
+            : "border-slate-200 hover:border-teal-200" // Màu mặc định
+        }`}
+      >
+        {/* Badge nổi bật góc phải trên nếu đang dẫn đầu */}
+        {isLeading && (
+          <div className="absolute top-0 right-0 bg-emerald-500 text-white px-3 py-1 rounded-bl-xl text-[10px] font-bold uppercase tracking-wider flex items-center gap-1 z-10 animate-pulse">
+            <CheckCircle2 className="w-3 h-3" />
+            Đang dẫn đầu
+          </div>
+        )}
+
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
           <div className="flex items-start gap-3 md:gap-4 flex-1 min-w-0">
             <div className="relative shrink-0">
@@ -49,14 +67,24 @@ const BidProduct = ({ product }: { product: BiddingProduct }) => {
                   className="rounded-xl object-cover border border-slate-100 shadow-sm"
                 />
               </div>
-              <div className="absolute -top-1.5 -left-1.5 bg-slate-800 text-white p-1 rounded-lg shadow-lg z-10">
+              <div
+                className={`absolute -top-1.5 -left-1.5 p-1 rounded-lg shadow-lg z-10 ${
+                  isLeading ? "bg-emerald-600" : "bg-slate-800"
+                } text-white`}
+              >
                 <Gavel className="w-3 h-3" />
               </div>
             </div>
 
             <div className="flex flex-col gap-1.5 justify-center flex-1 min-w-0">
               <div className="group/title flex items-center gap-1">
-                <h3 className="font-bold text-slate-800 text-[16px] md:text-[17px] line-clamp-1 group-hover:text-teal-600 transition-colors">
+                <h3
+                  className={`font-bold text-[16px] md:text-[17px] line-clamp-1 transition-colors ${
+                    isLeading
+                      ? "text-emerald-700"
+                      : "text-slate-800 group-hover:text-teal-600"
+                  }`}
+                >
                   {product.name}
                 </h3>
                 <ChevronRight className="w-4 h-4 text-slate-400 shrink-0 group-hover:translate-x-0.5 transition-transform" />
@@ -73,10 +101,19 @@ const BidProduct = ({ product }: { product: BiddingProduct }) => {
                 </span>
               </div>
 
-              {/* Phần được điều chỉnh chữ to hơn */}
               <div className="flex flex-wrap items-center gap-x-4 gap-y-2 mt-1">
-                <div className="flex items-center gap-2 px-2.5 py-1 bg-slate-50 border border-slate-100 rounded-lg">
-                  <Crown className="w-3.5 h-3.5 text-amber-500" />
+                <div
+                  className={`flex items-center gap-2 px-2.5 py-1 border rounded-lg ${
+                    isLeading
+                      ? "bg-emerald-50 border-emerald-100"
+                      : "bg-slate-50 border-slate-100"
+                  }`}
+                >
+                  <Crown
+                    className={`w-3.5 h-3.5 ${
+                      isLeading ? "text-emerald-500" : "text-amber-500"
+                    }`}
+                  />
                   <span className="text-[12px] md:text-[13px] text-slate-500 font-semibold">
                     Dẫn đầu:
                   </span>
@@ -91,7 +128,13 @@ const BidProduct = ({ product }: { product: BiddingProduct }) => {
                 </div>
                 <div className="text-[12px] md:text-[13px] text-slate-500 font-medium">
                   Của bạn:{" "}
-                  <span className="font-bold text-slate-800 bg-teal-50 px-1.5 py-0.5 rounded text-[13px]">
+                  <span
+                    className={`font-bold px-1.5 py-0.5 rounded text-[13px] ${
+                      isLeading
+                        ? "text-emerald-700 bg-emerald-100"
+                        : "text-slate-800 bg-teal-50"
+                    }`}
+                  >
                     {formatCurrency(product.user_price)}
                   </span>
                 </div>
@@ -105,8 +148,16 @@ const BidProduct = ({ product }: { product: BiddingProduct }) => {
                 Giá hiện tại
               </p>
               <div className="flex items-center gap-1 sm:justify-end">
-                <TrendingUp className="w-3.5 h-3.5 text-teal-500 sm:hidden" />
-                <p className="text-teal-600 font-bold text-[20px] md:text-2xl leading-none">
+                <TrendingUp
+                  className={`w-3.5 h-3.5 sm:hidden ${
+                    isLeading ? "text-emerald-500" : "text-teal-500"
+                  }`}
+                />
+                <p
+                  className={`font-bold text-[20px] md:text-2xl leading-none ${
+                    isLeading ? "text-emerald-600" : "text-teal-600"
+                  }`}
+                >
                   {formatCurrency(product.current_price)}
                 </p>
               </div>
@@ -123,7 +174,11 @@ const BidProduct = ({ product }: { product: BiddingProduct }) => {
           </div>
         </div>
 
-        <div className="absolute bottom-0 right-0 w-16 h-16 bg-gradient-to-br from-transparent to-slate-50/50 rounded-br-2xl -z-10 transition-opacity opacity-0 group-hover:opacity-100" />
+        <div
+          className={`absolute bottom-0 right-0 w-16 h-16 bg-gradient-to-br from-transparent rounded-br-2xl -z-10 transition-opacity opacity-0 group-hover:opacity-100 ${
+            isLeading ? "to-emerald-100/50" : "to-slate-50/50"
+          }`}
+        />
       </div>
     </Link>
   );

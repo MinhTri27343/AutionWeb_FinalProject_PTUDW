@@ -165,6 +165,7 @@ export class ProductService extends BaseService {
       p.category_id,
       p.main_image,
       p.name,
+      p.seller_id,
       p.buy_now_price,
       COALESCE((
         SELECT created_at
@@ -186,6 +187,7 @@ export class ProductService extends BaseService {
     const { seller_email, category_name, ...rest } = products[0];
     products = {
       ...rest,
+      top_bidder_id: top_bidder ? top_bidder.id : null,
       top_bidder_name: top_bidder ? top_bidder.name : null,
       current_price: current_price ? current_price : products[0].initial_price,
       bid_count: bid_count,

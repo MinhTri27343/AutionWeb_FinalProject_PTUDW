@@ -53,7 +53,13 @@ const SoldProduct = ({ product }: SoldProps) => {
   };
 
   return (
-    <div className="group relative bg-white border border-slate-200 rounded-2xl p-4 w-full transition-all hover:shadow-lg hover:border-teal-200 overflow-hidden">
+    <div
+      className={`group relative bg-white border rounded-2xl p-4 w-full transition-all hover:shadow-lg overflow-hidden ${
+        product.status === "shipped"
+          ? "border-emerald-500 border-2 shadow-sm shadow-emerald-50" // Viền xanh lá khi hoàn thành
+          : "border-slate-200 hover:border-teal-200"
+      }`}
+    >
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div className="flex items-start gap-3 md:gap-4 flex-1 min-w-0">
           <div className="relative shrink-0">
@@ -75,7 +81,13 @@ const SoldProduct = ({ product }: SoldProps) => {
               href={`/product/sell/order/${product.id}`}
               className="group/title flex items-center gap-1"
             >
-              <h3 className="font-bold text-slate-800 text-[15px] md:text-[16px] line-clamp-1 group-hover/title:text-teal-600 transition-colors">
+              <h3
+                className={`${
+                  product.status == "shipped"
+                    ? "text-teal-600"
+                    : "text-slate-800"
+                } font-bold text-[15px] md:text-[16px] line-clamp-1 group-hover/title:text-teal-600 transition-colors`}
+              >
                 {product.name}
               </h3>
               <ChevronRight className="w-4 h-4 text-slate-400 shrink-0 group-hover/title:translate-x-0.5 transition-transform" />
@@ -102,6 +114,7 @@ const SoldProduct = ({ product }: SoldProps) => {
                 <button
                   onClick={(e) => {
                     e.preventDefault();
+                    e.stopPropagation();
                     setOpenRatingModal(true);
                   }}
                   className="flex items-center gap-1.5 px-3 py-1 bg-white border border-emerald-200 text-emerald-600 rounded-full hover:bg-emerald-600 hover:text-white transition-all text-[10px] font-bold uppercase tracking-wide shadow-sm"

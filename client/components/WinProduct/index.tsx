@@ -45,7 +45,13 @@ const WinProduct = ({ product }: { product: WinningProduct }) => {
   };
 
   return (
-    <div className="group relative bg-white border border-slate-200 rounded-2xl p-4 w-full transition-all hover:shadow-lg hover:border-teal-200 overflow-hidden">
+    <div
+      className={`group relative bg-white border rounded-2xl p-4 w-full transition-all hover:shadow-lg overflow-hidden ${
+        product.status === "shipped"
+          ? "border-emerald-500 border-2 shadow-sm shadow-emerald-50" // Viền xanh lá khi hoàn thành
+          : "border-slate-200 hover:border-teal-200"
+      }`}
+    >
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         {/* Khối bên trái: Ảnh + Thông tin */}
         <div className="flex items-start gap-3 md:gap-4 flex-1 min-w-0">
@@ -68,7 +74,13 @@ const WinProduct = ({ product }: { product: WinningProduct }) => {
               href={`/product/order/${product.id}`}
               className="group/title flex items-center gap-1"
             >
-              <h3 className="font-bold text-slate-800 text-[15px] md:text-[16px] line-clamp-1 group-hover/title:text-teal-600 transition-colors">
+              <h3
+                className={`${
+                  product.status == "shipped"
+                    ? "text-teal-600"
+                    : "text-slate-800"
+                } font-bold text-[15px] md:text-[16px] line-clamp-1 group-hover/title:text-teal-600 transition-colors`}
+              >
                 {product.name}
               </h3>
               <ChevronRight className="w-4 h-4 text-slate-400 shrink-0 group-hover/title:translate-x-0.5 transition-transform" />
@@ -91,6 +103,7 @@ const WinProduct = ({ product }: { product: WinningProduct }) => {
                 <button
                   onClick={(e) => {
                     e.preventDefault();
+                    e.stopPropagation();
                     setOpenRatingModal(true);
                   }}
                   className="flex items-center gap-1.5 px-3 py-1 bg-white border border-emerald-200 text-emerald-600 rounded-full hover:bg-emerald-600 hover:text-white transition-all text-[10px] font-bold uppercase tracking-wide shadow-sm"
@@ -103,9 +116,8 @@ const WinProduct = ({ product }: { product: WinningProduct }) => {
           </div>
         </div>
 
-        {/* Khối bên phải: Giá & Ngày (Xử lý Responsive dứt điểm) */}
-        <div className="flex flex-row sm:flex-col items-center sm:items-end justify-between sm:justify-center gap-2 pt-3 sm:pt-0 sm:pl-6 shrink-0">
-          {/* Giá: Mobile bên trái, Desktop ở trên */}
+        {/* Khối bên phải: Giá & Ngày */}
+        <div className="flex flex-row sm:flex-col items-center sm:items-end justify-between sm:justify-center gap-2 pt-3 sm:pt-0 sm:pl-6 shrink-0 border-t sm:border-t-0 border-slate-50">
           <div className="text-left sm:text-right">
             <p className="hidden sm:block text-slate-400 text-[10px] font-bold uppercase tracking-wider mb-0.5">
               Giá thắng
@@ -115,7 +127,6 @@ const WinProduct = ({ product }: { product: WinningProduct }) => {
             </p>
           </div>
 
-          {/* Ngày: Mobile bên phải, Desktop ở dưới */}
           <div className="flex items-center gap-1.5 text-slate-500 sm:mt-1">
             <Clock className="w-3.5 h-3.5 text-slate-400" />
             <span className="text-[12px] font-semibold text-slate-600">
@@ -125,7 +136,6 @@ const WinProduct = ({ product }: { product: WinningProduct }) => {
         </div>
       </div>
 
-      {/* Hiệu ứng trang trí góc */}
       <div className="absolute bottom-0 right-0 w-16 h-16 bg-gradient-to-br from-transparent to-teal-50/40 rounded-br-2xl -z-10 transition-opacity opacity-0 group-hover:opacity-100" />
 
       {openRatingModal && (
