@@ -12,7 +12,7 @@ const Header = () => {
   const role = useAuthStore().user?.role;
 
   return (
-    <header className="fixed top-0 left-0 right-0 bg-white border-b border-gray-200 shadow-sm z-50">
+    <header className="w-full h-full bg-white border-b border-gray-200 shadow-sm z-50">
       <div className="container-layout">
         <div className="flex items-center justify-between h-16">
           <div className="relative h-full py-2">
